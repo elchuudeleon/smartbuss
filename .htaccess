@@ -1,9 +1,9 @@
 RewriteEngine on
 
+
 RewriteCond %{HTTP} off
-RewriteCond %{HTTP_HOST} smartbuss\.co [NC]
-RewriteCond %{SERVER_PORT} 80
-RewriteRule ^(.*)$ https://smartbuss.co/$1 [L,R=301]
+RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d+
@@ -18,5 +18,3 @@ RewriteRule ^([a-zA-Z0-9\-]+)/?(.*)?$ index.php?page=$1&id=$2 [L]
 	SecFilterEngine Off
 	SecFilterScanPOST Off
 </IfModule>
-
-php_value max_input_vars 3500
