@@ -1,0 +1,219 @@
+[15-Jun-2021 14:52:07 UTC] PHP Parse error:  syntax error, unexpected 'logo' (T_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[15-Jun-2021 14:52:11 UTC] PHP Parse error:  syntax error, unexpected 'logo' (T_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[15-Jun-2021 14:52:19 UTC] PHP Parse error:  syntax error, unexpected 'logo' (T_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[15-Jun-2021 14:56:58 UTC] PHP Parse error:  syntax error, unexpected '?' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[15-Jun-2021 14:57:04 UTC] PHP Parse error:  syntax error, unexpected '?' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[22-Jul-2021 22:32:54 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:32:57 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:32:58 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:32:59 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:33:00 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:33:00 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[22-Jul-2021 22:33:01 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 47
+[14-Aug-2021 17:52:43 UTC] PHP Warning:  require(../assets/bundles/fpdf183/fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:52:43 UTC] PHP Fatal error:  require(): Failed opening required '../assets/bundles/fpdf183/fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:52:55 UTC] PHP Warning:  require(../assets/bundles/fpdf183/fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:52:55 UTC] PHP Fatal error:  require(): Failed opening required '../assets/bundles/fpdf183/fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:53:45 UTC] PHP Warning:  require(../assets/bundles/fpdf183/fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:53:45 UTC] PHP Fatal error:  require(): Failed opening required '../assets/bundles/fpdf183/fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:53:46 UTC] PHP Warning:  require(../assets/bundles/fpdf183/fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[14-Aug-2021 17:53:46 UTC] PHP Fatal error:  require(): Failed opening required '../assets/bundles/fpdf183/fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[17-Aug-2021 13:28:28 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method FPDF::WriteHTML() in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 8
+[17-Aug-2021 13:29:39 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method FPDF::WriteHTML() in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 8
+[17-Aug-2021 13:37:13 UTC] PHP Warning:  require(WriteHTML.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 3
+[17-Aug-2021 13:37:13 UTC] PHP Fatal error:  require(): Failed opening required 'WriteHTML.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 3
+[17-Aug-2021 13:37:17 UTC] PHP Warning:  require(WriteHTML.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 3
+[17-Aug-2021 13:37:17 UTC] PHP Fatal error:  require(): Failed opening required 'WriteHTML.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 3
+[17-Aug-2021 13:38:13 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:14 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:14 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:14 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:14 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:14 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:15 UTC] PHP Fatal error:  Uncaught Error: Class 'PDF_HTML' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 5
+[17-Aug-2021 13:38:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method FPDF::WriteHTML() in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 9
+[17-Aug-2021 13:41:08 UTC] PHP Warning:  require(../fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:08 UTC] PHP Fatal error:  require(): Failed opening required '../fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:10 UTC] PHP Warning:  require(../fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:10 UTC] PHP Fatal error:  require(): Failed opening required '../fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:10 UTC] PHP Warning:  require(../fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:10 UTC] PHP Fatal error:  require(): Failed opening required '../fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:59 UTC] PHP Warning:  require(../fpdf.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 13:41:59 UTC] PHP Fatal error:  require(): Failed opening required '../fpdf.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/assets/bundles/fpdf183/tutorial/tuto6.php on line 2
+[17-Aug-2021 14:24:27 UTC] PHP Warning:  require(../../assets/bundles/TCPDF-main/TCPDF-main/tcpdf_include.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[17-Aug-2021 14:24:27 UTC] PHP Fatal error:  require(): Failed opening required '../../assets/bundles/TCPDF-main/TCPDF-main/tcpdf_include.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[17-Aug-2021 14:24:31 UTC] PHP Warning:  require(../../assets/bundles/TCPDF-main/TCPDF-main/tcpdf_include.php): failed to open stream: No such file or directory in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[17-Aug-2021 14:24:31 UTC] PHP Fatal error:  require(): Failed opening required '../../assets/bundles/TCPDF-main/TCPDF-main/tcpdf_include.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 2
+[17-Aug-2021 14:25:40 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:25:49 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:25:51 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:25:52 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:27:29 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:27:30 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:27:31 UTC] PHP Fatal error:  Uncaught Error: Class 'MYPDF' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 7
+[17-Aug-2021 14:39:17 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 24
+[17-Aug-2021 14:39:20 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 24
+[17-Aug-2021 14:47:23 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:47:26 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:51:11 UTC] PHP Parse error:  syntax error, unexpected '$URL' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:51:12 UTC] PHP Parse error:  syntax error, unexpected '$URL' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:51:13 UTC] PHP Parse error:  syntax error, unexpected '$URL' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:51:17 UTC] PHP Parse error:  syntax error, unexpected '$URL' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 63
+[17-Aug-2021 14:52:00 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 65
+[17-Aug-2021 14:52:02 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 65
+[17-Aug-2021 14:52:02 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 65
+[17-Aug-2021 14:52:02 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 65
+[17-Aug-2021 14:52:26 UTC] PHP Parse error:  syntax error, unexpected ''</td>' (T_CONSTANT_ENCAPSED_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 14:52:28 UTC] PHP Parse error:  syntax error, unexpected ''</td>' (T_CONSTANT_ENCAPSED_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 14:52:28 UTC] PHP Parse error:  syntax error, unexpected ''</td>' (T_CONSTANT_ENCAPSED_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 14:52:28 UTC] PHP Parse error:  syntax error, unexpected ''</td>' (T_CONSTANT_ENCAPSED_STRING) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:28:39 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 89
+[17-Aug-2021 15:29:40 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:29:42 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:12 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:13 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:14 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:14 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:14 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:14 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:14 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:49 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:57 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:58 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:30:59 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:31:00 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:31:50 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 155
+[17-Aug-2021 15:31:51 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 155
+[17-Aug-2021 15:31:51 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 155
+[17-Aug-2021 15:31:51 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 155
+[17-Aug-2021 15:31:51 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 155
+[17-Aug-2021 15:33:26 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:28 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:28 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:29 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:33:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:35:30 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 129
+[17-Aug-2021 15:35:32 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 129
+[17-Aug-2021 15:35:32 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 129
+[17-Aug-2021 15:35:33 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 129
+[17-Aug-2021 15:38:33 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 95
+[17-Aug-2021 15:38:35 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 95
+[17-Aug-2021 15:38:35 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 95
+[17-Aug-2021 15:41:40 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:41:41 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:41:42 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:41:42 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:43:26 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:43:27 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:43:28 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:44:20 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:44:57 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:00 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:17 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:18 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:19 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:31 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:32 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:45:32 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 60
+[17-Aug-2021 15:46:10 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:46:12 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:47:06 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:47:07 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:47:08 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:47:51 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:47:52 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:48:23 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:48:25 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:48:26 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:48:27 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:48:34 UTC] PHP Parse error:  syntax error, unexpected '$pdf' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 71
+[17-Aug-2021 15:50:40 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:01 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:03 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:04 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:04 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:04 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:55 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:51:57 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131
+[17-Aug-2021 15:53:13 UTC] PHP Parse error:  syntax error, unexpected 'foreach' (T_FOREACH) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/crm/pdfcotizacion.php on line 131

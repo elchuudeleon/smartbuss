@@ -1,0 +1,4 @@
+[20-Aug-2021 19:42:34 UTC] PHP Fatal error:  Uncaught Error: Class 'PhpOffice\PhpSpreadsheet\Spreadsheet' not found in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/tema/info.php:23
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/tema/info.php on line 23

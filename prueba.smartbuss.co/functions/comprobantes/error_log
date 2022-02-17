@@ -1,0 +1,1 @@
+[18-Aug-2021 21:14:28 UTC] PHP Parse error:  syntax error, unexpected '$highestColumn' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/comprobantes/leercomprobante.php on line 53

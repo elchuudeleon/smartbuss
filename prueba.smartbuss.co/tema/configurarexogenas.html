@@ -1,0 +1,254 @@
+<?php 
+
+include_once("class/exogenas.php");
+
+$oControl=new Control(); 
+$validarIngreso=1; 
+// $oEmpresa=new Empresa(); 
+
+if (empty($_SESSION["idEmpresa"])) {
+
+
+    // if($_SESSION["idRol"]==2){
+
+    //   $oItem=new Data("usuario","idUsuario", $_SESSION["idUsuario"]); 
+
+    //   $valUser=$oItem->getDatos(); 
+
+    //   unset($oItem);  
+    //   $validarIngreso=$valUser["ingresoPerfilEmpresa"]; 
+    //   $aEmpresa=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
+
+    // }
+
+    // if($_SESSION["idRol"]==5){
+
+    //   $aEmpresa=$oEmpresa->getEmpresasExterno();
+    // }
+}
+if(!empty($_SESSION["idEmpresa"])){
+  // $aEmpresa=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
+  $idEmpresa=$_SESSION['idEmpresa'];
+
+  $oExogenas=new Exogenas();
+  $cuentasExogenas=$oExogenas->getCuentasMovimientoAnual(array("idEmpresa"=>$idEmpresa));
+  unset($oExogenas);
+
+  // print_r($cuentasExogenas);
+  $oLista=new Lista("exogena");
+  $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
+  $oLista->setFiltro("anio","=",date("Y"));
+  $oLista->setOrden("codigoCuenta","ASC");
+  $exogena=$oLista->getLista();
+  unset($oLista);
+}
+
+?>
+<style type="text/css">
+  .hovernegro:hover{
+    background-color: black;
+    font-weight: bold;
+  }
+</style>
+
+<section class="section">
+
+        <ul class="breadcrumb breadcrumb-style ">
+
+          <li class="breadcrumb-item">
+
+            <a href="<?php echo $URL; ?>">
+
+              <i data-feather="home"></i></a>
+
+          </li>
+
+          <li class="breadcrumb-item">Exogenas</li>
+
+          <li class="breadcrumb-item">Configurar</li>
+
+        </ul>
+        <?php if (empty($_SESSION["idEmpresa"])) { ?>
+          <div class="card">
+            <div class="card-header">
+              
+                <h4>Por favor ingrese a trabajar a una empresa en la parte de <a href="listarempresas" class="hovernegro">listar empresas</a></h4>
+              
+              
+            </div>
+          </div>
+        <?php } ?>
+        <?php if (!empty($_SESSION["idEmpresa"])) { ?>
+        <div class="section-body">
+
+          <div class="row">
+
+            <div class="col-md-12 col-lg-12">
+
+              <div class="card">
+                
+
+                <div class="card-header">
+
+                  <h4>Asistente medios magenticos</h4>
+
+                </div>
+
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="col-md-12 col-lg-12">
+
+                      <table class="table table-striped table-bordered mayusculas" id="tableEnterprise">
+
+                        <thead>
+
+                          <tr>
+
+                            <!-- <th class="text-center">#</th> -->
+
+                            <th>Cuenta Contable</th>
+
+                            <th>Concepto</th>
+
+                            <th>Formato</th>
+
+                            <th>Categoria</th>
+
+                            <th>Tipo suma</th>
+
+                            <th>Acciones</th>
+
+                          </tr>
+
+                        </thead>
+
+                        <tbody>
+                          <tr>
+                            <td>
+                              <select class="form-control select2">
+                                <option value="">Seleccione </option>
+                                <?php foreach($cuentasExogenas as $index => $exogenas){ ?>
+                                <option value="<?php echo $exogenas["idCuentaContable"] ?>"><?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?></option>
+                                <?php } ?>
+                              </select>
+                            </td>
+                            <td>
+                              <select class="form-control select2" name="datos[concepto]" id="concepto">
+                              <option value="">Seleccione </option>
+                              <option value="5085">5085</option>
+                            </select>
+                            </td>
+
+                            <td>
+                              <input type="text" name="datos[formato]" id="formato" class="form-control" value="1001" readonly >
+                            </td>
+                              
+                              <td><select class="form-control select2" name="datos[categoria]" id="categoria">
+                                <option value="">Seleccione </option>
+                                <option value="1070">Pago o abono en cuenta deducible </option>
+                                <option value="1070">Pago o abono en cuenta NO deducible </option>
+                                <option value="1070">IVA mayor valor del costo o gasto deducible </option>
+                                <option value="1070">IVA mayor valor del costo o gasto no deducible</option>
+                                <option value="1070">Retención en la fuente practicada Renta </option>
+                                <option value="1070">Retención en la fuente asumida Renta </option>
+                                <option value="1070">Retención en la fuente practicada IVA Régimen común </option>
+                                <option value="1070">Retención en la fuente practicada IVA no domiciliados</option>
+                              </select></td>
+
+                              
+
+                              <td><select class="form-control select2" name="datos[tipoSuma]" id="tipoSuma">
+                                <option value="">Seleccione </option>
+                                <option value="1">DEBITOS</option>
+                                <option value="2">CREDITOS</option>
+                                <option value="3">DEBITO-CREDITO</option>
+                                <option value="4">SALDO FINAL</option>
+                              </select></td>
+
+                              <td class="centrar">
+                                <!-- <a class="btn btn-primary mr-1" id="btnGuardar">GUARDAR</a> -->
+                                <a href="javascript:void(0)" id="btnGuardar" name="btnGuardar[<?php echo $index ?>]" ><i class="far fa-save" style="color: #2993FC;font-size: 18px;" data-toggle="tooltip" data-placement="top" title="Guardar"></i></a>
+
+                                <a href="javascript:void(0)" id="btnEliminar" name="btnEliminar[<?php echo $index ?>]" ><i class="fas fa-trash" style="color: #FF5D5D;font-size: 18px;" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></a>
+                                </td>
+
+                          </tr>
+
+                          <?php 
+                          foreach($exogena as $index => $exogenaParametrizada){ 
+
+                            // $digito=$iEmpresa["tipoPersona"]==1?"":"-".$iEmpresa["digitoVerificador"]; 
+                            // $aEncript['cadena']=$iEmpresa['idEmpresa'];
+                            // $id=$oControl->encriptar($aEncript); 
+
+
+                            $oLista=new Lista("cuenta_contable");
+                            $oLista->setFiltro("idCuentaContable","=",$exogenaParametrizada["idCuentaContable"]);
+                            $cuenta=$oLista->getLista();
+                            unset($oLista);
+
+                            $oLista=new Lista("concepto_exogena");
+                            $oLista->setFiltro("idConceptoExogena","=",$exogenaParametrizada["idConcepto"]);
+                            $concepto=$oLista->getLista();
+                            unset($oLista);
+
+
+                            $oLista=new Lista("formato_exogena");
+                            $oLista->setFiltro("idFormatoExogena","=",$exogenaParametrizada["idFormato"]);
+                            $concepto=$oLista->getLista();
+                            unset($oLista);
+
+                            ?> 
+                            <tr>
+
+                              <!-- <td><?php echo $index+1; ?></td> -->
+                              <td>
+                                <?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?>
+                                </td>
+                              
+                              <td><?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?></td>
+                              
+                              <td><?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?></td>
+                              
+                              <td><?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?></td>
+
+                              <td><?php echo $exogenas["codigoCuenta"].' '.$exogenas["nombre"] ?></td>
+
+                              <td class="centrar">
+
+                                <!-- <a href="<?php  echo $URL; ?>listartercerosempresa/<?php echo $id; ?>" name="<?php echo $iEmpresa['idEmpresa']; ?>"  data-toggle="tooltip" data-placement="top" title="Ver terceros"><i class="fas fa-eye" style="color: #3BCCFF;font-size: 20px;"></i></a> -->
+                             
+                                <a href="javascript:void(0)" id="btnEliminar" name="btnEliminar[<?php echo $index?>]" ><i class="fas fa-trash" style="color: #FF5D5D;font-size: 18px;" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></a>
+                                </td>
+                            </tr>
+
+                          <?php 
+                        } 
+                        ?>
+
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+                  </div>
+
+                  </div>
+                 <!--  <div class="card-footer text-right">
+                      <a class="btn btn-primary mr-1" id="btnGuardar">GUARDAR</a>
+                    </div>
+ -->
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+  <? } ?>
+
+</section>
+

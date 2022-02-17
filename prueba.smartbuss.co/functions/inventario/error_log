@@ -1,0 +1,6 @@
+[12-Aug-2021 15:39:56 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarinventarioinicial.php on line 68
+[12-Aug-2021 15:41:11 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarinventarioinicial.php on line 68
+[12-Aug-2021 15:42:43 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarinventarioinicial.php on line 68
+[12-Aug-2021 15:45:13 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarinventarioinicial.php on line 68
+[29-Sep-2021 14:13:25 UTC] PHP Parse error:  syntax error, unexpected '$aItem' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarproductocontable.php on line 51
+[29-Sep-2021 14:16:57 UTC] PHP Parse error:  syntax error, unexpected '$aItem' (T_VARIABLE) in /home/toa8o1mv7ibx/public_html/prueba.smartbuss.co/functions/inventario/guardarproductocontable.php on line 43
