@@ -1,0 +1,161 @@
+<?php 
+
+require_once("class/empresa.php"); 
+ $oControl=new Control(); 
+$id=(isset($_REQUEST['id'] ) ? $_REQUEST['id'] : '' );
+$url=$id; 
+if($id==""){
+  echo '<script>window.history.back()</script>'; 
+}
+$decrip["cadena"]=$id; 
+$idEmpresa=$oControl->desencriptar($decrip); 
+
+$oItem=new Lista("cuenta_bancaria");
+$oItem->setFiltro("idEmpresa","=",$idEmpresa);
+$aBancos=$oItem->getLista();
+unset($oItem);
+
+$oLista=new Lista("producto_servicio");
+$oLista->setFiltro("idEmpresa","=",$idEmpresa);
+$producto=$oLista->getLista();
+unset($oLista);
+
+$oItem=new Lista("parametros_documentos");
+$oItem->setFiltro("idEmpresa","=",$idEmpresa);
+$aParametros=$oItem->getLista();
+unset($oItem);
+?>
+
+<section>
+	<form enctype="multipart/form-data" id="frmGuardar">
+		<input type="hidden" name="datos[idEmpresa]" id="idEmpresaConfigurar" value="<?php echo $idEmpresa; ?>">
+		<div class="card">
+			<div class="card-body">
+				<div class="card-header">Productos</div>
+				
+				<div class="row">
+					<div class=" col-md-3 ">
+						<div class="form-group">
+              <label class="negrita d-block">Producto:</label>
+
+              <input type="text" class="form-control producto" name="item[0][productoCompra]"  required>
+							<input type="hidden" class="form-control idProducto"  name="item[0][idProductoCompra]" required>
+
+          	</div>
+					</div>
+					
+					<div class=" col-md-3 ">
+						<div class="form-group">
+							<label class="negrita d-block">Cuenta contable:</label>
+							<input type="text" class="form-control cuentaContable" name="item[0][cuentaContableProductoCompra]"   required>
+							<input type="hidden" class="form-control idCuentaContable" name="item[0][idCuentaContableProductoCompra]"  required>
+							<input type="hidden" class="form-control naturaleza" name="item[0][naturalezaProductoCompra]"   required>
+	          </div>
+					</div>
+					<div class=" col-md-3 ">
+	           <label class="negrita d-block">Tipo documento:</label>
+						<!-- <div class="form-inline"> -->
+								<div class="form-group">
+								<select class="form-control" name="item[0][tipoDocumentoProductoCompra]" >
+									<?php foreach ($aParametros as $keyT => $valueT) {
+									$oItem=new Data("tipos_documento_contable","idTiposDocumento",$valueT["tipo"]);
+									$aTipo=$oItem->getDatos();?>
+									<option value="<?php echo $valueT["idParametrosDocumentos"]; ?>"><?php echo $aTipo['letra'].'-'.$valueT["comprobante"].'-'.$valueT['descripcion'];?></option> 
+								<?php } ?>
+								</select>
+	            </div>
+	          <!-- </div> -->
+					</div>
+					 <div class=" col-md-3 ">
+						<div class="form-group">
+	            <label class="negrita d-block">Tipo Factura:</label>
+								<select class="form-control" name="item[0][naturalezaNuevaProducto]" id="" >
+									<option value="compra">COMPRA</option>
+									<option value="venta">VENTA</option>
+								</select>
+								<!-- <input type="text" class="form-control" name="item[<?php echo $key?>][compraProducto]" readonly value="COMPRA"> -->
+	          </div>
+					</div>
+					<?php	
+				// } 
+					?>
+
+				</div>
+				<div class="text-right">
+		    	<a class="btn btn-primary mr-1" id="btnGuardar">Guardar</a>
+	      </div>
+				<hr>
+				<?php 
+			// }
+				 ?>
+				
+			</div>
+			
+      <div class="card-header">
+      	<h3>Productos parametrizados</h3>
+      </div>
+      <?php 
+					 
+					
+					
+							
+					?>
+      <div class="card-body">
+      	<table class="table table-striped" id="tableProductos">
+      		<thead>
+      			<tr>
+      				<!-- <th>#</th> -->
+      				<th>Código</th>
+      				<th>Producto</th>
+      				<th>Cuenta contable</th>
+      				<th>Tipo documento</th>
+      				<th>Tipo factura</th>
+      				<th>Acciones</th>
+      			</tr>
+      		</thead>
+      		<tbody>
+      			<?php foreach ($producto as $key=> $value){ 
+      				$oLista=new Lista("producto_cuenta_contable");
+							$oLista->setFiltro("idEmpresa","=",$idEmpresa);
+							$oLista->setFiltro("idProducto","=",$value['idProductoServicio']);
+							// $oLista->setFiltro("tipoFactura","=","compra");
+							$productoCuen=$oLista->getLista();
+							unset($oLista);
+							
+							if(!empty($productoCuen)){
+								foreach ($productoCuen as $keyP=> $valueP){ 
+								$oLista=new Data("cuenta_contable","idCuentaContable",$valueP["idEmpresaCuenta"]);						
+								$cuentaC=$oLista->getDatos();
+								unset($oLista); 
+
+
+								$oItem=new Data("parametros_documentos","idParametrosDocumentos",$valueP['tipoDocumento']);
+								// $oItem->setFiltro("","=",);
+								$aParametro=$oItem->getDatos();
+								unset($oItem);
+								$oItem=new Data("tipos_documento_contable","idTiposDocumento",$aParametro["tipo"]);
+								$aLetra=$oItem->getDatos();
+								unset($oItem);
+      				?>
+      			<tr>
+      				<!-- <td><?php echo $key+1; ?></td> -->
+      				<td><?php echo $value['codigo']; ?></td>
+      				<td><?php echo $value['nombre']; ?></td>
+      				<td><?php echo $cuentaC['codigoCuenta'].' '.$cuentaC['nombre']; ?></td>
+      				<td><?php echo $aLetra['letra'].' '.$aParametro['comprobante'].' '.$aParametro['descripcion']; ?></td>
+      				<td><?php echo $valueP['tipoFactura']; ?></td>
+      				<td><a href="javascript:void(0)"  name="btnEliminar[<?php echo $index?>]" value="<?php echo $valueP['idProductoCuentaContable']; ?>" class="eliminarImpuesto"><i class="fas fa-trash" style="color: #FF5D5D;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Eliminar"  ></i></a></td>
+      			</tr>
+      		<?php }}} ?>
+      		</tbody>
+      	</table>
+      </div>
+		</div>
+	</form>
+</section>
+
+
+
+
+
+

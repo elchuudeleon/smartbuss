@@ -1,0 +1,326 @@
+<?php 
+
+require_once("./class/cuentascontables.php");
+
+$oControl=new Control(); 
+if (empty($_SESSION["idEmpresa"])) {
+
+$id=(isset($_REQUEST['id'] ) ? $_REQUEST['id'] : '' );
+if($id==""){
+
+  echo '<script>window.history.back()</script>'; 
+
+}
+
+$decrip["cadena"]=$id; 
+
+$id=$oControl->desencriptar($decrip); 
+}
+if (!empty($_SESSION["idEmpresa"])) {
+  $id=$_SESSION["idEmpresa"];
+}
+$oControl=new Control(); 
+
+$oLista = new Lista('comprobante');
+$oLista->setFiltro("idEmpresa","=",$id);
+$oLista->setOrden("idTipo","DESC");
+$oLista->setOrden("comprobante","DESC");
+$oLista->setOrden("numero","DESC");
+
+$aComprobante=$oLista->getLista();
+
+unset($oLista);
+$idEmpresa=$id;
+?>
+
+<section class="section">
+
+        <ul class="breadcrumb breadcrumb-style ">
+
+          <li class="breadcrumb-item">
+
+            <a href="<?php echo $URL; ?>">
+
+              <i data-feather="home"></i></a>
+
+          </li>
+
+          <li class="breadcrumb-item">Comprobantes</li>
+
+          <li class="breadcrumb-item">Listar comprobantes</li>
+
+        </ul>
+
+        <div class="section-body">
+
+          <div class="row">
+
+            <div class="col-md-12 col-lg-12">
+
+              <div class="card">
+
+                <div class="card-header">
+
+                  <h4>Información General</h4>
+
+                </div>
+
+                <div class="card-body">
+
+                  <div class="row">
+
+                    <div class="col-md-12 col-lg-12">
+
+                      <table class="table table-striped mayusculas" style="font-size: 11px;" id="tableEnterprise">
+
+                        <thead>
+
+                          <tr>
+
+                            <th class="text-center">#</th>
+
+                            <th>TIPO</th>
+
+                            <!-- <th>COMPROBANTE</th> -->
+
+                            <th>FECHA</th>
+                            
+                            <th>FECHA REGISTRO</th>
+                            
+                            <th>USUARIO REGISTRA</th>
+                            
+                            <th style="width:15%;">OBSERVACIONES</th>
+                            <th>DEBITOS</th>
+                            <th>CREDITOS</th>
+
+                            <th>ACCIONES</th>
+
+                          </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                          <?php foreach($aComprobante as $index => $iComprobante){ 
+
+                            $aEncript['cadena']=$iComprobante['idComprobante'];
+                            $idEliminar=$iComprobante['idComprobante'];
+
+                            $id=$oControl->encriptar($aEncript); 
+                            $oItem=new Data("tipos_documento_contable","idTiposDocumento",$iComprobante["idTipo"]); 
+
+                            $aDatos=$oItem->getDatos(); 
+
+                            unset($oItem); 
+
+                            $oItem=new Data("parametros_documentos","idParametrosDocumentos",$iComprobante["comprobante"]); 
+
+                            $aDatosP=$oItem->getDatos(); 
+
+                            unset($oItem); 
+
+                            $oItem=new Data("usuario","idUsuario",$iComprobante["usuarioRegistra"]); 
+
+                            $aDatosU=$oItem->getDatos(); 
+
+                            unset($oItem); 
+                            $fechaEx= explode("-", $iComprobante["fecha"]);
+                            $mes=$fechaEx[0].'-'.intval($fechaEx[1]);
+                            
+                            $oLista=new Lista("cierre_mes_contable");
+                            $oLista->setFiltro("mes","=",$mes);
+                            $oLista->setFiltro("idEmpresa","=",$idEmpresa);
+                            $cierre=$oLista->getLista();
+                            unset($oLista);
+
+
+
+                            $oLista=new Lista("comprobante_items");
+                            $oLista->setFiltro("idComprobante","=",$iComprobante['idComprobante']);
+                            // $oLista->setFiltro("mes","=",$mes);
+                            $comprobanteItemsBuscar=$oLista->getLista();
+                            unset($oLista);
+
+                            // foreach($comprobanteItemsBuscar)
+                            $debito=0;
+                            $credito=0;
+                            foreach ($comprobanteItemsBuscar as $keyC => $valueC) {
+                              $debito=$debito+$valueC["saldoDebito"];
+                              $credito=$credito+$valueC["saldoCredito"];
+                            }
+                            
+                            ?> 
+
+                            <tr>
+
+                              <td><?php echo $index+1; ?></td>
+
+                              <td class="centrar"><?php echo $aDatos["letra"].'-'.$iComprobante["comprobante"].'-'.$iComprobante["numero"]; ?></td>
+
+                              <td class="centrar"><?php echo $iComprobante["fecha"]; ?></td>
+                              
+                              <td class="centrar"><?php echo $iComprobante["fechaRegistro"]; ?></td>
+                              
+                              <td class="centrar"><?php echo $aDatosU["nombreUsuario"].' '.$aDatosU["apellidoUsuario"]; ?></td>
+                              
+                              <td class="centrar"><?php echo $iComprobante["observaciones"]; ?></td>
+
+                              <td class="centrar"><?php echo "$".number_format($debito,2,",","."); ?></td>
+
+                              <td class="centrar"><?php echo "$".number_format($credito,2,",","."); ?></td>
+
+                              <td class="centrar">
+
+                                <a href="<?php  echo $URL; ?>vercomprobante/<?php echo $id; ?>" name="<?php echo $iEmpresa['idEmpresa']; ?>"  data-toggle="tooltip" data-placement="top" title="Ver Items comprobante"><i class="fas fa-eye" style="color: #8A96FF;font-size: 20px;"></i></a>
+
+                                <a href="<?php echo $URL.$iComprobante['archivo']; ?>" target="_blank"data-toggle="tooltip" data-placement="top" title="ver archivo"><i class="fas fa-paperclip" style="color: #A59D9D;font-size: 20px;"></i></a>
+                                
+                                <?php if ($iComprobante["estado"]==null) {  ?>
+
+                                <a href="<?php  echo $URL; ?>editarcomprobante/<?php echo $id; ?>" name="<?php echo $iEmpresa['idEmpresa']; ?>"  data-toggle="tooltip" data-placement="top" title="Editar comprobante"><i class="fas fa-pencil-alt" style="color: #FFCC4D;font-size: 20px;"></i></a>
+                                <a href="javascript:void(0)" id="btnAnular" name="btnAnular[<?php echo $index?>]"  value="<?php echo $idEliminar; ?>" ><i class="fas fa-ban" style="color: #DF81FF;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Anular factura"  ></i></a>
+                                    <?php 
+                                    // if (empty($cierre)) {
+                                      
+                                  ?>
+
+                                <a href="javascript:void(0)" id="btnEliminar" name="btnEliminar[<?php echo $index?>]" value="<?php echo $idEliminar; ?>"   idEmpresa="<?php echo $idEmpresa; ?>"><i class="fas fa-trash" style="color: #FF5D5D;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Eliminar"  ></i></a>
+                                  
+                                  <?php if ($aDatos["letra"]!='G' && $aDatos["letra"]!='R') { ?>
+                                  <!-- <a href="javascript:void(0)" id="<?php echo $iFactura['idFacturaVenta']; ?>" class="comprobante" data-toggle="modal" data-target="#modal" ><i class="fas fa-money-bill-alt" data-toggle="tooltip" data-placement="top" title="Pagar" style="color: #65E572;font-size: 19px;"></i></a>  -->
+
+                                    
+                                  <?php  
+                                  }
+                                // } 
+                                ?>
+
+                              <?php } ?>
+
+                            </tr>
+
+                          <?php } ?>
+
+                        </tbody>
+
+                      </table>
+
+                    </div>
+
+                  </div>
+
+                  </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myLargeModalLabel">Registrar comprobante de egreso/recibo</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form enctype="multipart/form-data" id="frmGuardar">
+            <input type="hidden" name="datos[idFacturaCompra]" id="datos[idFacturaCompra]" value="">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="negrita">Nro Factura:</label>
+                  <input type="text" class="form-control" id="nroFactura" name="datos[numeroFactura]" required readonly>
+                </div>
+              </div>
+              <?php
+              $oLista=new Lista("parametros_documentos");
+              $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
+              // $oLista->setFiltro("tipo","!=",);
+              $parametros=$oLista->getLista();
+              unset($oLista);
+                    ?>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label class="negrita">Tipo documento<span class="requerido">*</span>:</label>
+                        <select class="form-control select2" name="datos[tipoDocumento]" id="tipoDocumento" required>
+                          <option value="">Seleccione una opción</option>
+                          <?php foreach($parametros as $iParametro){ 
+                            $oItem=new Data("tipos_documento_contable","idTiposDocumento",$iParametro["tipo"]);
+                            $letraTipo=$oItem->getDatos();
+                            unset($oItem);
+                            ?>
+                          <option value="<?php echo $iParametro['idParametrosDocumentos']; ?>"    numeracion="<?php echo $iParametro['numeracionActual']; ?>" ><?php echo $letraTipo["letra"].'-'.$iParametro["comprobante"].'-'.$iParametro["descripcion"]; ?></option>
+                        <?php } ?>
+                        </select>
+                      </div>
+                    </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="negrita">Número<span class="requerido">*</span>:</label>
+                  <input type="text" class="form-control " name="datos[numeroComprobante]" id="numeroComprobante" required >
+                </div>
+            </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="negrita">Empresa:</label>
+                  <input type="text" class="form-control" id="empresa" required readonly>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="negrita">Fecha <span class="requerido">*</span>:</label>
+                  <input type="date" class="form-control" name="datos[fechaPago]" id="datos[fechaPago]" required>
+                </div>
+              </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="negrita">total factura<span class="requerido">*</span>:</label>
+                  <input type="text" class="form-control" name="datos[total]" id="total" required>
+                  <input type="hidden" class="form-control" name="datos[totalSaldo]" id="totalSaldo" required>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="datos[radioPago]" id="radioPagoTotal" value="1" checked>
+                  <label class="form-check-label" for="radioPagoTotal" >
+                    Pago total
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="datos[radioPago]" value="2" id="radioAbono" >
+                  <label class="form-check-label" for="radioAbono">
+                    Abono
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-3 ocultar" id="divCuentaContableTotal">
+                <div class="form-group">
+                  <label class="negrita">Cuenta contable total a Pagar:</label>
+                  <select class="form-control" name="datos[cuentaContableTotal]" id="cuentaContableTotal">
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <a class="btn btn-primary" href="javascript:void(0)" id="btnGuardar">Guardar</a>
+          </div>
+      </div>
+    </div>
+  </div>
+

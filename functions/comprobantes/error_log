@@ -1,0 +1,9 @@
+[17-Jan-2022 23:24:33 UTC] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/toa8o1mv7ibx/public_html/functions/comprobantes/editarcomprobante.php on line 194
+[17-Jan-2022 23:25:22 UTC] PHP Parse error:  syntax error, unexpected '}', expecting end of file in /home/toa8o1mv7ibx/public_html/functions/comprobantes/editarcomprobante.php on line 194
+[26-Jan-2022 21:49:43 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 109
+[27-Jan-2022 14:53:43 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 135
+[27-Jan-2022 14:56:33 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 135
+[27-Jan-2022 14:57:56 UTC] PHP Parse error:  syntax error, unexpected 'elseif' (T_ELSEIF) in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 227
+[27-Jan-2022 20:15:41 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 609
+[27-Jan-2022 20:18:08 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 774
+[27-Jan-2022 20:20:59 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/toa8o1mv7ibx/public_html/functions/comprobantes/guardarcomprobantecargado.php on line 774

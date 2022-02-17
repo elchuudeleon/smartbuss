@@ -1,0 +1,40 @@
+[13-Nov-2021 17:33:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpmhlm.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpmhlm.php on line 16
+[13-Nov-2021 17:33:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wppkcd.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wppkcd.php on line 16
+[13-Nov-2021 17:33:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpok19.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpok19.php on line 16
+[22-Nov-2021 22:51:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpnriw.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpnriw.php on line 16
+[22-Nov-2021 22:51:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wp8jps.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wp8jps.php on line 16
+[22-Nov-2021 22:51:17 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_transient() in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpxbfv.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.wpxbfv.php on line 16
+[11-Jan-2022 22:48:13 UTC] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function wc_maybe_store_user_agent(), 1 passed in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php on line 303 and exactly 2 expected in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-content/plugins/woocommerce/includes/wc-user-functions.php:856
+Stack trace:
+#0 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php(303): wc_maybe_store_user_agent('admin')
+#1 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#2 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#3 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.sso37410051c2be4d8da046fbc540facbbc.php(16): do_action('wp_login', 'admin')
+#4 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-content/plugins/woocommerce/includes/wc-user-functions.php on line 856
+[11-Jan-2022 22:50:01 UTC] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function wc_maybe_store_user_agent(), 1 passed in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php on line 303 and exactly 2 expected in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-content/plugins/woocommerce/includes/wc-user-functions.php:856
+Stack trace:
+#0 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php(303): wc_maybe_store_user_agent('admin')
+#1 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/class-wp-hook.php(327): WP_Hook->apply_filters('', Array)
+#2 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-includes/plugin.php(470): WP_Hook->do_action(Array)
+#3 /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/deleteme.sso9804454472ed4ea8b5b3c9bf85f78b69.php(16): do_action('wp_login', 'admin')
+#4 {main}
+  thrown in /home/toa8o1mv7ibx/public_html/wp.smartbuss.co/wp-content/plugins/woocommerce/includes/wc-user-functions.php on line 856
