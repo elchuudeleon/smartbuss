@@ -31,7 +31,7 @@ $("body").on("change","[name='datos[periodo]']",function(e){
           			for (var i = 1; i <= 12; i++) {
           				if(element[i]!=undefined){
           					sHtml+='<td class="text-center">'+element[i].valor+'</td>';
-                    total=parseFloat(total)+parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(element[i].valor,"$",""),",",""),".",","));
+                    total=parseFloat(total)+parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(element[i].valor,"$",""),".",""),".",","));
           				}else{
 							sHtml+='<td class="text-center">-</td>';
           				}

@@ -1,37 +1,26 @@
 <?php
-
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
 
-
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 
 
 date_default_timezone_set("America/Bogota"); 
 
-
-
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
-
 $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
 
-
+$msg=true;
 
 $oItem=new Data("tercero","nit",$datos["nit"]); 
-
 $aValidate=$oItem->getDatos(); 
-
 unset($oItem); 
 if(!isset($_SESSION)){ session_start(); }
 
 if(empty($aValidate)){
 
-    
+  
 
     $aDatos["tipoPersona"]=$datos["tipoPersona"]; 
     $aDatos["nit"]=$datos["nit"]; 
@@ -58,19 +47,27 @@ if(empty($aValidate)){
     foreach($aDatos  as $key => $value){
         $oItem->$key=$value; 
     }
-    $oItem->guardar(); 
+    $msg=$oItem->guardar(); 
     $idTercero=$oItem->ultimoId(); 
     unset($oItem);
-    foreach ($item as $key => $value) {
-        if($value["estado"]==1){
-        $oItem=new Data("tercero_empresa","idTerceroEmpresa"); 
-        $oItem->idTercero=$idTercero; 
-        $oItem->idEmpresa=$value["idEmpresa"]; 
-        $oItem->guardar(); 
-        unset($oItem); 
+
+    if($msg){
+        foreach ($item as $key => $value) {
+            if($value["estado"]==1){
+            $oItem=new Data("tercero_empresa","idTerceroEmpresa"); 
+            $oItem->idTercero=$idTercero; 
+            $oItem->idEmpresa=$value["idEmpresa"]; 
+            $msg=$oItem->guardar(); 
+
+            if(!$msg){
+                echo json_encode(array("msg"=>$msg));
+                break; 
+            }
+            unset($oItem); 
+            }
         }
     }
-    $msg=true; 
+    
 
 }else{
     if ($aValidate['tipoTercero']==1 || $aValidate['tipoTercero']==4) {
@@ -101,19 +98,25 @@ if(empty($aValidate)){
         foreach($aDatos  as $key => $value){
             $oItem->$key=$value; 
         }
-        $oItem->guardar(); 
+        $msg=$oItem->guardar(); 
         $idTercero=$aValidate['idTercero']; 
         unset($oItem);
-        foreach ($item as $key => $value) {
-            if($value["estado"]==1){
-            $oItem=new Data("tercero_empresa","idTerceroEmpresa"); 
-            $oItem->idTercero=$idTercero; 
-            $oItem->idEmpresa=$value["idEmpresa"]; 
-            $oItem->guardar(); 
-            unset($oItem); 
+
+        if($msg){
+            foreach ($item as $key => $value) {
+                if($value["estado"]==1){
+                $oItem=new Data("tercero_empresa","idTerceroEmpresa"); 
+                $oItem->idTercero=$idTercero; 
+                $oItem->idEmpresa=$value["idEmpresa"]; 
+                $msg=$oItem->guardar(); 
+                unset($oItem); 
+                if(!$msg){
+                    echo json_encode(array("msg"=>$msg));
+                    break; 
+                }
+                }
             }
         }
-        $msg=true;
     }
 
 

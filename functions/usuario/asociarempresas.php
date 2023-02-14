@@ -26,14 +26,10 @@ foreach ($item as $key => $value) {
     $oItem=new Data("usuario_empresa","idUsuarioEmpresa"); 
     $oItem->idUsuario=$id; 
     $oItem->idEmpresa=$value["idEmpresa"]; 
-    $oItem->guardar(); 
+    $msg=$oItem->guardar(); 
     unset($oItem); 
     }
 }
-
-
-$msg=true; 
-
  
 
 echo json_encode(array("msg"=>$msg));

@@ -1,63 +1,35 @@
 <?php 
-
 require_once("class/facturaventa.php"); 
-
 require_once("class/clientes.php"); 
 
-
-
 $oClientes=new Clientes();
-
 $oFactura=new FacturaVenta(); 
-
 $oControl=new Control(); 
-
 $id=(isset($_REQUEST['id'] ) ? $_REQUEST['id'] : '' );
 
-
-
 if($id==""){
-
   echo '<script>window.history.back()</script>'; 
-
 }
-
 $decrip["cadena"]=$id; 
-
 $id=$oControl->desencriptar($decrip); 
 
-
-
 $oItem=new Data("factura_venta","idFacturaVenta",$id); 
-
 $aDatos=$oItem->getDatos(); 
-
 unset($oItem); 
-
-
 
 $oItem=new Data("empresa","idEmpresa",$aDatos["idEmpresa"]); 
-
 $aEmpresa=$oItem->getDatos(); 
-
 unset($oItem); 
 
-
-
 $oItem=new Data("tercero","idTercero",$aDatos["idCliente"]); 
-
 $aCliente=$oItem->getDatos(); 
 
 unset($oItem); 
 
 
-
 $oLista = new Lista('factura_venta_item');
-
 $oLista->setFiltro("idFacturaVenta","=",$id);
-
 $aItems=$oLista->getLista();
-
 unset($oLista);
 
 
@@ -68,15 +40,10 @@ unset($oLista);
 
 
 $oLista = new Data('factura_venta_gestion',"idFacturaVenta",$id);
-
 $aGestion=$oLista->getDatos();
-
 unset($oLista);
 
 $aClientes=$oClientes->getClientesEmpresa(array("estado"=>1,"idEmpresa"=>$aDatos["idEmpresa"]));
-
-
-
 
 $oLista = new Lista('producto_servicio');
 $oLista->setFiltro("idEmpresa","=",$aDatos["idEmpresa"]);
@@ -84,23 +51,15 @@ $aProducto=$oLista->getLista();
 unset($oLista);
 
 ?>
-
 <style type="text/css">
-
   input[readonly]{
-
     background-color: #FFFF !important;
-
     text-transform: uppercase;
-
   }
 
   .no-producto{
-
     width: calc(100% - 18px) !important;
-
     display: inline-block;
-
   }
 
 </style>
@@ -411,7 +370,7 @@ unset($oLista);
 
                             <td colspan="8" style="text-align: right;" class="negrita">DESCUENTO:</td>
 
-                            <td style="width: 200px;"><input type="text" style="text-align: right;" class="form-control mayusculas" value='<?php echo "$".number_format($aDatos["descuento"],2,",","."); ?>' readonly ></td>
+                            <td style="width: 200px;"><input type="text" style="text-align: right;" name="datos[descuento]" class="form-control mayusculas" value='<?php echo "$".number_format($aDatos["descuento"],2,",","."); ?>' readonly ></td>
 
                           </tr>
 
@@ -419,7 +378,7 @@ unset($oLista);
 
                             <td colspan="8" style="text-align: right;" class="negrita">IVA:</td>
 
-                            <td style="width: 200px;"><input type="text" style="text-align: right;" class="form-control mayusculas" value='<?php echo "$".number_format($aDatos["iva"],2,",","."); ?>' readonly ></td>
+                            <td style="width: 200px;"><input type="text" style="text-align: right;" name="datos[iva]" class="form-control mayusculas" value='<?php echo "$".number_format($aDatos["iva"],2,",","."); ?>' readonly ></td>
 
                           </tr>
 
@@ -553,7 +512,7 @@ unset($oLista);
 
                               <th>Valor</th>
 
-                              <!-- <th class="text-center" style="width: 50px">-</th> -->
+                              <th class="text-center" style="width: 50px">-</th>
 
                             </tr>
 
@@ -561,63 +520,46 @@ unset($oLista);
 
                           <tbody>
                             <?php foreach($aDeduccion as $key=>$deduccion){ 
-
                             switch ($deduccion["tipoDeduccion"]) {
-
                                 case '1':
-
                                   $tipodeduccion="Retención"; 
-
                                   break;
-
                                 case '2':
-
                                   $tipodeduccion="RETE ICA"; 
-
                                   break;
-
                                 case '3':
-
                                   $tipodeduccion="ARL"; 
-
                                   break;
-
                                 case '4':
-
                                   $tipodeduccion="Otros descuentos autorizados"; 
-
                                   break;
-
                                 case '5':
-
                                   $tipodeduccion="Retención salarios"; 
-
                                   break;
-
                                 default:
-
                                   # code...
-
                                   break;
-
                                 }
 
                                 $oLista = new Lista('retencion');
-
                                 $oLista->setFiltro("tipo","=",$deduccion["tipoDeduccion"]);
-
                                 $oLista->setFiltro("estado","=",1);
-
                                 $aRetencion=$oLista->getLista();
-
                                 unset($oLista);
-                                $totalDeduccion+=$deduccion["valor"];
+                                if($deduccion["idConcepto"]!=33){
+                                  $totalDeduccion+=$deduccion["valor"];  
+                                }
+                                
                             ?>
                             <tr>
-                              <input type="hidden" name="baseImpuestos[<?php echo $key?>][idFacturaVentaDeduccion]" value="<?php echo $deduccion['idFacturaVentaDeduccion'];?>">
-                              <td><div class="form-group">
-
-                            <label class="negrita">Tipo deducción<span class="requerido">*</span>:</label>
+                              <input type="hidden" name="impuesto[<?php echo $key?>][tipoDeduccion]" id="impuesto[<?php echo $key?>][tipoDeduccion]" value="<?php echo $deduccion["tipoDeduccion"];?>">
+                              <input type="hidden" name="impuesto[<?php echo $key?>][concepto]" id="impuesto[<?php echo $key?>][concepto]" value="<?php echo $deduccion["concepto"];?>">
+                              <input type="hidden" name="impuesto[<?php echo $key?>][idConcepto]" id="impuesto[<?php echo $key?>][idConcepto]" value="<?php echo $deduccion["idConcepto"];?>">
+                              <input type="hidden" name="impuesto[<?php echo $key?>][baseImpuestos]" id="impuesto[<?php echo $key?>][baseImpuestos]" value="<?php echo $deduccion["baseImpuestos"];?>">
+                              <input type="hidden" name="impuesto[<?php echo $key?>][valor]" id="impuesto[<?php echo $key?>][valor]" value="<?php echo $deduccion["valor"];?>" class="valorSumar">
+                              <td>
+                                <?php echo $tipodeduccion; ?>
+                              <!-- div class="form-group">
 
                             <select class="form-control mayusculas tipoDeduccion" id="tipoDeduccion[<?php echo $key?>][tipoDeduccion]" name="baseImpuestos[<?php echo $key?>][tipoDeduccion]">
 
@@ -631,12 +573,13 @@ unset($oLista);
 
                           </select>
 
-                        </div></td>
+                        </div> -->
+                          
+                        </td>
                               <!-- <td><?php echo $deduccion["concepto"]; ?></td> -->
-                              <td><div class="form-group">
-
-                            <label class="negrita d-block">Concepto<span class="requerido">*</span>:</label>
-
+                              <td>
+                                <?php echo $deduccion["concepto"]; ?>
+                              <!-- <div class="form-group">
                             <select class="form-control conceptoSelect" name="baseImpuestos[<?php echo $key?>][conceptoSelect]" id="conceptoSelect[<?php echo $key?>]">
 
                             <option value="">Seleccione una opción</option>
@@ -648,9 +591,13 @@ unset($oLista);
 
                           </select>
 
-                        </div></td>
-                              <td><input type="text" name="baseImpuestos[<?php echo $key?>][baseImpuestos]" id="baseImpuestos[<?php echo $key?>]" class="form-control moneda decimales baseImpuestos" value='<?php echo "$".number_format($deduccion["baseImpuestos"],2,",","."); ?>' </td>
-                              <td><input type="text" name="baseImpuestos[<?php echo $key?>][valorDeduccion]" id="valor[<?php echo $key?>]" class="form-control moneda valorDeduccion valorSumar" value='<?php echo "$".number_format($deduccion["valor"],2,",","."); ?>' readonly></td>
+                        </div> --></td>
+                              <td>
+                                <?php echo "$".number_format($deduccion["baseImpuestos"],2,",","."); ?>
+                              <!-- <input type="text" name="baseImpuestos[<?php echo $key?>][baseImpuestos]" id="baseImpuestos[<?php echo $key?>]" class="form-control moneda decimales baseImpuestos" value='<?php echo "$".number_format($deduccion["baseImpuestos"],2,",","."); ?>' --></td>
+                              <td>
+                                <?php echo "$".number_format($deduccion["valor"],2,",","."); ?>
+                                <!-- <input type="text" name="baseImpuestos[<?php echo $key?>][valorDeduccion]" id="valor[<?php echo $key?>]" class="form-control moneda valorDeduccion valorSumar" value='<?php echo "$".number_format($deduccion["valor"],2,",","."); ?>' readonly> --> </td>
 
                               <td><a href='javascript:void(0)' data-toggle='tooltip' id='eliminar' data-placement='top' title='Eliminar' class='btnEliminar btn btn-icon btn-sm btn-danger'><i class='fas fa-trash'></i></a></td>
                               
@@ -667,7 +614,7 @@ unset($oLista);
 
                     <div class="row">
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
 
                         <div class="form-group">
 
@@ -679,7 +626,7 @@ unset($oLista);
 
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-3">
 
                         <div class="form-group">
 
@@ -698,7 +645,7 @@ unset($oLista);
                               $totalPagar=$aGestion["totalPagar"];
                             }
                             ?>
-                      <div class="col-md-4">
+                      <div class="col-md-3">
 
                         <div class="form-group">
 
@@ -709,7 +656,34 @@ unset($oLista);
                         </div>
 
                       </div>
+                      <?php 
 
+                        $oItem=new Lista("banco_cuenta_contable");
+                        $oItem->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
+                        $aBancos=$oItem->getLista();
+                        unset($oItem); 
+                        ?>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label class="negrita">Forma de pago:</label>
+                              <select class="form-control select2 dropup" name="datos[formaPagoFactura]" id="formaPagoFactura" required>
+                                <optgroup label="Crear forma de pago">
+                                  <option value="">Seleccione</option>
+                                  <option value="0"><i class="fas fa-plus-circle" >+ NUEVO</i></option>
+                                  
+                                </optgroup>
+                                <optgroup label="Formas de pago existentes:">
+                                  <?php foreach ($aBancos as $key=> $value){  
+                                    $oItem=new Data("cuenta_contable","idCuentaContable",$value["idEmpresaCuenta"]);
+                                    $cuenta=$oItem->getDatos();
+                                    unset($oItem);
+                                    ?>
+                                    <option <?php if($aDatos['formaPagoFactura']==$value["idBancoCuentaContable"]){ echo 'selected'; } ?> value="<?php echo $value["idBancoCuentaContable"]; ?>"><?php echo $value["nombre"].'   -  '.$cuenta["codigoCuenta"]; ?></option>
+                                  <?php } ?>
+                                </optgroup>
+                            </select>
+                          </div>
+                        </div>
                     </div>
 
                     

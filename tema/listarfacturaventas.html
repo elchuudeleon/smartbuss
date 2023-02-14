@@ -176,7 +176,8 @@ if(empty($_SESSION["idEmpresa"])){
                                       $retencion=$retencion+$valuede["valor"];
                                     }
                                   }
-                                  echo "$".number_format($iFactura["total"]-$retencion,2,",",".");  
+                                  $valor=str_replace(",",".",$iFactura["total"])-str_replace(",",".",$retencion); 
+                                  echo "$".number_format($valor,2,",",".");  
                                 }else{
                                   echo "$".number_format($iFactura["saldo"],2,",",".");   
                                 }

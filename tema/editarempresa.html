@@ -324,7 +324,27 @@ unset($oLista);
                               </div>
                       </div>
                   </div>
-
+                  <div class="row">
+                       <div class="col-md-3">
+                        <div class="form-group">
+                                <input  type="hidden" name="datos[siigonube]" id="datos[siigonube]" value="0">
+                                <input  type="checkbox" name="datos[siigonube]" id="datos[siigonube]" <?php if($aDatos['aplicaSiigo']==1){ echo 'checked'; } ?> value="1">
+                                <label class="form-check-label" for="defaultCheck1">¿Conexion Siigo Nube?</label>
+                              </div>
+                      </div>
+                      <div class="col-md-4 siigo <?php if($aDatos['aplicaSiigo']!=1){ echo 'ocultar'; } ?>">
+                      <div class="form-group">
+                        <label class="negrita">Usuario API Siigo Nube<span class="requerido">*</span>:</label>
+                        <input type="email" class="form-control" value="<?php echo $aDatos['usuarioSiigo']; ?>" name="datos[usuarioSiigo]" id="datos[usuarioSiigo]" <?php if($aDatos['aplicaSiigo']==1){ echo 'required'; } ?>>
+                      </div>
+                    </div>
+                    <div class="col-md-4 siigo <?php if($aDatos['aplicaSiigo']!=1){ echo 'ocultar'; } ?>">
+                      <div class="form-group">
+                        <label class="negrita">Llave API Siigo Nube<span class="requerido">*</span>:</label>
+                        <input type="text" class="form-control" name="datos[llaveApi]" value="<?php echo $aDatos['access_key']; ?>" id="datos[llaveApi]" <?php if($aDatos['aplicaSiigo']==1){ echo 'required'; } ?>>
+                      </div>
+                    </div>
+                  </div>
                   </div>
 
                   <div class="card-header">

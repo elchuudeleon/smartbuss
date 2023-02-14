@@ -1,20 +1,15 @@
 <?php
 
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
 
 date_default_timezone_set("America/Bogota"); 
 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
-// $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
-// $banco  = (isset($_REQUEST['banco'] ) ? $_REQUEST['banco'] : "" );
 
-
+$msg=true; 
 if(!isset($_SESSION)){ session_start(); }
 
     
@@ -22,12 +17,10 @@ if(!isset($_SESSION)){ session_start(); }
     $oLista->setFiltro("idEmpresa","=",$datos["idEmpresa"]);
     $oLista->setFiltro("idConcepto","=",$datos['idConcepto']);
     $oLista->setFiltro("idEmpresaCuenta","=",$datos["idCuentaContable"]);
-    // $oLista->setFiltro("tipoFactura","=",$datos["tipoFactura"]);
     $nominaparametrizada=$oLista->getlista();
     unset($oLista);
 
     if (empty($nominaparametrizada)) {
-
 
 
         if ($datos["idConcepto"]=="1") {
@@ -106,14 +99,12 @@ if(!isset($_SESSION)){ session_start(); }
 
 
         $oItem=new Data("nomina_cuenta_contable","idNominaCuentaContable");  
-            foreach($nominap  as $keya => $valuea){
-                $oItem->$keya=$valuea; 
-            }
-            $oItem->guardar(); 
-            unset($oItem);
+        foreach($nominap  as $keya => $valuea){
+            $oItem->$keya=$valuea; 
+        }
+        $msg=$oItem->guardar(); 
+        unset($oItem);
 
-
-       $msg=true; 
 
     }
 
@@ -122,6 +113,6 @@ if(!isset($_SESSION)){ session_start(); }
         $msg=false;         
     }
 
-    echo json_encode(array("msg"=>$msg));
+echo json_encode(array("msg"=>$msg));
 
  ?>

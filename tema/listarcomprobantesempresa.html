@@ -1,8 +1,10 @@
 <?php 
 
 require_once("./class/cuentascontables.php");
+require_once("./class/comprobantes.php");
 
 $oControl=new Control(); 
+$oComprobantes=new Comprobantes(); 
 if (empty($_SESSION["idEmpresa"])) {
 
 $id=(isset($_REQUEST['id'] ) ? $_REQUEST['id'] : '' );
@@ -17,174 +19,113 @@ $decrip["cadena"]=$id;
 $id=$oControl->desencriptar($decrip); 
 }
 if (!empty($_SESSION["idEmpresa"])) {
-  $id=$_SESSION["idEmpresa"];
+  $idEmpresa=$_SESSION["idEmpresa"];
 }
-$oControl=new Control(); 
 
-$oLista = new Lista('comprobante');
-$oLista->setFiltro("idEmpresa","=",$id);
-$oLista->setOrden("idTipo","DESC");
-$oLista->setOrden("comprobante","DESC");
-$oLista->setOrden("numero","DESC");
+$nuevaFecha = strtotime ( '-2 month' , strtotime ( date("Y-m") ) ) ;
+$nuevaFecha = date ( 'Y-m' , $nuevaFecha )."-01";
 
-$aComprobante=$oLista->getLista();
+$aFiltro["fechaInicio"]=$nuevaFecha; 
+$aFiltro["fechaFinal"]=date("Y-m-d"); 
 
-unset($oLista);
-$idEmpresa=$id;
+$aComprobante=$oComprobantes->getComprobantesEmpresas($aFiltro); 
+//$idEmpresa=$id;
 ?>
 
 <section class="section">
-
         <ul class="breadcrumb breadcrumb-style ">
-
           <li class="breadcrumb-item">
-
             <a href="<?php echo $URL; ?>">
-
               <i data-feather="home"></i></a>
-
           </li>
-
           <li class="breadcrumb-item">Comprobantes</li>
-
           <li class="breadcrumb-item">Listar comprobantes</li>
-
         </ul>
-
         <div class="section-body">
-
           <div class="row">
-
             <div class="col-md-12 col-lg-12">
-
               <div class="card">
-
                 <div class="card-header">
-
                   <h4>Información General</h4>
-
                 </div>
-
                 <div class="card-body">
-
                   <div class="row">
-
+                    <div class="col-md-2 offset-md-8">
+                      <div class="form-group">
+                        <label class="negrita">Fecha Inicio<span class="requerido">*</span>:</label>
+                        <input type="text" readonly class="form-control datepicker" value="<?php echo $nuevaFecha; ?>" name="fechaInicio" id="fechaInicio" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="negrita">Fecha Final<span class="requerido">*</span>:</label>
+                        <input type="text" readonly class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>" name="fechaFinal" id="fechaFinal" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
                     <div class="col-md-12 col-lg-12">
-
                       <table class="table table-striped mayusculas" style="font-size: 11px;" id="tableEnterprise">
-
                         <thead>
-
                           <tr>
-
                             <th class="text-center">#</th>
-
                             <th>TIPO</th>
-
                             <!-- <th>COMPROBANTE</th> -->
-
                             <th>FECHA</th>
-                            
                             <th>FECHA REGISTRO</th>
-                            
                             <th>USUARIO REGISTRA</th>
-                            
                             <th style="width:15%;">OBSERVACIONES</th>
                             <th>DEBITOS</th>
                             <th>CREDITOS</th>
-
                             <th>ACCIONES</th>
-
                           </tr>
-
+                          <tr>
+                            <th class="text-center"></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th style="width:15%;"><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th><input type="text"  class="form-control" style="heigth:25%;" /></th>
+                            <th> - </th>
+                          </tr>
                         </thead>
-
                         <tbody>
-
                           <?php foreach($aComprobante as $index => $iComprobante){ 
-
                             $aEncript['cadena']=$iComprobante['idComprobante'];
-                            $idEliminar=$iComprobante['idComprobante'];
-
+                        
                             $id=$oControl->encriptar($aEncript); 
-                            $oItem=new Data("tipos_documento_contable","idTiposDocumento",$iComprobante["idTipo"]); 
-
-                            $aDatos=$oItem->getDatos(); 
-
-                            unset($oItem); 
-
-                            $oItem=new Data("parametros_documentos","idParametrosDocumentos",$iComprobante["comprobante"]); 
-
-                            $aDatosP=$oItem->getDatos(); 
-
-                            unset($oItem); 
-
-                            $oItem=new Data("usuario","idUsuario",$iComprobante["usuarioRegistra"]); 
-
-                            $aDatosU=$oItem->getDatos(); 
-
-                            unset($oItem); 
+                            
                             $fechaEx= explode("-", $iComprobante["fecha"]);
                             $mes=$fechaEx[0].'-'.intval($fechaEx[1]);
                             
-                            $oLista=new Lista("cierre_mes_contable");
-                            $oLista->setFiltro("mes","=",$mes);
-                            $oLista->setFiltro("idEmpresa","=",$idEmpresa);
-                            $cierre=$oLista->getLista();
-                            unset($oLista);
-
-
-
-                            $oLista=new Lista("comprobante_items");
-                            $oLista->setFiltro("idComprobante","=",$iComprobante['idComprobante']);
-                            // $oLista->setFiltro("mes","=",$mes);
-                            $comprobanteItemsBuscar=$oLista->getLista();
-                            unset($oLista);
-
-                            // foreach($comprobanteItemsBuscar)
-                            $debito=0;
-                            $credito=0;
-                            foreach ($comprobanteItemsBuscar as $keyC => $valueC) {
-                              $debito=$debito+$valueC["saldoDebito"];
-                              $credito=$credito+$valueC["saldoCredito"];
-                            }
-                            
                             ?> 
-
                             <tr>
-
                               <td><?php echo $index+1; ?></td>
-
-                              <td class="centrar"><?php echo $aDatos["letra"].'-'.$iComprobante["comprobante"].'-'.$iComprobante["numero"]; ?></td>
-
+                              <td class="centrar"><?php echo $iComprobante["letra"].'-'.$iComprobante["comprobante"].'-'.$iComprobante["numero"]; ?></td>
                               <td class="centrar"><?php echo $iComprobante["fecha"]; ?></td>
-                              
                               <td class="centrar"><?php echo $iComprobante["fechaRegistro"]; ?></td>
-                              
-                              <td class="centrar"><?php echo $aDatosU["nombreUsuario"].' '.$aDatosU["apellidoUsuario"]; ?></td>
-                              
+                              <td class="centrar"><?php echo $iComprobante["usuario"]; ?></td>
                               <td class="centrar"><?php echo $iComprobante["observaciones"]; ?></td>
-
-                              <td class="centrar"><?php echo "$".number_format($debito,2,",","."); ?></td>
-
-                              <td class="centrar"><?php echo "$".number_format($credito,2,",","."); ?></td>
-
+                              <td class="centrar"><?php echo "$".number_format($iComprobante["saldoDebito"],2,",","."); ?></td>
+                              <td class="centrar"><?php echo "$".number_format($iComprobante["saldoCredito"],2,",","."); ?></td>
                               <td class="centrar">
 
                                 <a href="<?php  echo $URL; ?>vercomprobante/<?php echo $id; ?>" name="<?php echo $iEmpresa['idEmpresa']; ?>"  data-toggle="tooltip" data-placement="top" title="Ver Items comprobante"><i class="fas fa-eye" style="color: #8A96FF;font-size: 20px;"></i></a>
 
                                 <a href="<?php echo $URL.$iComprobante['archivo']; ?>" target="_blank"data-toggle="tooltip" data-placement="top" title="ver archivo"><i class="fas fa-paperclip" style="color: #A59D9D;font-size: 20px;"></i></a>
                                 
-                                <?php if ($iComprobante["estado"]==null) {  ?>
+                                <?php if ($iComprobante["estadoFra"]!=3) {  ?>
 
                                 <a href="<?php  echo $URL; ?>editarcomprobante/<?php echo $id; ?>" name="<?php echo $iEmpresa['idEmpresa']; ?>"  data-toggle="tooltip" data-placement="top" title="Editar comprobante"><i class="fas fa-pencil-alt" style="color: #FFCC4D;font-size: 20px;"></i></a>
-                                <a href="javascript:void(0)" id="btnAnular" name="btnAnular[<?php echo $index?>]"  value="<?php echo $idEliminar; ?>" ><i class="fas fa-ban" style="color: #DF81FF;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Anular factura"  ></i></a>
+                                <a href="javascript:void(0)" id="btnAnular" name="btnAnular[<?php echo $index?>]"  value="<?php echo $iComprobante['idComprobante']; ?>" ><i class="fas fa-ban" style="color: #DF81FF;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Anular factura"  ></i></a>
                                     <?php 
                                     // if (empty($cierre)) {
                                       
                                   ?>
 
-                                <a href="javascript:void(0)" id="btnEliminar" name="btnEliminar[<?php echo $index?>]" value="<?php echo $idEliminar; ?>"   idEmpresa="<?php echo $idEmpresa; ?>"><i class="fas fa-trash" style="color: #FF5D5D;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Eliminar"  ></i></a>
+                                <a href="javascript:void(0)" id="btnEliminar" name="btnEliminar[<?php echo $index?>]" value="<?php echo $iComprobante['idComprobante']; ?>"   idEmpresa="<?php echo $idEmpresa; ?>"><i class="fas fa-trash" style="color: #FF5D5D;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Eliminar"  ></i></a>
                                   
                                   <?php if ($aDatos["letra"]!='G' && $aDatos["letra"]!='R') { ?>
                                   <!-- <a href="javascript:void(0)" id="<?php echo $iFactura['idFacturaVenta']; ?>" class="comprobante" data-toggle="modal" data-target="#modal" ><i class="fas fa-money-bill-alt" data-toggle="tooltip" data-placement="top" title="Pagar" style="color: #65E572;font-size: 19px;"></i></a>  -->
@@ -196,29 +137,18 @@ $idEmpresa=$id;
                                 ?>
 
                               <?php } ?>
-
+                              </td>
                             </tr>
-
                           <?php } ?>
-
                         </tbody>
-
                       </table>
-
                     </div>
-
                   </div>
-
                   </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 

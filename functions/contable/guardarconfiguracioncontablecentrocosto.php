@@ -14,7 +14,7 @@ $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 // $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
 // $banco  = (isset($_REQUEST['banco'] ) ? $_REQUEST['banco'] : "" );
 
-
+ $msg=true; 
 if(!isset($_SESSION)){ session_start(); }
 
 
@@ -31,12 +31,9 @@ if(!isset($_SESSION)){ session_start(); }
     foreach($centroCosto  as $keyEC => $valueEC){
         $oItem->$keyEC=$valueEC; 
     }
-    $oItem->guardar(); 
+    $msg=$oItem->guardar(); 
     unset($oItem);
-    
-
-       $msg=true; 
-
+   
 
     echo json_encode(array("msg"=>$msg));
 

@@ -15,7 +15,6 @@ $("body").on("change","[name='datos[periodo]']",function(e){
         dataType: "json",
         }).done(function(msg){  
 
-          console.log(msg); 
           if(msg!=null){
           		var sHtml=''; 
 
@@ -33,7 +32,7 @@ $("body").on("change","[name='datos[periodo]']",function(e){
           				if(element[i]!=undefined){
           					sHtml+='<td class="text-center">'+element[i].valor+'</td>';
                     
-                    total=parseFloat(total)+parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(element[i].valor,"$",""),",",""),".",","));
+                    total=parseFloat(total)+parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(element[i].valor,"$",""),".",""),".",","));
           				}else{
 							sHtml+='<td class="text-center">-</td>';
           				}

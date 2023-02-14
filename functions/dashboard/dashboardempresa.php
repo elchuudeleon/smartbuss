@@ -1,4 +1,5 @@
 <?php
+header('Content-type: application/json');
 require_once("../../php/restrict.php");
 
 include_once($CLASS . "data.php");
@@ -143,16 +144,30 @@ if ($totalPasivoCorriente["total"]=="" || $totalPasivoCorriente["total"]=="0") {
 	$totalPasivoCorriente["total"]=$pasivo;	
 }
 
+$indiceLiquidez=0; 
+if($totalPasivoCorriente["total"]>0){
 $indiceLiquidez=$totalActivoCorriente["total"]/$totalPasivoCorriente["total"];
-
+}
 
 $capitalTrabajo=$totalActivoCorriente["total"]-$totalPasivoCorriente["total"]; 
 
-$rentabilidadPatrimonio=$utilidadOperacional["valor"]/$totalPatrimonio["total"]; 
-$rentabilidadActivo=$totalActivo["total"]/$totalPatrimonio["total"]; 
-$vSolidez=$activo/$pasivo; 
+$rentabilidadPatrimonio=0; 
+$rentabilidadActivo=0; 
+if($totalPatrimonio["total"]>0){
+	$rentabilidadPatrimonio=$utilidadOperacional["valor"]/$totalPatrimonio["total"]; 	
+	$rentabilidadActivo=$totalActivo["total"]/$totalPatrimonio["total"]; 
+}
 
-$listIndicador["nivelEndeudamiento"]=$nivelEndeudamiento;
+
+
+$vSolidez=0; 
+if($pasivo>0){
+$vSolidez=$activo/$pasivo; 	
+}
+
+
+
+$listIndicador["nivelEndeudamiento"]=$nivelEndeudamiento==null?0:$nivelEndeudamiento;
 $listIndicador["solidez"]=$vSolidez; 
 $listIndicador["indiceLiquidez"]=$indiceLiquidez;
 $listIndicador["rentabilidadPatrimonio"]=$rentabilidadPatrimonio;
@@ -160,11 +175,6 @@ $listIndicador["rentabilidadActivo"]=$rentabilidadActivo;
 $listIndicador["capitalTrabajo"]="$".number_format($capitalTrabajo,0,",","."); 
 
 
-
-
-
 echo json_encode(array("rentabilidad"=>$aItem,"situacion"=>$listaSituacion,"facturacion"=>$aFacturacion,"indicador"=>$listIndicador,"ingresos"=>$ingresos,"gastos"=>$gastos));
-
-// print_r('-----');
 
 ?>

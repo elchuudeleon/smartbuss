@@ -114,7 +114,9 @@ class Data {
 			$this->pk_value=$this->dbh->lastInsertId();
 			return true; 
 		}catch(PDOException $e){
-	    	echo $e->getMessage();
+		    return false;
+		    //echo $sql;
+	    	//echo $e->getMessage();
 	    }
 	}
 	
@@ -141,14 +143,24 @@ class Data {
 			$this->$pk_value=$this->dbh->lastInsertId();
 			return true; 
 		}catch(PDOException $e){
-	    	echo $e->getMessage();
+	    	return false; 
+	    	//echo $e->getMessage();
 	    }
 	}
 
-	public function eliminar(){				
-		$sql="DELETE FROM $this->table WHERE $this->pk=$this->pk_value";
-		$sth = $this->dbh->prepare($sql);
-		return $sth->execute();
+	public function eliminar(){	
+	    
+	    try{
+	        $sql="DELETE FROM $this->table WHERE $this->pk=$this->pk_value";
+    		$sth = $this->dbh->prepare($sql);
+    		$sth->execute();
+    		
+    		return true; 
+	    }catch(PDOException $e){
+	    	return false; 
+	    	//echo $e->getMessage();
+	    }
+		
 	}
 	
 	

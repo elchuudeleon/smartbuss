@@ -8,7 +8,7 @@ include_once($CLASS . "data.php");
 include_once($CLASS . "lista.php");
 
 date_default_timezone_set("America/Bogota"); 
-
+$msg=true; 
 $id  = (isset($_REQUEST['id'] ) ? $_REQUEST['id'] : "" );
 $tipo  = (isset($_REQUEST['tipo'] ) ? $_REQUEST['tipo'] : "" );
 $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
@@ -47,13 +47,13 @@ foreach ($item as $key => $value) {
         $oItem=new Data("fecha_retencion_iva_empresa","idFechaRetencionIvaEmpresa"); 
         $oItem->idFechaRetencionIva=$id; 
         $oItem->idEmpresa=$value["idEmpresa"]; 
-        $oItem->guardar(); 
+        $msg=$oItem->guardar(); 
         unset($oItem); 
     }
 }
 
 
-$msg=true; 
+
 
  
 

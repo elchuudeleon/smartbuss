@@ -1050,27 +1050,25 @@ $("body").on("change","#baseImpuestos",function(e){
 
 
 
-   var base=parseInt(eliminarMoneda(eliminarMoneda(eliminarMoneda($(this).val(),".",""),"$",""),",","."))
+   var base=Math.round(eliminarMoneda(eliminarMoneda(eliminarMoneda($(this).val(),".",""),"$",""),",","."))
 
-   var subtotal=parseInt(eliminarMoneda(eliminarMoneda(eliminarMoneda($('[name="datos[subtotal]"]').val(),".",""),"$",""),",","."))
+   var subtotal=Math.round(eliminarMoneda(eliminarMoneda(eliminarMoneda($('[name="datos[subtotal]"]').val(),".",""),"$",""),",","."))
 
    if(base>subtotal){
 
-    swal({   
+    Swal.fire(
+      {
+        icon: 'error',
+        title: 'Algo ha salido mal!',
+        text: 'La base de impuestos no puede ser mayor al subtotal',
+        closeOnConfirm: true,
+      }
 
-      title: "Algo ha salido mal!",   
+      ).then((result) => {
 
-      text: "La base de impuestos no puede ser mayor al subtotal",
+       $("#baseImpuestos").val("")
 
-      type: "error",        
-
-      closeOnConfirm: true 
-
-      }).then((element)=>{
-
-        $("#baseImpuestos").val("")
-
-      });
+      })
 
       return false; 
 
@@ -1104,7 +1102,7 @@ calcularDeduccion=function(){
     var tipo=$("[name='impuesto["+index+"][tipoDeduccion]']").val();  
     var concepto =$("[name='impuesto["+index+"][idConcepto]']").val();  
 
-    if (concepto!=33) {
+    if (concepto!="33") {
       valor+=parseFloat(eliminarMoneda($(element).val(),",","."));
     }
 
@@ -1133,27 +1131,22 @@ $("body").on("click touchstart",".btnEliminar",function(e){
   $(this).parents("tr").css("background-color","#f0d0d0"); 
 
   var elemento=this; 
-
-  setTimeout(function(){
-
-    $(elemento).parents("tr").remove();
+	$(elemento).parents("tr").remove();
 
     $("#tableDeducciones tbody tr").each(function(index,element){
 
-      $(element).find(".tipoDeduccion").attr("id","item["+index+"][tipoDeduccion]").attr("name","item["+index+"][tipoDeduccion]")
+      $(element).find(".tipoDeduccion").attr("id","impuesto["+index+"][tipoDeduccion]").attr("name","impuesto["+index+"][tipoDeduccion]")
 
-      $(element).find(".concepto").attr("id","item["+index+"][concepto]").attr("name","item["+index+"][concepto]")
+      $(element).find(".concepto").attr("id","impuesto["+index+"][concepto]").attr("name","impuesto["+index+"][concepto]")
 
-      $(element).find(".idConcepto").attr("id","item["+index+"][idConcepto]").attr("name","item["+index+"][idConcepto]")
+      $(element).find(".idConcepto").attr("id","impuesto["+index+"][idConcepto]").attr("name","impuesto["+index+"][idConcepto]")
 
-      $(element).find(".baseImpuestos").attr("id","item["+index+"][baseImpuestos]").attr("name","item["+index+"][baseImpuestos]")
+      $(element).find(".baseImpuestos").attr("id","impuesto["+index+"][baseImpuestos]").attr("name","impuesto["+index+"][baseImpuestos]")
 
-      $(element).find(".valor").attr("id","item["+index+"][valor]").attr("name","item["+index+"][valor]")
+      $(element).find(".valor").attr("id","impuesto["+index+"][valor]").attr("name","impuesto["+index+"][valor]")
 
     })
-
-    
-
+  setTimeout(function(){
     calcularDeduccion(); 
 
   },500)

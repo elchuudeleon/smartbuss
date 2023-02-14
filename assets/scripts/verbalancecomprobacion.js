@@ -80,10 +80,10 @@ $(document).ready(function(){
                 doc.pageMargins = [ 10, 10, 15, 10 ];
                 // doc.defaultStyle.font = 'Arial';
                 doc.defaultStyle.fontSize = 8;
-                $(doc.document.body).find('h1').fillColor='white';
-                $(doc.document.body).find('h1').css('font-size', '12pt');
-                $(doc.document.body).find('h1').css('text-align', 'center'); 
-                $(doc.document.body).find('h1').css('justify-content', 'space-between');
+                //$(doc.document.body).find('h1').fillColor='white';
+                //$(doc.document.body).find('h1').css('font-size', '12pt');
+                //$(doc.document.body).find('h1').css('text-align', 'center'); 
+               // $(doc.document.body).find('h1').css('justify-content', 'space-between');
                 // $(doc.document).css('width', '95%');
             },
             // columns: [ 0, 1, 2, 3,4,5,7,8,9,10,11,12 ],

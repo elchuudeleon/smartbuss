@@ -1,359 +1,278 @@
 <?php
-
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 date_default_timezone_set("America/Bogota"); 
 
 
+$aDatos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 
-$item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
-
-// print_r($item);
-
-
+$msg=true; 
 if(!isset($_SESSION)){ session_start(); }
 
-// print_r($item);
+$grupo=explode("-",str_replace(" ","",$aDatos["grupo"])); 
+$codigoCuentaContable=$grupo[0]; 
 
-foreach ($item as $key => $value) {
-        if ($value["cuenta"]!="") {
-            $nombre=substr($value["cuenta"], 5);
-        }
-        if ($value["subcuenta"]!="") {
-            $nombre=substr($value["subcuenta"], 5);
-        }    
-        if ($value["checksubcuenta"]!="") {
+$cuenta=explode("-",str_replace(" ","",$aDatos["cuenta"])); 
+$codigoCuentaContable=$codigoCuentaContable.$cuenta[0]; 
+
+if($aDatos["idSubcuenta"]!=""){
+    $subcuenta=explode("-",str_replace(" ","",$aDatos["codigoSubcuenta"])); 
+    $nombresubcuenta=explode("-",$aDatos["codigoSubcuenta"]); 
+    
+    $nombre=ltrim($nombresubcuenta[1], ' '); 
+    $codigoCuentaContable=$codigoCuentaContable.$subcuenta[0];     
+}else{
+    $nombre=$aDatos["subcuenta"]; 
+    $codigoCuentaContable=$codigoCuentaContable.str_pad($aDatos["codigoSubcuenta"], 2, "0", STR_PAD_LEFT); 
+}
+
+if($aDatos["checkauxiliar"]==1){
+    $nombre=$aDatos["auxiliar"]; 
+    $codigoCuentaContable=$codigoCuentaContable.str_pad($aDatos["idAuxiliar"], 2, "0", STR_PAD_LEFT); 
+}
+if($aDatos["checksubauxiliar"]==1){
+    $nombre=$aDatos["subauxiliar"]; 
+    $codigoCuentaContable=$codigoCuentaContable.str_pad($aDatos["cuentaSubauxiliar"], 2, "0", STR_PAD_LEFT); 
+}
+
+$data["codigoCuenta"]=$codigoCuentaContable;
+$data["nombre"]=$nombre;
+$data["naturaleza"]=$aDatos["naturaleza"];
+$data["tipoCuenta"]=$aDatos["tipoCuenta"];
+$data["detalle"]=$aDatos["detalle"];
+$data["tercero"]=$aDatos["tercero"];
+$data["idEmpresa"]=$aDatos["idEmpresa"];
+$data["centroCosto"]=$aDatos["checkcentrocosto"];
+$data["porcentajeRetencion"]=$aDatos["porcentajeRetencion"];
+
+
+$oItem=new Data("cuenta_contable","idCuentaContable");
+foreach($data as $key => $value){
+    $oItem->$key=$value; 
+}
+$msg=$oItem->guardar();
+$idCuenta=$oItem->ultimoId();
+unset($oItem);
+
+if($aDatos["idCuenta"]==""){
+    // $cuenta=explode("-",str_replace(" ","",$aDatos["codigoSubcuenta"])); 
+    // $nombrecuenta=explode("-",$aDatos["cuenta"]); 
+    
+    // $aSubcuenta["codigo"]=$cuenta[0]; 
+    // $aSubcuenta["denominacion"]=ltrim($nombrecuenta[1], ' '); 
+    // $aSubcuenta["idGrupo"]=$aDatos["idGrupo"]; 
+    // $oItem=new Data("cuenta","idCuenta");
+    // foreach($aSubcuenta as $key => $value){
+    //     $oItem->$key=$value; 
+    // }
+    // $msg=$oItem->guardar();
+    // $aDatos["idCuenta"]=$oItem->ultimoId();
+    // unset($oItem);
+}
+
+if($msg){
+   if($aDatos["checksubcuenta"]==1){
+    
+        if($aDatos["idSubcuenta"]==""&&$aDatos["checkauxiliar"]==1){
+            $data["codigoCuenta"]=substr($codigoCuentaContable,0,6);
+            $data["nombre"]=$aDatos["subcuenta"];
+            $data["naturaleza"]=$aDatos["naturaleza"];
+            $data["tipoCuenta"]=$aDatos["tipoCuenta"];
+            $data["detalle"]=$aDatos["detalle"];
+            $data["tercero"]=$aDatos["tercero"];
+            $data["idEmpresa"]=$aDatos["idEmpresa"];
+            $data["centroCosto"]=$aDatos["checkcentrocosto"];
+            $data["porcentajeRetencion"]=$aDatos["porcentajeRetencion"];
             
-            $aCuenta["codigo"]=$value["subcuenta"];
-            $aCuenta["denominacion"]=$value["descripcionSubcuenta"];
-            $aCuenta["idCuenta"]=$value["idCuenta"];
+            
+            $oItem=new Data("cuenta_contable","idCuentaContable");
+            foreach($data as $key => $value){
+                $oItem->$key=$value; 
+            }
+            $msg=$oItem->guardar();
+            $idCuentas=$oItem->ultimoId();
+            unset($oItem);
+            
+            // $aSubcuenta["codigo"]=$aDatos["codigoSubcuenta"]; 
+            // $aSubcuenta["denominacion"]=$aDatos["subcuenta"]; 
+            // $aSubcuenta["idCuenta"]=$idCuentas; 
+            // $oItem=new Data("subcuenta","idSubcuenta");
+            // foreach($aSubcuenta as $key => $value){
+            //     $oItem->$key=$value; 
+            // }
+            // $msg=$oItem->guardar();
+            // $idSubcuenta=$oItem->ultimoId();
+            // unset($oItem);
+        }
+        if($msg){
+           // $aSubcuenta["codigo"]=$aDatos["codigoSubcuenta"]; 
+           //  $aSubcuenta["denominacion"]=$aDatos["subcuenta"]; 
+           //  $aSubcuenta["idCuenta"]=$idCuentas; 
+           //  $oItem=new Data("subcuenta","idSubcuenta");
+           //  foreach($aSubcuenta as $key => $value){
+           //      $oItem->$key=$value; 
+           //  }
+           //  $msg=$oItem->guardar();
+           //  $idSubcuenta=$oItem->ultimoId();
+           //  unset($oItem); 
 
-            $nombre=$value["descripcionSubcuenta"];
+                if($aDatos["idSubcuenta"]==""&&$aDatos["checkauxiliar"]==0){
+                    $aSubcuenta["codigo"]=$aDatos["codigoSubcuenta"]; 
+                    $aSubcuenta["denominacion"]=$aDatos["subcuenta"]; 
+                    $aSubcuenta["idCuenta"]=$aDatos["idCuenta"]; 
+                    $aSubcuenta["idEmpresa"]=$aDatos["idEmpresa"]; 
+                    $oItem=new Data("subcuenta","idSubcuenta");
+                    foreach($aSubcuenta as $key => $value){
+                        $oItem->$key=$value; 
+                    }
+                    $msg=$oItem->guardar();
+                    $aDatos["idSubcuenta"]=$oItem->ultimoId();
+                    unset($oItem); 
+                }else if($aDatos["idSubcuenta"]!=""){
+                    $oItem=new Data("subcuenta","idSubcuenta", $aDatos["idSubcuenta"]); 
+                    $aValidateSubcuenta=$oItem->getDatos(); 
+                    unset($oItem); 
 
-            $oItem=new Data("subcuenta","idSubcuenta"); 
-
-                foreach($aCuenta  as $keya => $valuea){
-
-                    $oItem->$keya=$valuea; 
-
+                    $aSubcuentaCodigo=explode("-",str_replace(" ","",$aDatos["codigoSubcuenta"])); 
+                    $aSubcuenta["codigo"]=$aSubcuentaCodigo[0]; 
+                    if($aDatos["subcuenta"]==""){
+                        $aDatos["subcuenta"]=explode("- ",$aDatos["codigoSubcuenta"])[1]; 
+                    }
+                    $aSubcuenta["denominacion"]=$aDatos["subcuenta"]; 
+                    $aSubcuenta["idCuenta"]=$aDatos["idCuenta"]; 
+                    $aSubcuenta["idEmpresa"]=$aDatos["idEmpresa"]; 
+                    if($aValidateSubcuenta["idEmpresa"]!=0){
+                        $oItem=new Data("subcuenta","idSubcuenta");
+                    }else{
+                        $oItem=new Data("subcuenta","idSubcuenta",$aDatos["idSubcuenta"]);
+                    }
+                    foreach($aSubcuenta as $key => $value){
+                        $oItem->$key=$value; 
+                    }
+                    $msg=$oItem->guardar();
+                    $aDatos["idSubcuenta"]=$oItem->ultimoId();
+                    unset($oItem);
                 }
 
-                $oItem->guardar(); 
-
-                $idSubCuentaN=$oItem->ultimoId();
-
-                unset($oItem);
-                $value["idSubcuenta"]=$idSubCuentaN;
-        }
-        if ($value["checkauxiliar"]!="") {
             
-            $aItemAuxiliar["codigo"]=$value["idAuxiliar"];
-            $aItemAuxiliar["denominacion"]=$value["auxiliar"];
-            $aItemAuxiliar["idSubcuenta"]=$value["idSubcuenta"];
-
-            $nombre=$value["auxiliar"];
-
-            $oItem=new Data("auxiliar","idAuxiliar"); 
-
-                foreach($aItemAuxiliar  as $keya => $valuea){
-
-                    $oItem->$keya=$valuea; 
-
+        }
+        
+        
+    }
+    
+    if($msg){
+        if($aDatos["checkauxiliar"]==1){
+            if($aDatos["codigoAuxiliar"]==""&&$aDatos["checksubauxiliar"]==1){
+                $data["codigoCuenta"]=substr($codigoCuentaContable,0,8);
+                $data["nombre"]=$aDatos["auxiliar"];
+                $data["naturaleza"]=$aDatos["naturaleza"];
+                $data["tipoCuenta"]=$aDatos["tipoCuenta"];
+                $data["detalle"]=$aDatos["detalle"];
+                $data["tercero"]=$aDatos["tercero"];
+                $data["idEmpresa"]=$aDatos["idEmpresa"];
+                $data["centroCosto"]=$aDatos["checkcentrocosto"];
+                $data["porcentajeRetencion"]=$aDatos["porcentajeRetencion"];
+                
+                
+                $oItem=new Data("cuenta_contable","idCuentaContable");
+                foreach($data as $key => $value){
+                    $oItem->$key=$value; 
                 }
-
-                $oItem->guardar(); 
-
-                $idAuxiliar=$oItem->ultimoId();
-
+                $msg=$oItem->guardar();
+                $idCuentaa=$oItem->ultimoId();
                 unset($oItem);
                 
+                if($msg){
+                   $aAuxiliar["codigo"]=$aDatos["idAuxiliar"]; 
+                    $aAuxiliar["denominacion"]=$aDatos["auxiliar"]; 
+                    if($idSubcuenta!=""){
+                        $aAuxiliar["idSubcuenta"]=$idSubcuenta;
+                    }else{
+                        $aAuxiliar["idSubcuenta"]=$aDatos["idSubcuenta"];
+                    }
+                    $aAuxiliar["idEmpresa"]=$aDatos["idEmpresa"];
+                    $oItem=new Data("auxiliar","idAuxiliar");
+                    foreach($aAuxiliar as $key => $value){
+                        $oItem->$key=$value; 
+                    }
+                    $msg=$oItem->guardar();
+                    $aDatos["codigoAuxiliar"]=$oItem->ultimoId();
+                    unset($oItem);  
 
-        }
-        if ($value["checkauxiliar"]=="") {
-            $idAuxiliar='';
-        }
-        if ($value["checksubauxiliar"]!="") {
-            $aItemSubauxiliar["codigo"]=$value["idSubauxiliar"];
-            $aItemSubauxiliar["denominacion"]=$value["subauxiliar"];
-            $aItemSubauxiliar["idAuxiliar"]=$idAuxiliar;
-
-            $nombre=$value["subauxiliar"];
-
-            $oItem=new Data("subauxiliar","idSubauxiliar"); 
-
-                foreach($aItemSubauxiliar  as $keys => $values){
-
-                    $oItem->$keys=$values; 
-
+                    if($msg){
+                       if($aDatos["codigoAuxiliar"]==""&&$aDatos["checksubauxiliar"]==0){
+                        $aAuxiliar["codigo"]=$aDatos["idAuxiliar"]; 
+                        $aAuxiliar["denominacion"]=$aDatos["auxiliar"]; 
+                        $aAuxiliar["idSubcuenta"]=$aDatos["idSubcuenta"]; 
+                        $oItem=new Data("auxiliar","idAuxiliar");
+                        foreach($aAuxiliar as $key => $value){
+                            $oItem->$key=$value; 
+                        }
+                        $msg=$oItem->guardar();
+                        $aDatos["codigoAuxiliar"]=$oItem->ultimoId(); 
+                        unset($oItem);  
+                    } 
+                    }
                 }
-
-                $oItem->guardar(); 
-
-                $idSubauxiliar=$oItem->ultimoId();
-
+                 
+                
+            }else if($aDatos["codigoAuxiliar"]==""&&$aDatos["checksubauxiliar"]==0){
+                $aAuxiliar["codigo"]=$aDatos["idAuxiliar"]; 
+                $aAuxiliar["denominacion"]=$aDatos["auxiliar"]; 
+                if($idSubcuenta!=""){
+                    $aAuxiliar["idSubcuenta"]=$idSubcuenta;
+                }else{
+                    $aAuxiliar["idSubcuenta"]=$aDatos["idSubcuenta"];
+                }
+                $aAuxiliar["idEmpresa"]=$aDatos["idEmpresa"];
+                $oItem=new Data("auxiliar","idAuxiliar");
+                foreach($aAuxiliar as $key => $value){
+                    $oItem->$key=$value; 
+                }
+                $msg=$oItem->guardar();
+                $aDatos["codigoAuxiliar"]=$oItem->ultimoId();
                 unset($oItem);
+            }
+            
+            
+        }
+
+        if($msg){
+            if($aDatos["checksubauxiliar"]==1&&$aDatos["idSubauxiliar"]==""){
+                $aSubauxiliar["codigo"]=$aDatos["cuentaSubauxiliar"]; 
+                $aSubauxiliar["denominacion"]=$aDatos["subauxiliar"]; 
+                $aSubauxiliar["idAuxiliar"]=$aDatos["codigoAuxiliar"]; 
+                $aSubauxiliar["idEmpresa"]=$aDatos["idEmpresa"];
+                $oItem=new Data("subauxiliar","idSubauxiliar");
+                foreach($aSubauxiliar as $key => $value){
+                    $oItem->$key=$value; 
+                }
+                $msg=$oItem->guardar();
+                unset($oItem); 
+            } 
+        }
+        
+    }
+    
 }
 
 
-    if ($value["checkcentrocosto"]==1) {
-        $centroCosto=1;
-    }
-    if ($value["checkcentrocosto"]=="") {
-        $centroCosto=0;
+if(!$msg){
+    $oItem=new Data("cuenta_contable","idCuentaContable",$idCuenta);
+    $oItem->eliminar(); 
+    unset($oItem);
+
+    if($idCuentas>0){
+        $oItem=new Data("cuenta_contable","idCuentaContable",$idCuentas);
+        $oItem->eliminar();
+        unset($oItem);
     }
     
-
-    $aItem["nombre"]=$nombre; 
-
-    $aItem["naturaleza"]=$value["naturaleza"];
-
-    $aItem["centroCosto"]=$centroCosto;
-    $aItem["tipoCuenta"]=$value["tipoCuenta"];
-
-    $aItem["idEmpresa"]=$value["idEmpresa"];
-
-    $aItem["detalle"]=$value["detalle"];
-    $aItem["tercero"]=$value["tercero"];
-    $aItem["porcentajeRetencion"]=$value["porcentajeRetencion"];
+}
 
 
-
-
-    $aItem["codigoCuenta"]=substr($value["grupo"], 0, 2).substr($value["cuenta"], 0, 2).substr($value["subcuenta"], 0, 2).substr($value["idAuxiliar"], 0, 2).substr($value["idSubauxiliar"], 0, 2); 
-
-    $tamanoCodigo=strlen($aItem["codigoCuenta"]);
-
-    $subcuenta=substr($value["grupo"], 0, 2).substr($value["cuenta"], 0, 2).substr($value["subcuenta"], 0, 2);
-
-    // print_r($tamanoCodigo);
-
-
-    switch ($tamanoCodigo) {
-        case 6:
-            $oItem=new Lista("cuenta_contable");
-            $oItem->setFiltro("codigoCuenta","like",$subcuenta.'%');
-            $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-            $subcuentaC=$oItem->getLista();
-            unset($oItem);            
-
-            // if (!empty($subcuentaC)) {
-                // $msg=false;
-            if (empty($subcuentaC)) {
-                        
-                $oItem=new Data("cuenta_contable","idCuentaContable"); 
-                foreach($aItem  as $keycc => $valuecc){
-                    $oItem->$keycc=$valuecc; 
-                }
-                $oItem->guardar(); 
-                // $idCuentaContable=$oItem->ultimoId(); 
-
-                unset($oItem);
-            }
-
-
-            break;
-        case 8:
-            $oItem=new Lista("cuenta_contable");
-            $oItem->setFiltro("codigoCuenta","like",$subcuenta);
-            $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-            $subcuentaC=$oItem->getLista();
-            unset($oItem);           
-
-            if (!empty($subcuentaC)) {
-                
-                        $actualizar["codigoCuenta"]=$aItem["codigoCuenta"];
-                        $actualizar["nombre"]=$nombre;
-
-                        $actualizar["naturaleza"]=$aItem["naturaleza"];
-                        $actualizar["tipoCuenta"]=$aItem["tipoCuenta"];
-                        $actualizar["detalle"]=$aItem["detalle"];
-                        $actualizar["tercero"]=$aItem["tercero"];
-                        $actualizar["porcentajeRetencion"]=$aItem["porcentajeRetencion"];
-
-
-                        $oItem=new Data("cuenta_contable","idCuentaContable",$subcuentaC[0]["idCuentaContable"]);
-                        foreach($actualizar  as $keycc => $valuesubcc){
-                            $oItem->$keycc=$valuesubcc; 
-                        }
-                        $oItem->guardar(); 
-                        
-                        unset($oItem);
-
-            }elseif (empty($subcuentaC)) {
-
-                $oItem=new Lista("cuenta_contable");
-                 $oItem->setFiltro("codigoCuenta","like",$aItem["codigoCuenta"].'%');
-                 $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-                 $cuentaC=$oItem->getLista();
-                 unset($oItem);
-
-                 if (empty($cuentaC)) {
-                        
-                            $oItem=new Data("cuenta_contable","idCuentaContable"); 
-                            foreach($aItem  as $keycc => $valuecc){
-                                $oItem->$keycc=$valuecc; 
-                            }
-                            $oItem->guardar(); 
-                            // $idCuentaContable=$oItem->ultimoId(); 
-
-                            unset($oItem);
-                 }
-                    
-            }            
-            break;
-        case 10:
-            
-            $oItem=new Lista("cuenta_contable");
-            $oItem->setFiltro("codigoCuenta","like",$subcuenta);
-            $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-            $subcuentaC=$oItem->getLista();
-            unset($oItem);           
-
-            if (!empty($subcuentaC)) {
-                
-                        $actualizar["codigoCuenta"]=$aItem["codigoCuenta"];
-                        $actualizar["nombre"]=$nombre;
-
-                        $actualizar["naturaleza"]=$aItem["naturaleza"];
-                        $actualizar["tipoCuenta"]=$aItem["tipoCuenta"];
-                        $actualizar["detalle"]=$aItem["detalle"];
-                        $actualizar["tercero"]=$aItem["tercero"];
-                        $actualizar["porcentajeRetencion"]=$aItem["porcentajeRetencion"];
-
-                        $oItem=new Data("cuenta_contable","idCuentaContable",$subcuentaC[0]["idCuentaContable"]);
-                        foreach($actualizar  as $keycc => $valuesubcc){
-                            $oItem->$keycc=$valuesubcc; 
-                        }
-                        $oItem->guardar(); 
-                        
-                        unset($oItem);
-                    
-
-            }elseif (empty($subcuentaC)) {
-                
-                $auxiliar=substr($value["grupo"], 0, 2).substr($value["cuenta"], 0, 2).substr($value["subcuenta"], 0, 2).substr($value["idAuxiliar"], 0, 2);
-
-                $oItem=new Lista("cuenta_contable");
-                 $oItem->setFiltro("codigoCuenta","like",$auxiliar);
-                 $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-                 $auxiliarC=$oItem->getLista();
-                 unset($oItem);
-
-
-                 if (!empty($auxiliarC)) {
-                
-  
-                            $actualizar["codigoCuenta"]=$aItem["codigoCuenta"];
-                            $actualizar["nombre"]=$nombre;
-
-                            $actualizar["naturaleza"]=$aItem["naturaleza"];
-                            $actualizar["tipoCuenta"]=$aItem["tipoCuenta"];
-                            $actualizar["detalle"]=$aItem["detalle"];
-                            $actualizar["tercero"]=$aItem["tercero"];
-                            $actualizar["porcentajeRetencion"]=$aItem["porcentajeRetencion"];
-
-
-                            $oItem=new Data("cuenta_contable","idCuentaContable",$auxiliarC[0]["idCuentaContable"]);
-                            foreach($aItemCuenta  as $keycc => $valuesubcc){
-                                $oItem->$keycc=$valuesubcc; 
-                            }
-                            $oItem->guardar(); 
-                            
-                            unset($oItem);
-
-                    }
-
-                 if (empty($auxiliarC)) {
-
-
-                    
-
-                        $oItem=new Lista("cuenta_contable");
-                         $oItem->setFiltro("codigoCuenta","like",$aItem["codigoCuenta"]);
-                         $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-                         $subauxiliar=$oItem->getLista();
-                         unset($oItem);
-
-                         if (empty($subauxiliar)) {
-                                
-                                    $oItem=new Data("cuenta_contable","idCuentaContable"); 
-                                    foreach($aItem  as $keycc => $valuecc){
-                                        $oItem->$keycc=$valuecc; 
-                                    }
-                                    $oItem->guardar(); 
-                                    // $idCuentaContable=$oItem->ultimoId(); 
-
-                                    unset($oItem);
-                         }
-                            
-                     
-                 }
-                    
-            }
-
-
-            break;
-        
-        default:
-            // code...
-            break;
-    }
-
-     
-
-    //  $oItem=new Lista("cuenta_contable");
-    //  $oItem->setFiltro("codigoCuenta","=",$aItem["codigoCuenta"]);
-    //  $oItem->setFiltro("idEmpresa","=",$value["idEmpresa"]);
-    //  $cuentaC=$oItem->getLista();
-    //  unset($oItem);
-     
-
-    //  if (!empty($cuentaC)) {
-    //      $aItemCuenta["centroCosto"]=$centroCosto;
-    //      $aItemCuenta["naturaleza"]=$value["naturaleza"];
-    //      $aItemCuenta["tipoCuenta"]=$value["tipoCuenta"];
-
-    //     $aItemCuenta["detalle"]=$value["detalle"];
-    //     $aItemCuenta["tercero"]=$value["tercero"];
-    //     $aItemCuenta["porcentajeRetencion"]=$value["porcentajeRetencion"];
-
-    //      $oItem=new Data("cuenta_contable","idCuentaContable",$cuentaC[0]["idCuentaContable"]);
-    //     foreach($aItemCuenta  as $keycc => $valuecc){
-    //         $oItem->$keycc=$valuecc; 
-    //     }
-    //     // $oItem->guardar(); 
-    //     $idCuentaContable=$cuentaC[0]["idCuentaContable"];
-    //     unset($oItem);
-    //  }
- 
-    
-    // if (empty($cuentaC) ) {
-    //     $oItem=new Data("cuenta_contable","idCuentaContable"); 
-
-    //     foreach($aItem  as $keycc => $valuecc){
-
-    //         $oItem->$keycc=$valuecc; 
-    //     }
-    //     // $oItem->guardar(); 
-    //     // $idCuentaContable=$oItem->ultimoId(); 
-
-    //     unset($oItem);
-
-    //     }
-
-    }
-
-
-    $msg=true; 
-
-
-
-    echo json_encode(array("msg"=>$msg));
+echo json_encode(array("msg"=>$msg));
 
 ?>

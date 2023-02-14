@@ -20,22 +20,13 @@ $aDatos["icono"]="2";
 $aDatos["estado"]=$_POST["radiocorreo"];
 
 
-// echo	$aDatos["fechaCreacion"];
-// echo	$aDatos["horaCreacion"];
-// echo	$aDatos["creador"];
-// echo	$aDatos["motivo"];
-// echo	$aDatos["idCliente"];
-// echo	$aDatos["tipo"];
-// echo	$aDatos["icono"];
-// echo	$aDatos["estado"];
-
 $oItem=new Data("actividades","idActividad"); 
-    foreach($aDatos  as $key => $value){
-        $oItem->$key=$value; 
-    }
-    $oItem->guardar(); 
-    $codigo=$oItem->ultimoId(); 
-    unset($oItem);
+foreach($aDatos  as $key => $value){
+    $oItem->$key=$value; 
+}
+$oItem->guardar(); 
+$codigo=$oItem->ultimoId(); 
+unset($oItem);
 
 
 

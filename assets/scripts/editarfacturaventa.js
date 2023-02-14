@@ -1,98 +1,53 @@
 
 $("body").on("click","#btnGuardar",function(e){
-
     e.preventDefault();
-
       if(true === $("#frmGuardar").parsley().validate()){
-
           Swal.fire({
-
           title: 'Está seguro?',
-
           text: 'Está a punto de editar los datos de la factura!',
-
           icon: 'warning', 
-
           showCancelButton: true,
-
           showLoaderOnConfirm: true,
-
           confirmButtonText: `Si, Continuar!`,
-
           cancelButtonText:'Cancelar',
-
           preConfirm: function(result) {
-
           return new Promise(function(resolve) {
-
             var formu = document.getElementById("frmGuardar");
 
-        
-
             var data = new FormData(formu);
-
             $.ajax({
-
             url:URL+"functions/facturaventa/editarfacturaventa.php", 
-
             type:"POST", 
-
             data: data,
-
             contentType:false, 
-
             processData:false, 
-
             dataType: "json",
-
             cache:false 
-
             }).done(function(msg){  
-
               if(msg.msg){
-
                 Swal.fire(
-
                   {
-
                   icon: 'success',
-
                   title: "Factura actualizada!",
-
                   text: 'con exito',
-
                   closeOnConfirm: true,
-
                 }
-
                 ).then((result) => {
-
                  window.history.back(); 
 
                 })
-
               }else{
-
                  Swal.fire(
-
                   'Algo ha salido mal!',
-
                   'Verifique su conexión a internet',
-
                   'error'
-
                 )
-
               }
           });
-
           });
-
         }
-
         })
       }
-
   })
 
 // $("body").on("change",".conceptoSelect",function(e){
@@ -176,22 +131,13 @@ $("body").on("click touchstart",".btnEliminar",function(e){
   setTimeout(function(){
 
     $(elemento).parents("tr").remove();
-
     $("#tableDeducciones tbody tr").each(function(index,element){
-
-      $(element).find(".tipoDeduccion").attr("id","item["+index+"][tipoDeduccion]").attr("name","item["+index+"][tipoDeduccion]")
-
-      $(element).find(".concepto").attr("id","item["+index+"][concepto]").attr("name","item["+index+"][concepto]")
-
-      $(element).find(".idConcepto").attr("id","item["+index+"][idConcepto]").attr("name","item["+index+"][idConcepto]")
-
-      $(element).find(".baseImpuestos").attr("id","item["+index+"][baseImpuestos]").attr("name","item["+index+"][baseImpuestos]")
-
-      $(element).find(".valor").attr("id","item["+index+"][valor]").attr("name","item["+index+"][valor]")
-
+      $(element).find(".tipoDeduccion").attr("id","impuesto["+index+"][tipoDeduccion]").attr("name","impuesto["+index+"][tipoDeduccion]")
+      $(element).find(".concepto").attr("id","impuesto["+index+"][concepto]").attr("name","impuesto["+index+"][concepto]")
+      $(element).find(".idConcepto").attr("id","impuesto["+index+"][idConcepto]").attr("name","impuesto["+index+"][idConcepto]")
+      $(element).find(".baseImpuestos").attr("id","impuesto["+index+"][baseImpuestos]").attr("name","impuesto["+index+"][baseImpuestos]")
+      $(element).find(".valorSumar").attr("id","impuesto["+index+"][valor]").attr("name","impuesto["+index+"][valor]")
     })
-
-    
 
     calcularDeduccion(); 
 
@@ -211,21 +157,19 @@ $("body").on("change",".baseImpuestos",function(e){
 
    if(base>subtotal){
 
-    swal({   
+    Swal.fire(
+      {
+        icon: 'error',
+        title: 'Algo ha salido mal!',
+        text: 'La base de impuestos no puede ser mayor al subtotal',
+        closeOnConfirm: true,
+      }
 
-      title: "Algo ha salido mal!",   
+      ).then((result) => {
 
-      text: "La base de impuestos no puede ser mayor al subtotal",
+       $("#baseImpuestos").val("")
 
-      type: "error",        
-
-      closeOnConfirm: true 
-
-      }).then((element)=>{
-
-        $("#baseImpuestos").val("")
-
-      });
+      })
 
       return false; 
 
@@ -298,34 +242,19 @@ $("body").on("change",".tipoDeduccion",function(e){
 
 
      $.ajax({
-
           url:URL+"functions/configuracion/listarretencioneica.php", 
-
           type:"POST", 
-
           data: {"tipo":$(this).val()}, 
-
           dataType: "json",
-
           }).done(function(msg){  
-
             var sHtml="<option value=''>Seleccione una opción</option>"; 
-
             msg.retenciones.forEach(function(element,index){
-
               var ciudad=""; 
-
               if(element.ciudad!=""){
-
                 ciudad="("+element.ciudad+")"; 
-
               }
-
               sHtml+="<option porcentaje='"+element.valor+"' value='"+element.idRetencion+"'>"+element.valor+"% - "+element.descripcion+" "+ciudad+"</option>"; 
-
             })
-
-
 
            conceptoSelect.innerHTML=sHtml;
 
@@ -333,19 +262,7 @@ $("body").on("change",".tipoDeduccion",function(e){
 
   }else{
 
-    // $(".concepto-select").addClass("ocultar")
 
-    // $(".baseimpuestos").addClass("ocultar")
-
-    // $(".concepto-texto").removeClass("ocultar")
-
-    // $(".boton-agregar").addClass("col-md-3").removeClass("col-md-2")
-
-    // $(".valor").addClass("col-md-3").removeClass("col-md-2")
-
-    // $("#valor").removeAttr("readonly")
-
-    
 
   }
 
@@ -362,27 +279,17 @@ $("body").on("click","#btnAgregar",function(e){
   var tipoDeduccion=$("#tipoDeduccion").find("option:selected").html(); 
 
 
-
   var concepto=$("#conceptoText").val(); 
-
   var idConcepto=''; 
-
   var base=0; 
-
   if($("#tipoDeduccion").val()==1||$("#tipoDeduccion").val()==2){
-
     concepto=$("#conceptoSelect").find("option:selected").html()
-
     idConcepto=$("#conceptoSelect").val(); 
-
     base=$("#baseImpuestos").val(); 
 
   }
-
   var valor=$("#valor").val(); 
-
   if(valor!=""){
-
     var valorMoneda=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(valor,"$",""),".",""),",","."));
 
   }
@@ -390,13 +297,9 @@ $("body").on("click","#btnAgregar",function(e){
   
 
   var cantidad=$("#tableDeducciones tbody tr").length; 
-
   var totalDeduccion=0; 
-
   var totalPago=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda($("[name='datos[totalPago]']").val(),"$",""),".",""),",","."));
-
   if($("[name='datos[totalDeduccion]']").val()!=""){
-
     totalDeduccion=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda($("[name='datos[totalDeduccion]']").val(),"$",""),".",""),",","."));
 
   }
@@ -406,19 +309,12 @@ $("body").on("click","#btnAgregar",function(e){
   if((totalDeduccion+valorMoneda)>totalPago){
 
     Swal.fire(
-
       {
-
         icon: 'error',
-
         title: 'Algo ha salido mal!',
-
         text: 'El valor de las deducciones no puede superar el valor del pago',
-
         closeOnConfirm: true,
-
       }
-
       ).then((result) => {
 
        $("#valor").val("")
@@ -431,10 +327,7 @@ $("body").on("click","#btnAgregar",function(e){
 
   if(concepto!=""&&tipo!=""&&valor!=""){
 
-    
-
     if(base!=""){
-
       base=eliminarMoneda(eliminarMoneda(eliminarMoneda(base,"$",""),".",""),",",".");
 
     }
@@ -444,43 +337,25 @@ $("body").on("click","#btnAgregar",function(e){
     // alert(valorMonedaSumar);
     }
 
-
     $("#tableDeducciones tbody:last").append("<tr>"
-
     +"<td><input type='hidden' name='impuesto["+cantidad+"][tipoDeduccion]' id='item["+cantidad+"][tipoDeduccion]' class='form-control tipoDeduccion' value='"+tipo+"' >"
-
     +"<input type='hidden' name='impuesto["+cantidad+"][concepto]' id='item["+cantidad+"][concepto]' class='form-control concepto' value='"+concepto+"' >"
-
     +"<input type='hidden' name='impuesto["+cantidad+"][idConcepto]' id='item["+cantidad+"][idConcepto]' class='form-control idConcepto' value='"+idConcepto+"' >"
-
     +"<input type='hidden' name='impuesto["+cantidad+"][baseImpuestos]' id='item["+cantidad+"][baseImpuestos]' class='form-control baseImpuestos' value='"+base+"' >"
-
     +"<input type='hidden' name='impuesto["+cantidad+"][valor]' id='item["+cantidad+"][valor]' class='form-control valorSumar' value='"+valorMonedaSumar+"' >"+
-
       tipoDeduccion+"</td>"
-
     +"<td>"+concepto+"</td>"
-
     +"<td>"+base+"</td>"
-
     +"<td>"+valor+"</td>"
-
-    // +"<td><a href='javascript:void(0)' data-toggle='tooltip' id='eliminar' data-placement='top' title='Eliminar' class='btnEliminar btn btn-icon btn-sm btn-danger'><i class='fas fa-trash'></i></a></td>"
-
+    +"<td><a href='javascript:void(0)' data-toggle='tooltip' id='eliminar' data-placement='top' title='Eliminar' class='btnEliminar btn btn-icon btn-sm btn-danger'><i class='fas fa-trash'></i></a></td>"
     +"</tr>"); 
 
 
-
     $("#tipoDeduccion").val(''); 
-
     $("#conceptoText").val(''); 
-
     $("#conceptoSelect").val('');
-
     $("#valor").val('');
-
     $("#baseImpuestos").val('');
-
   }
 
   calcularDeduccion(); 
@@ -504,54 +379,32 @@ $("body").on("change","#tipoDeduccion",function(e){
     $("#valor").attr("readonly","readonly"); 
 
      $.ajax({
-
           url:URL+"functions/configuracion/listarretencioneica.php", 
-
           type:"POST", 
-
           data: {"tipo":$(this).val()}, 
-
           dataType: "json",
-
           }).done(function(msg){  
-
             var sHtml="<option value=''>Seleccione una opción</option>"; 
-
             msg.retenciones.forEach(function(element,index){
-
               var ciudad=""; 
-
               if(element.ciudad!=""){
-
                 ciudad="("+element.ciudad+")"; 
-
               }
-
               sHtml+="<option porcentaje='"+element.valor+"' value='"+element.idRetencion+"'>"+element.valor+"% - "+element.descripcion+" "+ciudad+"</option>"; 
 
             })
-
-
 
             $("#conceptoSelect").html(sHtml);
 
         });
 
   }else{
-
     $(".concepto-select").addClass("ocultar")
-
     $(".baseimpuestos").addClass("ocultar")
-
     $(".concepto-texto").removeClass("ocultar")
-
     $(".boton-agregar").addClass("col-md-3").removeClass("col-md-2")
-
     $(".valor").addClass("col-md-3").removeClass("col-md-2")
-
-    $("#valor").removeAttr("readonly")
-
-    
+    $("#valor").removeAttr("readonly")    
 
   }
 
@@ -572,21 +425,19 @@ $("body").on("change","#baseImpuestos",function(e){
 
    if(base>subtotal){
 
-    swal({   
+    Swal.fire(
+      {
+        icon: 'error',
+        title: 'Algo ha salido mal!',
+        text: 'La base de impuestos no puede ser mayor al subtotal',
+        closeOnConfirm: true,
+      }
 
-      title: "Algo ha salido mal!",   
+      ).then((result) => {
 
-      text: "La base de impuestos no puede ser mayor al subtotal",
+       $("#baseImpuestos").val("")
 
-      type: "error",        
-
-      closeOnConfirm: true 
-
-      }).then((element)=>{
-
-        $("#baseImpuestos").val("");
-
-      });
+      })
 
       return false; 
 

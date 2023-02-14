@@ -1,60 +1,45 @@
 <?php
 
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 date_default_timezone_set("America/Bogota"); 
 
 
-
-// $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
-
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 
-// $banco  = (isset($_REQUEST['banco'] ) ? $_REQUEST['banco'] : "" );
-
-// print_r($item);
 
 if(!isset($_SESSION)){ session_start(); }
 
 
-// print_r($item);
-// print_r('---');
-// print_r($datos);
+$msg=true; 
 
 
-    if ($datos["cuentaContableTotalPagarCompra"]!="" and $datos["idCuentaContableTotalPagarCompra"]!=""  ) {
-       
+if ($datos["cuentaContableTotalPagarCompra"]!="" and $datos["idCuentaContableTotalPagarCompra"]!=""  ) {
+   
 
-    $aItemAuxiliar["concepto"]='1';
-    $aItemAuxiliar["idEmpresa"]=$datos["idEmpresa"];
-    $aItemAuxiliar["idEmpresaCuenta"]=$datos["idCuentaContableTotalPagarCompra"];
-    
-    $aItemAuxiliar["tipoDocumento"]=$datos["tipoDocumentoTotalPagarCompra"];
-    $aItemAuxiliar["tipoFactura"]=$datos["naturalezaNuevaTotalPagarCompra"];  
+$aItemAuxiliar["concepto"]='1';
+$aItemAuxiliar["idEmpresa"]=$datos["idEmpresa"];
+$aItemAuxiliar["idEmpresaCuenta"]=$datos["idCuentaContableTotalPagarCompra"];
 
-    $oItem=new Data("compra_cuenta_contable","idCompraCuentaContable"); 
+$aItemAuxiliar["tipoDocumento"]=$datos["tipoDocumentoTotalPagarCompra"];
+$aItemAuxiliar["tipoFactura"]=$datos["naturalezaNuevaTotalPagarCompra"];  
 
-        foreach($aItemAuxiliar  as $keya => $valuea){
+$oItem=new Data("compra_cuenta_contable","idCompraCuentaContable"); 
 
-            $oItem->$keya=$valuea; 
+    foreach($aItemAuxiliar  as $keya => $valuea){
 
-        }
-        $oItem->guardar(); 
-        // $idAuxiliar=$oItem->ultimoId();
-        unset($oItem);
+        $oItem->$keya=$valuea; 
+
     }
+    $msg=$oItem->guardar(); 
+    // $idAuxiliar=$oItem->ultimoId();
+    unset($oItem);
+}
 
 
-   $msg=true; 
-
-
-    echo json_encode(array("msg"=>$msg));
+echo json_encode(array("msg"=>$msg));
 
 
 ?>

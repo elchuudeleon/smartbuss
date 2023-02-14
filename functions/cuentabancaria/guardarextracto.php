@@ -64,10 +64,8 @@ if(count($lista)>0){
 foreach($datos  as $key => $value){
     $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem);
-
-$msg=true; 
 
 echo json_encode(array("msg"=>$msg));
 ?>

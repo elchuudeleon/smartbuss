@@ -54,11 +54,11 @@ $oItem=new Data("usuario","idUsuario",$datos["idUsuario"]);
 foreach($aDatos  as $key => $value){
 	$oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem); 
 
 if($_SESSION["idRol"]!=2&&$_SESSION["idRol"]!=1){
 
 }
-echo json_encode(array("msg"=>true));
+echo json_encode(array("msg"=>$msg));
 ?>

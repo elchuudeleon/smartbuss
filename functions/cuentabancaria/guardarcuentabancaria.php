@@ -1,37 +1,20 @@
 <?php
 
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
-
-
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 include_once($CLASS . "control.php");
-
-
 
 $oControl=new Control();
 
-
-
 date_default_timezone_set("America/Bogota"); 
-
-
-
+$msg=true; 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
-
 if(!isset($_SESSION)){ session_start(); }
-
 $datos["idUsuarioRegistro"]=$_SESSION["idUsuario"]; 
-
 $datos["fechaRegistro"]=date("Y-m-d H:i:s"); 
-
 $datos["saldoActual"]=str_replace(",", ".",str_replace("$", "", str_replace(".", "", $datos["saldoActual"]))); 
-
 $datos["estado"]=1; 
 
 if ($datos["numeroCuenta"]=="") {
@@ -44,25 +27,25 @@ $oItem=new Data("cuenta_bancaria","idCuentaBancaria");
 foreach($datos  as $key => $value){
     $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 $idCuenta=$oItem->ultimoId();
 unset($oItem);
 
+if($msg){
+    if($datos["cuentaContable"]>0){
+        $bancoC["idCuentaBancaria"]=$idCuenta;
+        $bancoC["idEmpresa"]=$datos["idEmpresa"];
+        $bancoC["idEmpresaCuenta"]=$datos["cuentaContable"];
+        $bancoC["nombre"]=$datos["nombreCuenta"];
+         $oItem=new Data("banco_cuenta_contable","idBancoCuentaContable"); 
+        foreach($bancoC  as $keyEC => $valueEC){
+            $oItem->$keyEC=$valueEC; 
+        }
+        $msg=$oItem->guardar(); 
+        unset($oItem);
+    }
 
-
-$bancoC["idCuentaBancaria"]=$idCuenta;
-$bancoC["idEmpresa"]=$datos["idEmpresa"];
-$bancoC["idEmpresaCuenta"]=$datos["cuentaContable"];
-$bancoC["nombre"]=$datos["nombreCuenta"];
- $oItem=new Data("banco_cuenta_contable","idBancoCuentaContable"); 
-foreach($bancoC  as $keyEC => $valueEC){
-    $oItem->$keyEC=$valueEC; 
 }
-$oItem->guardar(); 
-unset($oItem);
-
-
-$msg=true; 
 
 
 

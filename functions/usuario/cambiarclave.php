@@ -11,8 +11,8 @@ $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 
 $oItem=new Data("usuario","idUsuario",$datos['idUsuario']); 
 $oItem->clave=md5($datos['clave']); 
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem); 
 
-echo json_encode(array("msg"=>true));
+echo json_encode(array("msg"=>$msg));
 ?>
