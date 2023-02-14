@@ -1,25 +1,16 @@
 <?php
 
-
-
 require_once("class/empresa.php");
-
 $oControl=new Control(); 
-
 
 
 $validarIngreso=1; 
 $oEmpresa=new Empresa(); 
 
 if($_SESSION["idRol"]==2){
-
   $oItem=new Data("usuario","idUsuario", $_SESSION["idUsuario"]); 
-
   $valUser=$oItem->getDatos(); 
-
   unset($oItem);  
-
-
 
   $validarIngreso=$valUser["ingresoPerfilEmpresa"]; 
   $aEmpresa=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
@@ -27,18 +18,12 @@ if($_SESSION["idRol"]==2){
 }
 
 
-
-
-
 if($_SESSION["idRol"]==5){
-
 	$aEmpresa=$oEmpresa->getEmpresasExterno();
 }
 
 if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 	$aEmpresa=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
-	
-
 }
 // $aEmpresa=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
 
@@ -49,12 +34,15 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 <div class="card card-body">
 	
 	<form enctype="multipart/form-data" id="frmGuardar">
+		<div class="card-footer text-right">
+      	<a class="btn btn-success mr-3" href="<?php echo $URL; ?>cargarcuentascontables">Cargar Cuentas Contables</a>
+      </div>	
 			<?php if (empty($_SESSION['idEmpresa'])) {
 				// code...
 			 ?>
 			<div class="col-md-6">
 				<label>Empresa</label>
-				<select class="form-control" name="item[0][idEmpresa]" id="item[0][idEmpresa]" required>
+				<select class="form-control" name="datos[idEmpresa]" id="datos[idEmpresa]" required>
 					<option value="">Seleccione</option>
 					<?php foreach($aEmpresa as $index => $iEmpresa){ ?>
 						<option value='<?php echo $iEmpresa["idEmpresa"]; ?>'><?php echo $iEmpresa["razonSocial"]; ?></option>
@@ -62,42 +50,52 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 				</select>
 			</div>
 			<?php }else{ ?>
-          <input type="hidden" name="item[0][idEmpresa]" id="item[0][idEmpresa]" value="<?php echo $_SESSION['idEmpresa']; ?>">
+          <input type="hidden" name="datos[idEmpresa]" id="datos[idEmpresa]" value="<?php echo $_SESSION['idEmpresa']; ?>">
       <?php } ?>
 		<br> <br>
 	<table class="table" cellspacing="6" cellpadding="10">
 		<tbody>
 			<tr>
 				<th><label class="negrita">Grupo</label></th>
-				<input type="hidden" class="form-control idGrupo"  name="item[0][idGrupo]" id="idGrupo" placeholder="Grupo">
-				<td><input type="text" class="form-control grupo mayusculas"  name="item[0][grupo]" id="grupo" placeholder="Grupo" required></td>
+				<input type="hidden" class="form-control idGrupo"  name="datos[idGrupo]" id="idGrupo" placeholder="Grupo">
+				<td><input type="text" class="form-control grupo mayusculas"  name="datos[grupo]" id="grupo" placeholder="Grupo" required></td>
 				
 				
 			</tr>
 			<tr>
 				<th><label class="negrita">Cuenta</label></th>
-				<input type="hidden" class="form-control idCuenta"  name="item[0][idCuenta]" id="idCuenta" placeholder="Cuenta">
-				<td ><input type="text" class="form-control cuenta mayusculas"  name="item[0][cuenta]" id="cuenta" placeholder="Cuenta" required></td>
+				<input type="hidden" class="form-control idCuenta"  name="datos[idCuenta]" id="idCuenta" placeholder="Cuenta">
+				<td ><input type="text" class="form-control cuenta mayusculas"  name="datos[cuenta]" id="cuenta" placeholder="Cuenta" required></td>
 				
 			</tr>
 			<tr>
-				<th><input type="checkbox" name="item[0][checksubcuenta]" id="checksubcuenta" value="1" ><label class="negrita">Subcuenta</label></th>
-				<td style="display: none;" id="tdSubcuenta"><!-- <input type="text" class="form-control idSubcuenta mayusculas numero"  name="item[0][idSubcuenta]" id="idSubcuenta" placeholder="Codigo subcuenta nuevo"> --></td>
+				<th>
+				    <input type="hidden" name="datos[checksubcuenta]" id="checksubcuenta" value="0" >
+				    <input type="checkbox" name="datos[checksubcuenta]" id="checksubcuenta" value="1" >
+				    <label class="negrita">Subcuenta</label></th>
+				<td style="display: none;" id="tdSubcuenta"></td>
 
-				<td ><input type="hidden" class="form-control idSubcuenta"  name="item[0][idSubcuenta]" id="idSubcuenta" placeholder="subcuenta"><input type="text" class="form-control subcuenta mayusculas"  name="item[0][subcuenta]" id="subcuenta" placeholder="Subcuenta" ></td>
-				<td ><input type="text" class="form-control mayusculas"  name="item[0][descripcionSubcuenta]" id="descripcionSubcuenta" placeholder="Descripción" readonly disabled></td>
+				<td><input type="hidden" class="form-control idSubcuenta"  name="datos[idSubcuenta]" id="idSubcuenta" placeholder="subcuenta">
+				<input type="text" class="form-control subcuenta mayusculas"  name="datos[codigoSubcuenta]" id="subcuenta" placeholder="Subcuenta" readonly disabled ></td>
+				<td><input type="text" class="form-control mayusculas"  name="datos[subcuenta]" id="descripcionSubcuenta" placeholder="Descripción" readonly disabled></td>
 			</tr>
 			<tr >
-				<th><input type="checkbox" name="item[0][checkauxiliar]" id="checkauxiliar" value="1" ><label class="negrita">Auxiliares</label></th>
-				<td><input type="number" class="form-control"  name="item[0][idAuxiliar]" id="idAuxiliar" placeholder="Código" readonly disabled></td>
-				
-				<td ><input type="text" class="form-control mayusculas"  name="item[0][auxiliar]" id="auxiliar" placeholder="Descripción" readonly disabled></td>
+				<th>
+				    <input type="hidden" name="datos[checkauxiliar]" id="checkauxiliar" value="0" >
+				    <input type="checkbox" name="datos[checkauxiliar]" id="checkauxiliar" value="1" readonly disabled ><label class="negrita">Auxiliares</label></th>
+				<td><input type="number" class="form-control auxiliar"  name="datos[idAuxiliar]" id="idAuxiliar" placeholder="Código" readonly disabled></td>
+				    <input type="hidden" class="form-control cuentaAuxiliar"  name="datos[codigoAuxiliar]" id="cuentaAuxiliar" placeholder="cuentaAuxiliar" ></td>
+				<td ><input type="text" class="form-control mayusculas nombreAuxiliar"  name="datos[auxiliar]" id="auxiliar" placeholder="Descripción" readonly ></td>
 			</tr>
 			<tr >
-				<th><input type="checkbox" name="item[0][checksubauxiliar]" id="checksubauxiliar" value="2" disabled><label class="negrita">Subauxiliares</label></th>
-				<td><input type="number" class="form-control"  name="item[0][idSubauxiliar]" id="idSubauxiliar" placeholder="Código" readonly disabled></td>
+				<th>
+				    <input type="hidden" name="datos[checksubauxiliar]" id="checksubauxiliar" value="0">
+				    <input type="checkbox" name="datos[checksubauxiliar]" id="checksubauxiliar" value="1" readonly disabled>
+				    <input type="hidden" class="form-control idAuxiliar"  name="datos[idSubauxiliar]" id="idSubauxiliar" placeholder="cuentaAuxiliar" ></td>
+				    <label class="negrita">Subauxiliares</label></th>
+				<td><input type="number" class="form-control cuentaSubauxiliar"  name="datos[cuentaSubauxiliar]" id="cuentaSubauxiliar" placeholder="Código" readonly ></td>
 				
-				<td ><input type="text" class="form-control"  name="item[0][subauxiliar]" id="subauxiliar" placeholder="Descripción" readonly disabled></td>
+				<td ><input type="text" class="form-control nombresubaxiliar"  name="datos[subauxiliar]" id="subauxiliar" placeholder="Descripción" readonly ></td>
 			</tr>
 		</tbody>
 	</table>
@@ -107,7 +105,7 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 	<div class="row">
 		<div class="col-md-3">
 			<label>Detalles</label>
-			<select class="form-control" name="item[0][detalle]" id="detalle">
+			<select class="form-control" name="datos[detalle]" id="detalle">
 				<option value="1">No detalla</option>
 				<option value="2">Por cobrar</option>
 				<option value="3">Por pagar</option>
@@ -115,7 +113,7 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 		</div>
 		<div class="col-md-3">
 			<label>Tercero</label>
-			<select class="form-control" name="item[0][tercero]" id="tercero">
+			<select class="form-control" name="datos[tercero]" id="tercero">
 				<option value="1">Si tercero</option>
 				<option value="2">No tercero</option>
 				<option value="3" >Retención</option>
@@ -123,12 +121,12 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 		</div>
 		<div class="col-md-2" id="divPorcentajeRetencion">
 			<label>% Retención</label>
-			<input type="text" class="form-control decimales" name="item[0][porcentajeRetencion]" id="porcentajeRetencion">
+			<input type="text" class="form-control decimales" name="datos[porcentajeRetencion]" id="porcentajeRetencion">
 				
 		</div>
 		<div class="col-md-4">
-			
-			<input type="checkbox" name="item[0][checkcentrocosto]" id="checkcentrocosto" value="1"><label>Centros de costo</label>
+			<input type="hidden" name="datos[checkcentrocosto]" id="checkcentrocosto" value="0">
+			<input type="checkbox" name="datos[checkcentrocosto]" id="checkcentrocosto" value="1"><label>Centros de costo</label>
 			
 		</div>
 
@@ -139,7 +137,7 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 		
 		<div class="col-md-4">
 			<label>Tipo cuenta</label>
-			<select class="form-control" name="item[0][tipoCuenta]">
+			<select class="form-control" name="datos[tipoCuenta]">
 				<option value="1">Activo</option>
 				<option value="2">Pasivo</option>
 				<option value="3">Patrimonio</option>
@@ -151,7 +149,7 @@ if($_SESSION["idRol"]!=5 && $_SESSION["idRol"]!=2){
 		</div>
 		<div class="col-md-4">
 			<label>Naturaleza</label>
-			<select class="form-control" name="item[0][naturaleza]">
+			<select class="form-control" name="datos[naturaleza]">
 				<option value="debito">Débito</option>
 				<option value="credito">Crédito</option>
 			</select>

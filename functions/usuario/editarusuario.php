@@ -56,8 +56,8 @@ $oItem=new Data("usuario","idUsuario",$id);
 foreach($aDatos  as $key => $value){
 	$oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem); 
 
-echo json_encode(array("msg"=>true));
+echo json_encode(array("msg"=>$msg));
 ?>

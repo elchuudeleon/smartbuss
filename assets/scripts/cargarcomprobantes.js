@@ -59,6 +59,8 @@ $("body").on("click touchstart","#btnGuardarInfo",function(e){
           showLoaderOnConfirm: true,
           confirmButtonText: `Si, Guardar!`,
           cancelButtonText:'Cancelar',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
           preConfirm: function(result) {
             return new Promise(function(resolve) {
               var formu = document.getElementById("frmGuardar");
@@ -73,7 +75,7 @@ $("body").on("click touchstart","#btnGuardarInfo",function(e){
               cache:false 
               }).done(function(msg){  
                 if(msg.msg){
-                  if (msg.fallos.length==0) {
+                  //if (msg.fallos.length==0) {
                     Swal.fire(
                       {
                       icon: 'success',
@@ -84,23 +86,23 @@ $("body").on("click touchstart","#btnGuardarInfo",function(e){
                     ).then((result) => {
                      location.reload(); 
                     })
-                  }
-                  if (msg.fallos.length!=0) {
-                    var codigosFallos='';
-                     msg.fallos.forEach(function(element,index){
-                      codigosFallos+=element+', ';
-                    })
-                    Swal.fire(
-                      {
-                      icon: 'success',
-                      title: 'Los comprobantes'+codigosFallos+' no se cargaron porque no existe el tercero!',
-                      text: 'por favor verifique los terceros',
-                      closeOnConfirm: true,
-                    }
-                    ).then((result) => {
-                     location.reload(); 
-                    })
-                  }
+                  //}
+                  // if (msg.fallos.length!=0) {
+                  //   var codigosFallos='';
+                  //    msg.fallos.forEach(function(element,index){
+                  //     codigosFallos+=element+', ';
+                  //   })
+                  //   Swal.fire(
+                  //     {
+                  //     icon: 'success',
+                  //     title: 'Los comprobantes'+codigosFallos+' no se cargaron porque no existe el tercero!',
+                  //     text: 'por favor verifique los terceros',
+                  //     closeOnConfirm: true,
+                  //   }
+                  //   ).then((result) => {
+                  //    location.reload(); 
+                  //   })
+                  // }
                 }else{
                    Swal.fire(
                     'Algo ha salido mal!',
@@ -175,296 +177,334 @@ $("body").on("click touchstart","#btnGuardarInfo",function(e){
 // ----------------------------------------------------------------------------------------------------------------------------------------------
 
 $("#excel").change(function(e){
+  var aCuentasCargadas=[]; 
+  if($("[name='datos[idEmpresa]']").val()!=""){
+    id=$("[name='datos[idEmpresa]']").val(); 
+    contError=0; 
+    $.ajax({
+        url:URL+"functions/cuentascontables/cargarcuentascontables.php", 
+        type:"POST", 
+        data: {"idEmpresa":id}, 
+        dataType: "json",
+        }).done(function(msg){  
+          aCuentasCargadas=msg; 
+          
+          var reader = new FileReader();
+          reader.readAsArrayBuffer(e.target.files[0]);
+          reader.onload = function(e){
+            var data = new Uint8Array(reader.result);
+            var wb = XLSX.read(data,  {type:"array"});
+            var name = wb.SheetNames[0];
+            var nameS=name.toString();
+            
+            var regex = /(\d+)/g;
+            var filas = wb.Sheets[nameS]['!ref'].split(':');
+            var numeroFilas=filas[1].match(regex)
+          
+            var tabla=0;
+            var sHtml='<div class="col-md-12"><table class="table table-striped mayusculas" id="tableComprobantes['+tabla+']"><thead><th>Cuenta</th><th>CC</th> <th>SC</th><th>Tercero</th><th>Descripción</th><th>Base</th><th>Débito</th><th>crédito</th></thead><tbody>';
+            var eHtml='';
+            var debito='0';
+            var credito='0';
+            var j =0;
+            var cont=0;
+            var tipoC='';
+            var tipo='';
+            var comprobanteT='';
+            var numero=0;
+            var control=1;
+            var fecha='';
+            var corrido=0;
 
-  var reader = new FileReader();
-  reader.readAsArrayBuffer(e.target.files[0]);
-  reader.onload = function(e){
-    var data = new Uint8Array(reader.result);
-    var wb = XLSX.read(data,  {type:"array"});
-    console.log('ingreso');
-    // console.log(wb);
-    var name = wb.SheetNames[0];
-    var nameS=name.toString();
-    console.log(wb.Sheets[nameS]);
-    var regex = /(\d+)/g;
-    var filas = wb.Sheets[nameS]['!ref'].split(':');
-    var numeroFilas=filas[1].match(regex)
-  
-    var tabla=0;
-    var sHtml='<div class="col-md-12"><table class="table table-striped mayusculas" id="tableComprobantes['+tabla+']"><thead><th>Cuenta</th><th>CC</th> <th>SC</th><th>Tercero</th><th>Descripción</th><th>Base</th><th>Débito</th><th>crédito</th></thead><tbody>';
-    var eHtml='';
-    var debito='0';
-    var credito='0';
-    var j =0;
-    var cont=0;
-    var tipoC='';
-    var tipo='';
-    var comprobanteT='';
-    var numero=0;
-    var control=1;
-    var fecha='';
-    var corrido=0;
+            var totalDebitos=0.00;
+            var totalCreditos=0.00;
 
-    var totalDebitos=0.00;
-    var totalCreditos=0.00;
-
-    var debitos=0.00;
-    var creditos=0.00;
+            var debitos=0.00;
+            var creditos=0.00;
 
 
 
-    if (numeroFilas<=308) {
+            if (numeroFilas<=308) {
 
 
-    for (var i = 8; i <= numeroFilas; i++) {
-        if (wb.Sheets[nameS]['A'+i] != undefined) {
-          if (control==1) {
-            tipoC=wb.Sheets[nameS]['B'+i].w.split('-');
-            tipo=tipoC[0];
-            comprobanteT=parseInt(tipoC[1]);
-            numero=parseInt(wb.Sheets[nameS]['C'+i].w);
-            fecha=wb.Sheets[nameS]['A'+i].w;
-            sHtml+='<div class="row"><div class="col-md-3"><div class="form-group"><label class="negrita">Tipo:</label><input type="text" class="form-control" name="item['+tabla+'][tipo]" value="'+tipo+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Comprobante:</label><input type="text" class="form-control" name="item['+tabla+'][comprobante]" value="'+comprobanteT+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Fecha:</label><input type="text" class="form-control" name="item['+tabla+'][fecha]" value="'+fecha+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Número:</label><input type="text" class="form-control" name="item['+tabla+'][numero]" value="'+numero+'" readonly></div></div></div>';  
-            // $("#divEncabezado").append(eHtml);
-          }
-          if (wb.Sheets[nameS]['N'+i]!=undefined) {
-            if (wb.Sheets[nameS]['N'+i].w==undefined) {
-              if (wb.Sheets[nameS]['N'+i].v!=undefined) {
-                debito=wb.Sheets[nameS]['N'+i].v;
-              }
-              if (wb.Sheets[nameS]['N'+i].v==undefined) {
-                debito=' 0.0 ';
-              }
-            }
-            // if () {
-
-            // }
-            if (wb.Sheets[nameS]['N'+i].w!=undefined) {
-              if (isNaN(eliminarMoneda(wb.Sheets[nameS]['N'+i].w,",",""))) {
-                  if (wb.Sheets[nameS]['O'+i].w!=undefined) {
-                    debito=wb.Sheets[nameS]['O'+i].w.trim();
+            for (var i = 8; i <= numeroFilas; i++) {
+                if (wb.Sheets[nameS]['A'+i] != undefined) {
+                  if (control==1) {
+                    tipoC=wb.Sheets[nameS]['B'+i].w.split('-');
+                    tipo=tipoC[0];
+                    comprobanteT=parseInt(tipoC[1]);
+                    numero=parseInt(wb.Sheets[nameS]['C'+i].w);
+                    fecha=wb.Sheets[nameS]['A'+i].w;
+                    fecha=new Date(fecha); 
+                    fecha=dateToYMD(fecha); 
+                    
+                    sHtml+='<div class="row"><div class="col-md-3"><div class="form-group"><label class="negrita">Tipo:</label><input type="text" class="form-control" name="item['+tabla+'][tipo]" value="'+tipo+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Comprobante:</label><input type="text" class="form-control" name="item['+tabla+'][comprobante]" value="'+comprobanteT+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Fecha:</label><input type="date" class="form-control" name="item['+tabla+'][fecha]" value="'+fecha+'" readonly></div></div><div class="col-md-3"><div class="form-group"><label class="negrita">Número:</label><input type="text" class="form-control" name="item['+tabla+'][numero]" value="'+numero+'" readonly></div></div></div>';  
+                    // $("#divEncabezado").append(eHtml);
                   }
-                  if (wb.Sheets[nameS]['O'+i].w==undefined) {
-                    debito=wb.Sheets[nameS]['O'+i].v;
+                  if (wb.Sheets[nameS]['N'+i]!=undefined) {
+                    if (wb.Sheets[nameS]['N'+i].w==undefined) {
+                      if (wb.Sheets[nameS]['N'+i].v!=undefined) {
+                        debito=wb.Sheets[nameS]['N'+i].v;
+                      }
+                      if (wb.Sheets[nameS]['N'+i].v==undefined) {
+                        debito=' 0.0 ';
+                      }
+                    }
+                    // if () {
+
+                    // }
+                    if (wb.Sheets[nameS]['N'+i].w!=undefined) {
+                      if (isNaN(eliminarMoneda(wb.Sheets[nameS]['N'+i].w,",",""))) {
+                          if (wb.Sheets[nameS]['O'+i].w!=undefined) {
+                            debito=wb.Sheets[nameS]['O'+i].w.trim();
+                          }
+                          if (wb.Sheets[nameS]['O'+i].w==undefined) {
+                            debito=wb.Sheets[nameS]['O'+i].v;
+                          }
+                          if (wb.Sheets[nameS]['P'+i]!=undefined) {
+                            if (wb.Sheets[nameS]['P'+i].w!=undefined) {
+                              credito=wb.Sheets[nameS]['P'+i].w.trim();
+                            }
+                            if (wb.Sheets[nameS]['P'+i].w==undefined) {
+                              credito=wb.Sheets[nameS]['P'+i].v;
+                            }
+                          }
+                          
+
+                          var centroCosto=wb.Sheets[nameS]['I'+i].w.trim(); 
+                          var subcentroCosto=wb.Sheets[nameS]['J'+i].w.trim(); 
+                          var detalle = wb.Sheets[nameS]['N'+i].w.trim();
+                          var base = wb.Sheets[nameS]['K'+i].w.trim();
+
+                            corrido=1;
+                      }
+                      if (!isNaN(eliminarMoneda(wb.Sheets[nameS]['N'+i].w,",",""))) {
+                        debito=wb.Sheets[nameS]['N'+i].w.trim();
+
+                        if (wb.Sheets[nameS]['O'+i]!=undefined) {
+                          if (wb.Sheets[nameS]['O'+i].w!=undefined) {
+                            credito=wb.Sheets[nameS]['O'+i].w.trim();
+                          }
+                          if (wb.Sheets[nameS]['O'+i].w==undefined) {
+                            credito=wb.Sheets[nameS]['O'+i].v;
+                          }
+                        }
+
+                        corrido=0;
+                      }
+                    }
                   }
-                  if (wb.Sheets[nameS]['P'+i]!=undefined) {
-                    if (wb.Sheets[nameS]['P'+i].w!=undefined) {
-                      credito=wb.Sheets[nameS]['P'+i].w.trim();
-                    }
-                    if (wb.Sheets[nameS]['P'+i].w==undefined) {
-                      credito=wb.Sheets[nameS]['P'+i].v;
-                    }
+                  if (corrido==0) {
+                    if (wb.Sheets[nameS]['O'+i]!=undefined) {
+                      if (wb.Sheets[nameS]['O'+i].w==undefined) {
+                        if (wb.Sheets[nameS]['O'+i].v!=undefined) {
+                          credito=wb.Sheets[nameS]['O'+i].v;
+                        }
+                        if (wb.Sheets[nameS]['O'+i].v==undefined) {
+                          credito='0.0';
+                        }
+                      }
+                      
+                      if (wb.Sheets[nameS]['O'+i].w!=undefined) {
+                        credito=wb.Sheets[nameS]['O'+i].w.trim();
+                      }
+                    }  
                   }
                   
 
-                  var centroCosto=wb.Sheets[nameS]['I'+i].w.trim(); 
-                  var subcentroCosto=wb.Sheets[nameS]['J'+i].w.trim(); 
-                  var detalle = wb.Sheets[nameS]['N'+i].w.trim();
-                  var base = wb.Sheets[nameS]['K'+i].w.trim();
+                var cuentaC=wb.Sheets[nameS]['F'+i].w+'-'+wb.Sheets[nameS]['G'+i].w;
+                if (wb.Sheets[nameS]['F'+i].w=='0000000000') {
+                  var tercero=wb.Sheets[nameS]['E'+i].w;
+                }
+                if (wb.Sheets[nameS]['F'+i].w!='0000000000') {
+                  var tercero=wb.Sheets[nameS]['E'+i].w.trim();
+                }
 
-                    corrido=1;
-              }
-              if (!isNaN(eliminarMoneda(wb.Sheets[nameS]['N'+i].w,",",""))) {
-                debito=wb.Sheets[nameS]['N'+i].w.trim();
+                  // var centroCosto=$(elemento).val();
+                  if (corrido==0) {
+                    if (wb.Sheets[nameS]['H'+i]!=undefined) {
+                      if (wb.Sheets[nameS]['H'+i].w==undefined) {
+                        if (wb.Sheets[nameS]['H'+i].v!=undefined) {
+                        
+                          var centroCosto=wb.Sheets[nameS]['H'+i].v.trim(); 
+                        }
+                        
+                      }
+                      if (wb.Sheets[nameS]['H'+i].w!=undefined) {
+                        
+                        var centroCosto=wb.Sheets[nameS]['H'+i].w.trim(); 
+                      }
+                    }
+                    if (wb.Sheets[nameS]['H'+i]==undefined) {
+                      var centroCosto='';
+                    }
 
-                if (wb.Sheets[nameS]['O'+i]!=undefined) {
-                  if (wb.Sheets[nameS]['O'+i].w!=undefined) {
-                    credito=wb.Sheets[nameS]['O'+i].w.trim();
+
+                    if (wb.Sheets[nameS]['M'+i].w!=undefined) {
+                      var detalle = wb.Sheets[nameS]['M'+i].w.trim();
+                    }
+                    if (wb.Sheets[nameS]['M'+i]==undefined) {
+                      var detalle = '';
+                    }
+
+                    if (wb.Sheets[nameS]['J'+i]==undefined) {
+                      var base = '';
+                    }
+                    if (wb.Sheets[nameS]['J'+i]!=undefined) {
+
+                      if (wb.Sheets[nameS]['J'+i].w!=undefined) {
+                        var base = wb.Sheets[nameS]['J'+i].w.trim();
+                      }else{
+                        var base='';
+                      }
+                    
+                    }
+
+                    var subcentroCosto=wb.Sheets[nameS]['I'+i].w.trim(); 
+                    
                   }
-                  if (wb.Sheets[nameS]['O'+i].w==undefined) {
-                    credito=wb.Sheets[nameS]['O'+i].v;
+                  var letreroCC=0;
+               
+                var findCuenta=false; 
+                var idCuentaContable=0; 
+                aCuentasCargadas.forEach(function(element, e){
+                  
+                  if(element.codigoCuentaContable==wb.Sheets[nameS]['F'+i].w||wb.Sheets[nameS]['F'+i].w=="0000000000"){
+                    findCuenta=true; 
+                    idCuentaContable=element.idCuentaContable; 
                   }
-                }
-
-                corrido=0;
-              }
-            }
-          }
-          if (corrido==0) {
-            if (wb.Sheets[nameS]['O'+i]!=undefined) {
-              if (wb.Sheets[nameS]['O'+i].w==undefined) {
-                if (wb.Sheets[nameS]['O'+i].v!=undefined) {
-                  credito=wb.Sheets[nameS]['O'+i].v;
-                }
-                if (wb.Sheets[nameS]['O'+i].v==undefined) {
-                  credito='0.0';
-                }
-              }
+                })
               
-              if (wb.Sheets[nameS]['O'+i].w!=undefined) {
-                credito=wb.Sheets[nameS]['O'+i].w.trim();
-              }
-            }  
-          }
-          
-
-        var cuentaC=wb.Sheets[nameS]['F'+i].w+'-'+wb.Sheets[nameS]['G'+i].w;
-        if (wb.Sheets[nameS]['F'+i].w=='0000000000') {
-          var tercero=wb.Sheets[nameS]['E'+i].w;
-        }
-        if (wb.Sheets[nameS]['F'+i].w!='0000000000') {
-          var tercero=wb.Sheets[nameS]['E'+i].w.trim();
-        }
-
-          // var centroCosto=$(elemento).val();
-          if (corrido==0) {
-            if (wb.Sheets[nameS]['H'+i]!=undefined) {
-              if (wb.Sheets[nameS]['H'+i].w==undefined) {
-                if (wb.Sheets[nameS]['H'+i].v!=undefined) {
+                sHtml+='<tr style="background-color:'; 
+                  if(!findCuenta){
+                    contError++; 
+                    sHtml+='#d10d0d;'; 
+                  }
+                sHtml+='">';
+                sHtml+='<td><input type="text" class="form-control cuentaContable mayusculas"  placeholder="Cuenta" value="'+cuentaC.trim()+'" readonly>'+
+                    '<input type="hidden" name="item['+tabla+'][item]['+cont+'][idCuentaContable]" id="item['+tabla+'][item]['+cont+'][idCuentaContable]" value="'+idCuentaContable+'" readonly>'
+                +'</td>';
                 
-                  var centroCosto=wb.Sheets[nameS]['H'+i].v.trim(); 
+            
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][centroCosto]" id="item['+tabla+']['+cont+'][centroCosto]" class="form-control centroCosto mayusculas"  placeholder="centro costo" value="'+centroCosto+'" readonly><span name="item['+tabla+'][item]['+cont+'][letreroCentroCosto]" class="ocultar">No existe</span></td>';  
+              
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][subcentroCosto]" id="item['+tabla+'][item]['+cont+'][subcentroCosto]" class="form-control subcentroCosto mayusculas"  placeholder="Subcentro costo" value="'+subcentroCosto+'" readonly></td>';
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][tercero]" id="item['+tabla+'][item]['+cont+'][tercero]" class="form-control mayusculas"  placeholder="tercero" value="'+tercero+'" readonly></td>';
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][descripcion]" id="item['+tabla+'][item]['+cont+'][descripcion]" class="form-control descripcion mayusculas"  placeholder="Descripción" value="'+detalle+'" readonly></td>';
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][base]" id="item['+tabla+'][item]['+cont+'][base]" class="form-control base mayusculas monedaComaPunto"  placeholder="base" value="'+base+'" readonly></td>';
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][debito]" id="item['+tabla+'][item]['+cont+'][debito]" class="form-control debito mayusculas monedaComaPunto"  placeholder="debito" value="'+debito+'" ></td>';
+                sHtml+='<td><input type="text" name="item['+tabla+'][item]['+cont+'][credito]" id="item['+tabla+'][item]['+cont+'][credito]" class="form-control credito mayusculas monedaComaPunto"  placeholder="credito" value="'+credito+'" ></td>';
+
+                if (debito!='' && credito!='') {
+                  
+
+                  // console.log('debito=>');
+                  // console.log(debito);
+
+                  // console.log('credito=>');
+                  // console.log(credito);
+
+
+                  debitos=parseFloat(eliminarMoneda(debito.toString(),",",""));
+                  creditos=parseFloat(eliminarMoneda(credito.toString(),",",""));
+                  // console.log('credito=>');
+                  // console.log(credito);
+                  if (numero=='2107062') {
+
+                    console.log('creditos:');
+                    console.log(creditos);
+
+                    console.log('debitos=>');
+                    console.log(debitos);
+                  }
+
+                  // console.log('debitosAntes=>');
+                  // console.log(totalDebitos);
+
+                  totalDebitos=totalDebitos+parseFloat(Math.round((debitos)*100)/100);
+                  totalCreditos=totalCreditos+parseFloat(Math.round((creditos)*100)/100);
+                  // totalDebitos=totalDebitos+parseFloat((debitos));
+                  // totalCreditos=totalCreditos+parseFloat(creditos);
+                  if (numero=='2107062') {
+
+                    console.log('debitosTotal=>');
+                    console.log(totalDebitos);
+                    console.log('creditosTotal=>:');
+                    console.log(totalCreditos);
+                  }
                 }
+                // if (wb.Sheets[nameS]['N'+i].w==undefined) {
+                //   console.log(wb.Sheets[nameS]['N'+i].v);
+                // }
+                // if (wb.Sheets[nameS]['N'+i].w!=undefined) {
+                //   console.log(wb.Sheets[nameS]['N'+i].w);
+                // }
+                // // console.log(wb.Sheets[nameS]['O'+i].w);
                 
+                sHtml+='</tr>';
+                cont++;
+                control=0;
               }
-              if (wb.Sheets[nameS]['H'+i].w!=undefined) {
-                
-                var centroCosto=wb.Sheets[nameS]['H'+i].w.trim(); 
+              console.log(wb.Sheets[nameS]['A'+i]); 
+              if (wb.Sheets[nameS]['A'+i] == undefined || wb.Sheets[nameS]['A'+i] == "") {
+                  console.log(sHtml); 
+                if(sHtml!=''){
+
+                  if (totalDebitos.toFixed(2)!=totalCreditos.toFixed(2)) {
+
+                    sHtml+='<tr><td class="negrita">TOTAL</td><td></td><td></td><td></td><td></td><td></td><td><input type="text"  id="totalDebito['+tabla+']" class="form-control totalDebito mayusculas moneda"  placeholder="total debito" style="color:red;" total="1" value="'+totalDebitos.toFixed(2)+'" readonly></td><td><input type="text" id="totalCredito['+tabla+']" class="form-control totalCredito mayusculas moneda"  placeholder="total creditos" style="color:red;" value="'+totalCreditos.toFixed(2)+'" readonly></td></tr>';
+                  }else{
+                    sHtml+='<tr><td class="negrita">TOTAL</td><td></td><td></td><td></td><td></td><td></td><td><input type="text"  id="totalDebito['+tabla+']" class="form-control totalDebito mayusculas moneda"  placeholder="total debito" total="0" value="'+totalDebitos.toFixed(2)+'" readonly></td><td><input type="text" id="totalCredito['+tabla+']" class="form-control totalCredito mayusculas moneda"  placeholder="total creditos" value="'+totalCreditos.toFixed(2)+'" readonly></td></tr>';
+
+                  }
+                  
+                  
+
+                  sHtml+='</tbody></table></div>';
+                  $("#divComprobanteCargado").append(sHtml);
+                  // $(".base").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
+                  // $(".debito").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
+                  // $(".credito").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
+                  totalDebitos=0.0;
+                  totalCreditos=0.0;
+                  //$("#btnGuardarInfo").removeClass('ocultar');
+                }
+                j=i+1;
+                sHtml='';
+                cont=0;
+                if (wb.Sheets[nameS]['A'+j] != undefined) {
+                  control=1;
+
+                sHtml='<div class="col-md-12"><table class="table table-striped mayusculas" id="tableComprobantes['+tabla+']"><thead><th>Cuenta</th><th>Centro de costo</th> <th>Subcentro costo</th><th>Tercero </th><th>Descripción</th><th>Base</th><th>Débito</th><th>crédito</th></thead><tbody>';
+                 tabla++;
+               }
               }
             }
-            if (wb.Sheets[nameS]['H'+i]==undefined) {
-              var centroCosto='';
+            if(contError>0){
+              $("#btnGuardarInfo").addClass('ocultar');
+            }else{
+              $("#btnGuardarInfo").removeClass('ocultar');
             }
 
+           }else{
+              $("#btnGuardarInfo").css("display","none");
+              Swal.fire(
+                'El archivo super el limite de filas!',
+                'Por favor verifique que el archivo contenga maximo 300 filas',
+                'error'
+              )
 
-            if (wb.Sheets[nameS]['M'+i].w!=undefined) {
-              var detalle = wb.Sheets[nameS]['M'+i].w.trim();
-            }
-            if (wb.Sheets[nameS]['M'+i]==undefined) {
-              var detalle = '';
-            }
-
-            if (wb.Sheets[nameS]['J'+i]==undefined) {
-              var base = '';
-            }
-            if (wb.Sheets[nameS]['J'+i]!=undefined) {
-
-              if (wb.Sheets[nameS]['J'+i].w!=undefined) {
-                var base = wb.Sheets[nameS]['J'+i].w.trim();
-              }else{
-                var base='';
-              }
+           } //aca toca cerrar el if del numero de filas
+            // recorrer();
             
-            }
 
-            var subcentroCosto=wb.Sheets[nameS]['I'+i].w.trim(); 
-            
-          }
-          var letreroCC=0;
-       
-        
-        
-      
-        sHtml+='<tr>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][cuentaContable]" id="item['+tabla+']['+cont+'][cuentaContable]" class="form-control cuentaContable mayusculas"  placeholder="Cuenta" value="'+cuentaC.trim()+'" readonly></td>';
-        
-    
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][centroCosto]" id="item['+tabla+']['+cont+'][centroCosto]" class="form-control centroCosto mayusculas"  placeholder="centro costo" value="'+centroCosto+'" readonly><span name="item['+tabla+']['+cont+'][letreroCentroCosto]" class="ocultar">No existe</span></td>';  
-      
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][subcentroCosto]" id="item['+tabla+']['+cont+'][subcentroCosto]" class="form-control subcentroCosto mayusculas"  placeholder="Subcentro costo" value="'+subcentroCosto+'" readonly></td>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][tercero]" id="item['+tabla+']['+cont+'][tercero]" class="form-control mayusculas"  placeholder="tercero" value="'+tercero+'" readonly></td>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][descripcion]" id="item['+tabla+']['+cont+'][descripcion]" class="form-control descripcion mayusculas"  placeholder="Descripción" value="'+detalle+'" readonly></td>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][base]" id="item['+tabla+']['+cont+'][base]" class="form-control base mayusculas monedaComaPunto"  placeholder="base" value="'+base+'" readonly></td>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][debito]" id="item['+tabla+']['+cont+'][debito]" class="form-control debito mayusculas monedaComaPunto"  placeholder="debito" value="'+debito+'" ></td>';
-        sHtml+='<td><input type="text" name="item['+tabla+']['+cont+'][credito]" id="item['+tabla+']['+cont+'][credito]" class="form-control credito mayusculas monedaComaPunto"  placeholder="credito" value="'+credito+'" ></td>';
-
-        if (debito!='' && credito!='') {
-          
-
-          // console.log('debito=>');
-          // console.log(debito);
-
-          // console.log('credito=>');
-          // console.log(credito);
-
-
-          debitos=parseFloat(eliminarMoneda(debito.toString(),",",""));
-          creditos=parseFloat(eliminarMoneda(credito.toString(),",",""));
-          // console.log('credito=>');
-          // console.log(credito);
-          if (numero=='2107062') {
-
-            console.log('creditos:');
-            console.log(creditos);
-
-            console.log('debitos=>');
-            console.log(debitos);
-          }
-
-          // console.log('debitosAntes=>');
-          // console.log(totalDebitos);
-
-          totalDebitos=totalDebitos+parseFloat(Math.round((debitos)*100)/100);
-          totalCreditos=totalCreditos+parseFloat(Math.round((creditos)*100)/100);
-          // totalDebitos=totalDebitos+parseFloat((debitos));
-          // totalCreditos=totalCreditos+parseFloat(creditos);
-          if (numero=='2107062') {
-
-            console.log('debitosTotal=>');
-            console.log(totalDebitos);
-            console.log('creditosTotal=>:');
-            console.log(totalCreditos);
-          }
-        }
-        // if (wb.Sheets[nameS]['N'+i].w==undefined) {
-        //   console.log(wb.Sheets[nameS]['N'+i].v);
-        // }
-        // if (wb.Sheets[nameS]['N'+i].w!=undefined) {
-        //   console.log(wb.Sheets[nameS]['N'+i].w);
-        // }
-        // // console.log(wb.Sheets[nameS]['O'+i].w);
-        
-        sHtml+='</tr>';
-        cont++;
-        control=0;
-      }
-      if (wb.Sheets[nameS]['A'+i] == undefined) {
-        if(sHtml!=''){
-
-          if (totalDebitos.toFixed(2)!=totalCreditos.toFixed(2)) {
-
-            sHtml+='<tr><td class="negrita">TOTAL</td><td></td><td></td><td></td><td></td><td></td><td><input type="text"  id="totalDebito['+tabla+']" class="form-control totalDebito mayusculas moneda"  placeholder="total debito" style="color:red;" total="1" value="'+totalDebitos.toFixed(2)+'" readonly></td><td><input type="text" id="totalCredito['+tabla+']" class="form-control totalCredito mayusculas moneda"  placeholder="total creditos" style="color:red;" value="'+totalCreditos.toFixed(2)+'" readonly></td></tr>';
-          }else{
-            sHtml+='<tr><td class="negrita">TOTAL</td><td></td><td></td><td></td><td></td><td></td><td><input type="text"  id="totalDebito['+tabla+']" class="form-control totalDebito mayusculas moneda"  placeholder="total debito" total="0" value="'+totalDebitos.toFixed(2)+'" readonly></td><td><input type="text" id="totalCredito['+tabla+']" class="form-control totalCredito mayusculas moneda"  placeholder="total creditos" value="'+totalCreditos.toFixed(2)+'" readonly></td></tr>';
 
           }
-          
-          
-
-          sHtml+='</tbody></table></div>';
-          $("#divComprobanteCargado").append(sHtml);
-          // $(".base").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
-          // $(".debito").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
-          // $(".credito").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
-          totalDebitos=0.0;
-          totalCreditos=0.0;
-          $("#btnGuardarInfo").removeClass('ocultar');
-        }
-        j=i+1;
-        sHtml='';
-        cont=0;
-        if (wb.Sheets[nameS]['A'+j] != undefined) {
-          control=1;
-
-        sHtml='<div class="col-md-12"><table class="table table-striped mayusculas" id="tableComprobantes['+tabla+']"><thead><th>Cuenta</th><th>Centro de costo</th> <th>Subcentro costo</th><th>Tercero </th><th>Descripción</th><th>Base</th><th>Débito</th><th>crédito</th></thead><tbody>';
-         tabla++;
-       }
-      }
-    }
-
-   }else{
-      $("#btnGuardarInfo").css("display","none");
-      Swal.fire(
-        'El archivo super el limite de filas!',
-        'Por favor verifique que el archivo contenga maximo 300 filas',
-        'error'
-      )
-
-   } //aca toca cerrar el if del numero de filas
-    // recorrer();
-    
-
-
+      });
   }
+
+  console.log(aCuentasCargadas)
+  
 
 });
 
@@ -571,7 +611,12 @@ function verificarTotal(){
 
 
 
-
+function dateToYMD(date) {
+    var d = date.getDate();
+    var m = date.getMonth() + 1; //Month from 0 to 11
+    var y = date.getFullYear();
+    return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+}
 // $("body").on("click touchstart","#btnGuardarInfo",function(e){
 
 //     e.preventDefault();

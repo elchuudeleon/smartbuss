@@ -10,11 +10,12 @@ date_default_timezone_set("America/Bogota");
 $id  = (isset($_REQUEST['idRetencion'] ) ? $_REQUEST['idRetencion'] : "" );
 $accion  = (isset($_REQUEST['accion'] ) ? $_REQUEST['accion'] : "" );
 
+$msg=true;
 $estado=$accion==1?0:1;
 $oItem=new Data("retencion","idRetencion",$id); 
 $oItem->estado=$estado; 
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem); 
 
-echo json_encode(array("msg"=>true));
+echo json_encode(array("msg"=>$msg));
 ?>

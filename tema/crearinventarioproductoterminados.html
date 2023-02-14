@@ -1,11 +1,6 @@
-
-
 <?php 
-
 require_once("class/empresa.php"); 
-
- include("class/clientes.php") ; 
-
+include("class/clientes.php") ; 
 
 $oEmpresa=new Empresa(); 
 
@@ -25,7 +20,6 @@ $aUnidades=$oLista->getLista();
 unset($oLista);
 
 
-
 $oLista = new Lista('inventario_inicial');
 $oLista->setFiltro("idEmpresa","=",$idEmpresa);
 $aInventario=$oLista->getLista();
@@ -43,9 +37,6 @@ unset($oLista);
 
 
 ?>
-
-
-
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <form enctype="multipart/form-data" id="frmGuardar">
@@ -155,8 +146,8 @@ unset($oLista);
                             <th>BODEGA</th>
                             <th>EXISTENCIA</th>
                             <th>STOCK MÍNIMO</th>
-                            <!-- <th>VALOR UNITARIO</th>
-                            <th>TOTAL</th> -->
+                            <th>ACCIONES</th>
+                            <!--<th>TOTAL</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -181,6 +172,13 @@ unset($oLista);
                             $bodegaProducto=$oItem->getDatos();
                             unset($oLista);
 
+                            $oLista = new Lista('inventario_productos_movimientos');
+                            $oLista->setFiltro("idEmpresa","=",$idEmpresa);
+                            $oLista->setFiltro("idProducto","=",$value["idProducto"]);
+                            $oLista->setFiltro("idBodega","=",$value["idBodega"]);
+                            $aMovimientos=$oLista->getLista();
+                            unset($oLista);
+
                             if (!empty($producto)) {
                               
                             
@@ -188,13 +186,16 @@ unset($oLista);
                             <tr>
                               <td><?php echo $producto["codigo"];?></td>
                               <td><?php echo $producto["nombre"];?></td>
-                              <td>
-                                <?php echo $categoria["nombre"];?>
-                              </td>
+                              <td><?php echo $categoria["nombre"];?></td>
                               <td> <?php echo $unidad["nombre"]; ?> </td>
                               <td> <?php echo $bodegaProducto["nombre"]; ?> </td>
-                                <td><?php echo $value["existencia"]; ?></td>
-                                <td><?php echo $value["stockMinimo"]; ?></td>
+                              <td><?php echo $value["existencia"]; ?></td>
+                              <td><?php echo $value["stockMinimo"]; ?></td>
+                              <td>
+                              <?php // if(count($aMovimientos)<1){ ?>
+                                <a href="javascript:void(0)" class="eliminar" data-toggle="tooltip" data-placement="top" title="Eliminar" id="<?php echo $value["idInventarioInicial"]; ?>" ><i class="fas fa-trash" style="color: #FF5D5D;font-size: 16px;"></i></a>
+                              <?php // } ?>
+                              </td>
                               <!-- <td><input type="text" class="form-control moneda numero valorUnitario mayusculas" name="datos[valorUnitario]" id="valorUnitario" placeholder="Valor Unitario" required ></td>
                               <td><input type="text" class="form-control moneda total mayusculas" name="datos[total]" id="total" placeholder="TOTAL" required readonly></td> -->
                             </tr>

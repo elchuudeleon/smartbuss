@@ -9,9 +9,10 @@ date_default_timezone_set("America/Bogota");
 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 
+$msg=true;
+
  
- 
-    if(!isset($_SESSION)){ session_start(); }
+if(!isset($_SESSION)){ session_start(); }
 
 $idActividad=$datos["idActividadCerrar"];
 $creador = $_SESSION["idUsuario"];
@@ -35,49 +36,26 @@ if ($datos["descripcionfinal"]!="") {
 }
 
 
+$oItem=new Data("actividades","idActividad",$idActividad); 
+foreach($aDatos  as $key => $value){
+$oItem->$key=$value; 
+}
+$msg=$oItem->guardar(); 
+unset($oItem);
 
-// echo $idActividad;
-// echo $aDatos["fechaCreacion"];
-// echo $aDatos["horaCreacion"];
-// echo $aDatos["motivo"];
-// echo $aDatos["creador"];
-// echo $aDatos["valor"];
-// echo $aDatos["estado"];
-// echo $aDatos["descripcion"];
-	
-
-		$oItem=new Data("actividades","idActividad",$idActividad); 
-		foreach($aDatos  as $key => $value){
-		$oItem->$key=$value; 
-		}
-		$oItem->guardar(); 
-		unset($oItem);
-
-
-
-
-
-		$aDatosR["idNegocio"]=$idActividad; 
-		$aDatosR["fechaRenovacion"]=$datos["renovacion"]; 
-		$aDatosR["fechaAlarma"]=$datos["alarmaRenovacion"]; 
-		 
-
-
-
-		$oItem=new Data("negocio_renovacion","idNegocioRenovacion"); 
-		foreach($aDatosR  as $keyR => $valueR){
-		$oItem->$keyR=$valueR; 
-		}
-		$oItem->guardar(); 
-		unset($oItem);
-
-
-
-
-$msg=true;
+if($msg){
+	$aDatosR["idNegocio"]=$idActividad; 
+	$aDatosR["fechaRenovacion"]=$datos["renovacion"]; 
+	$aDatosR["fechaAlarma"]=$datos["alarmaRenovacion"]; 
+	 
+	$oItem=new Data("negocio_renovacion","idNegocioRenovacion"); 
+	foreach($aDatosR  as $keyR => $valueR){
+	$oItem->$keyR=$valueR; 
+	}
+	$msg=$oItem->guardar(); 
+	unset($oItem);
+}
 
 echo json_encode(array("msg"=>$msg));
-		
-	  // header('location: ../../negocios/',$codigocliente);
  ?>
  

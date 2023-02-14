@@ -1,10 +1,6 @@
 <?php 
-
 require_once("class/empresa.php"); 
-
 require_once("class/clientes.php"); 
-
-
 
 $oClientes=new Clientes(); 
 
@@ -14,15 +10,9 @@ $validarIngreso=1;
 }
 // if($_SESSION["idRol"]==2){
 if(empty($_SESSION["idEmpresa"])){
-
   $oItem=new Data("usuario","idUsuario", $_SESSION["idUsuario"]); 
-
   $valUser=$oItem->getDatos(); 
-
   unset($oItem);  
-
-
-
   $validarIngreso=$valUser["ingresoPerfilEmpresa"]; 
 
 $aEmpresas=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso));
@@ -30,54 +20,33 @@ $aEmpresas=$oEmpresa->getEmpresas(array("ingresoPerfilEmpresa"=>$validarIngreso)
   $aEmpresas=$oEmpresa->getEmpresas();
 }
 
-
-
-
-
 $oLista = new Lista('unidad');
-
 $oLista->setOrden("nombre","ASC");
-
 $aUnidades=$oLista->getLista();
-
 unset($oLista);
-
-
 
 // if($_SESSION["idRol"]!=1&&$_SESSION["idRol"]!=2){
 if(!empty($_SESSION["idEmpresa"])){
-
   $aClientes=$oClientes->getClientesEmpresa(); 
-
   $idEmpresa=$_SESSION["idEmpresa"];
-
 }
 
 
 
 ?>
-
 <style type="text/css">
-
   input[readonly]{
-
     background-color: #FFFF !important;
-
     text-transform: uppercase;
-
   }
 
 </style>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
 <form enctype="multipart/form-data" id="frmGuardar">
-
 <?php if(!empty($_SESSION['idEmpresa'])){ ?>
-
 <input type="hidden" name="datos[idEmpresa]" id="datos[idEmpresa]" value="<?php echo $_SESSION['idEmpresa']; ?>">
 <input type="hidden" name="datos[tipoProdcutos]" id="tipoProdcutos" >
-
 <?php } ?>
 <section class="section">
         <ul class="breadcrumb breadcrumb-style ">
@@ -154,13 +123,13 @@ if(!empty($_SESSION["idEmpresa"])){
                     </div>
 
 
-                    <div class="<?php if(empty($_SESSION['idEmpresa'])){ ?> col-md-2 <?php }else{ ?> col-md-4 <?php } ?>">
+                    <div class="<?php if(empty($_SESSION['idEmpresa'])){ ?> col-md-2 <?php }else{ ?> col-md-3 <?php } ?>">
                       <div class="form-group">
                         <label class="negrita">Fecha factura<span class="requerido">*</span>:</label>
                         <input type="text" readonly class="form-control datepicker" name="datos[fechaFactura]" id="datos[fechaFactura]" required>
                       </div>
                     </div>
-                    <div class="<?php if(empty($_SESSION['idEmpresa'])){ ?> col-md-2 <?php }else{ ?> col-md-4 <?php } ?>">
+                    <div class="<?php if(empty($_SESSION['idEmpresa'])){ ?> col-md-2 <?php }else{ ?> col-md-3 <?php } ?>">
                       <div class="form-group">
                         <label class="negrita">Tercero<span class="requerido">*</span>:</label>
                         <select class="form-control select2 mayusculas" name="datos[idCliente]" id="datos[idCliente]" required>
@@ -187,93 +156,49 @@ if(!empty($_SESSION["idEmpresa"])){
                     </div>
 
                     <div class="col-md-3">
-
                       <div class="form-group">
-
                         <label class="negrita">Factura:</label>
-
                         <div class="custom-file">
-
                           <input type="file" class="custom-file-input" id="file" name="file" >
-
                           <label class="custom-file-label" for="customFile">Seleccionar archivo</label>
-
                         </div>
-
                       </div>
-
                     </div>
-
                     <div class="col-md-3">
-
                       <div class="form-group">
-
                         <label class="negrita">Archivo 2:</label>
-
                         <div class="custom-file">
-
                           <input type="file" class="custom-file-input" id="file2" name="file2" >
-
                           <label class="custom-file-label" for="customFile">Seleccionar archivo</label>
-
                         </div>
-
                       </div>
-
                     </div>
-
                   </div>
-
                   </div>
-
                   <div class="card-header">
-
                     <h4>Detalles Factura</h4>
-
                   </div>
-
                   <div class="card-body">
-
                     <div class="row">
-
                     <div class="col-md-12 col-lg-12 table-responsive">
-
                       <table class="table table-striped mayusculas" id="tableProductos">
-
                         <thead>
-
                           <tr>
-
-                            <th class="text-center">#</th>
-
+                           <th class="text-center">#</th>
                             <th>Productos</th>
-
                             <th>Descripción</th>
-
                             <th>Bodega</th>
-
                             <th>Cantidad</th>
-
                             <th>Unidad</th>
-
                             <th>Valor Unit.</th>
-
                             <th>Subtotal</th>
-
                             <th>Iva(%)</th>
-
                             <th>Total</th>
-
                             <th class="text-center">
-
                               <a href="javascript:void(0)" data-toggle="tooltip" id="agregar" data-placement="top" title="Agregar" class="btn btn-icon btn-sm btn-primary"><i class="fas fa-plus"></i></a>
-
                             </th>
-
                           </tr>
-
                         </thead>
-
                         <tbody>
                           <?php
                           $oBodega=new Lista("bodega");
@@ -292,49 +217,27 @@ if(!empty($_SESSION["idEmpresa"])){
                               <td><input type="text" class="form-control descripcion mayusculas" name="item[0][descripcion]" id="item[0][descripcion]" placeholder="Descripción" required></td>
 
                               <td><select class="form-control mayusculas idBodega" name="item[0][idBodega]" id="item[0][idBodega]" >
-
                                   <option value="">Seleccione una opción</option>
-
                                   <?php foreach($aBodegas as $iBodegas){ ?>
-
                                   <option value="<?php echo $iBodegas['idBodega']; ?>"><?php echo $iBodegas["codigo"].' '.$iBodegas["nombre"]; ?></option>
-
                                   <?php } ?>
-
                                 </select></td>
-
                               <td><input type="text" class="form-control decimales cantidad" name="item[0][cantidad]" id="item[0][cantidad]" placeholder="Cantidad" required></td>
-
                               <td><select class="form-control mayusculas idUnidad" name="item[0][idUnidad]" id="item[0][idUnidad]" required>
-
                                   <option value="">Seleccione una opción</option>
-
                                   <?php foreach($aUnidades as $iUnidades){ ?>
-
                                   <option value="<?php echo $iUnidades['idUnidad']; ?>"><?php echo $iUnidades["nombre"]; ?></option>
-
                                   <?php } ?>
-
                                 </select></td>
-
                               <td><input type="text" class="form-control moneda decimales valorUnitario " name="item[0][valorUnitario]" id="item[0][valorUnitario]" placeholder="Valor Unitario" required></td>
-
                               <td><input type="text" class="form-control moneda subtotal " name="item[0][subtotal]" id="item[0][subtotal]" placeholder="Subtotal" required readonly></td>
-
                               <td><input type="text" class="form-control decimales iva " name="item[0][iva]" id="item[0][iva]" placeholder="IVA" required></td>
-
                               <td><input type="text" class="form-control moneda total " name="item[0][total]" id="item[0][total]" placeholder="TOTAL" required readonly></td>
-
                               <td class="centrar">
-
                                 <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn btn-icon btn-sm btn-danger eliminar"><i class="fas fa-trash"></i></a>
-
                               </td>
-
                             </tr>
-
                         </tbody>
-
                         <tfoot>
                           <tr>
                             <td colspan="9" style="text-align: right;" class="negrita">SUBTOTAL:</td>
@@ -382,121 +285,62 @@ if(!empty($_SESSION["idEmpresa"])){
                             <select class="form-control" name="conceptoSelect" id="conceptoSelect">
                             <option value="">Seleccione una opción</option>
                           </select>
-
                         </div>
-
                       </div>
-
                       <div class=" col-md-3 concepto-texto">
-
                         <div class="form-group">
-
                             <label class="negrita">Concepto<span class="requerido">*</span>:</label>
-
                             <input type="text" class="form-control " name="conceptoText" id="conceptoText" >
-
                         </div>
-
                       </div>
-
                       <div class=" col-md-2 ocultar baseimpuestos">
-
                         <div class="form-group">
-
                             <label class="negrita ">Base Impuestos<span class="requerido">*</span>:</label>
-
                             <input type="text" class="form-control monedaD decimales " name="baseImpuestos" id="baseImpuestos">
-
                         </div>
-
                       </div>
-
                       <div class=" col-md-3 valor">
-
                         <div class="form-group">
-
                             <label class="negrita ">Valor<span class="requerido">*</span>:</label>
-
                             <input type="text" class="form-control moneda " name="valor" id="valor">
-
                         </div>
-
                       </div>
-
                       <div class=" col-md-3 boton-agregar">
-
                         <div class="form-group text-right">
-
                             <label class="negrita d-block">&nbsp;</label>
-
                             <a class="btn btn-success mr-1" id="btnAgregar">Agregar</a>
-
                         </div>
-
                       </div>
-
                     </div>
-
                     <div class="row">
-
                       <div class="col-md-12 col-lg-12">
-
                         <table class="table table-striped mayusculas" id="tableDeducciones">
-
                           <thead>
-
                             <tr>
-
                               <th>Tipo Deducción</th>
-
                               <th>Descripción</th>
-
                               <th>Valor</th>
-
                               <th class="text-center" style="width: 50px">-</th>
-
                             </tr>
-
                           </thead>
-
                           <tbody>
-
                           </tbody>
-
                         </table>
-
                       </div>
-
                     </div>
-
                     <div class="row">
-
                       <div class="col-md-4">
-
                         <div class="form-group">
-
                             <label class="negrita">Total Deducciones:</label>
-
                             <input type="text" class="form-control moneda decimales totalDeduccion" name="datos[totalDeduccion]" id="datos[totalDeduccion]" value="0" readonly>
-
                         </div>
-
                       </div>
-
-
-
                       <div class="col-md-4">
-
                           <div class="form-group">
-
                               <label class="negrita">Total a Pagar:</label>
-
                               <input type="text" class="form-control mayusculas moneda" name="datos[totalPago]" id="datos[totalPago]" value='<?php echo "$".number_format(0,2,",","."); ?>' readonly required>
-
                           </div>
-
                           </div>
-
                            <?php 
                           $oItem=new Lista("banco_cuenta_contable");
                           $oItem->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
@@ -522,31 +366,10 @@ if(!empty($_SESSION["idEmpresa"])){
                                     <?php } ?>
                                   </optgroup>
                               </select>
-
                             </div>
-
                           </div>
-
-
                   </div>
               </div>
-
-                      <!-- <div class="col-md-4 ocultar" id="divCuentaContableTotal">
-
-                        <div class="form-group">
-
-                          <label class="negrita">Cuenta contable total a Pagar:</label>
-
-                          <select class="form-control" name="datos[cuentaContableTotal]" id="cuentaContableTotal">
-
-                            
-                        
-                          </select>
-
-                        </div>
-
-                      </div> -->
-
 
                     </div>
 
@@ -573,18 +396,14 @@ if(!empty($_SESSION["idEmpresa"])){
 </form>
 <?php if(!empty($_SESSION['idEmpresa'])){ 
 
-  $idEmpresa=$_SESSION["idEmpresa"];
+$idEmpresa=$_SESSION["idEmpresa"];
 
-  $oItem=new Lista("parametros_documentos");
-  $oItem->setFiltro("idEmpresa","=",$idEmpresa);
-  $aParametros=$oItem->getLista();
-  unset($oItem);
+$oItem=new Lista("parametros_documentos");
+$oItem->setFiltro("idEmpresa","=",$idEmpresa);
+$aParametros=$oItem->getLista();
+unset($oItem);
 
-
-
-
-
-  $oItem=new Lista("cuenta_bancaria");
+$oItem=new Lista("cuenta_bancaria");
 $oItem->setFiltro("idEmpresa","=",$idEmpresa);
 $aBancos=$oItem->getLista();
 unset($oItem);
@@ -595,8 +414,6 @@ $aRetenciones=$oItem->getLista();
 unset($oItem);
 }
 ?>
-
-
 
 
 <div class="modal fade bd-example-modal-lg" id="modalFormaPago" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabelFormaPago" aria-hidden="true">

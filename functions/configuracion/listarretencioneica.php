@@ -16,7 +16,7 @@ $aRetencion=$oLista->getLista();
 unset($oLista);
 
 foreach ($aRetencion as $key => $value) {
-	if($value["idCiudad"]!=""){
+	if($value["idCiudad"]!=0){
 		$oItem=new Data("ciudad","idCiudad",$value["idCiudad"]);
 		$aCiudad=$oItem->getDatos(); 
 		unset($oItem); 

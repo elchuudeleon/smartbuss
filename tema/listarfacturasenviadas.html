@@ -3,15 +3,20 @@
 $oControl=new Control(); 
 
 
+$id=(isset($_REQUEST['id'] ) ? $_REQUEST['id'] : '' );
 
-
+if($id!=""){
+  $decrip["cadena"]=$id; 
+  $id=$oControl->desencriptar($decrip);
+}
 
 $oLista = new Lista('factura_compra');
-
+if($id!=""){
+  $oLista->setFiltro("idProveedor","=",$id);
+  $oLista->setFiltro("estado","IN",'1,2,4');   
+}
 $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]); 
-
 $aFacturas=$oLista->getLista();
-
 unset($oLista);
 
 

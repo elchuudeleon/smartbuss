@@ -10,7 +10,7 @@ date_default_timezone_set("America/Bogota");
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 $id  = (isset($_REQUEST['id'] ) ? $_REQUEST['id'] : "" );
 
-
+$msg=true; 
 $aDatos["tipoPersona"]=$datos["tipoPersona"]; 
 $aDatos["nit"]=$datos["nit"]; 
 $aDatos["digitoVerificador"]=$datos["digitoVerificador"]==""?0:$datos["digitoVerificador"]; 
@@ -25,11 +25,11 @@ $oItem=new Data("proveedor","idProveedor",$id);
 foreach($aDatos  as $key => $value){
 $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem);
 
 
-$msg=true; 
+
 
 
 echo json_encode(array("msg"=>$msg));

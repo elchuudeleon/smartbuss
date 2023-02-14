@@ -15,9 +15,8 @@ $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
 // $comprobante  = (isset($_REQUEST['comprobante'] ) ? $_REQUEST['comprobante'] : "" );
 
 
-// print_r($datos);
+ $msg=true; 
 
-// print_r($item);
 
 if(!isset($_SESSION)){ session_start(); }
 
@@ -39,7 +38,7 @@ foreach ($item as $key => $value) {
             $oItem=new Data("tercero_empresa","idTerceroEmpresa");
             $oItem->idTercero=$aValidate["idTercero"];        
             $oItem->idEmpresa=$datos["idEmpresa"]; 
-            $oItem->guardar(); 
+            $msg=$oItem->guardar(); 
             unset($oItem);
         }
     }else{
@@ -87,28 +86,24 @@ foreach ($item as $key => $value) {
     foreach($aDatos  as $key => $value){
         $oItem->$key=$value; 
     }
-    $oItem->guardar(); 
+    $msg=$oItem->guardar(); 
     $idtercero=$oItem->ultimoId(); 
     unset($oItem); 
 
 
-
-    $oItem=new Data("tercero_empresa","idTerceroEmpresa");
-    $oItem->idTercero=$idtercero;
-    $oItem->idEmpresa=$datos["idEmpresa"]; 
-    $oItem->guardar(); 
-    unset($oItem);
+    if($msg){
+        $oItem=new Data("tercero_empresa","idTerceroEmpresa");
+        $oItem->idTercero=$idtercero;
+        $oItem->idEmpresa=$datos["idEmpresa"]; 
+        $msg=$oItem->guardar(); 
+        unset($oItem);
+    }
+    
 
     }
 
 }
-      
-
-
-    $msg=true; 
-
-
-
-    echo json_encode($msg);
+ 
+ echo json_encode($msg);
 
 ?>

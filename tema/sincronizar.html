@@ -1,0 +1,613 @@
+<?php 
+//var_dump($_SESSION["token"]); 
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/products");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"], 
+));
+
+$response = curl_exec($ch);
+
+$responseProductos=json_decode($response);
+
+
+$paginas=$responseProductos->pagination->page_size; 
+$total=$responseProductos->pagination->total_results; 
+
+$for=ceil($total/$paginas); 
+
+
+$totalSincronizar=0; 
+$aProductos=[]; 
+for($i=1; $i<=$for; $i++){
+  curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/products?page=".$i);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: ".$_SESSION["token"], 
+  ));
+
+  $response2 = curl_exec($ch);
+  
+  $response2=json_decode($response2);
+
+  foreach($response2->results as $index => $result){
+      
+      $oLista=new Lista("producto_servicio"); 
+      $oLista->setFiltro("nombre","LIKE",$result->name); 
+      $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]); 
+      $aProductosSiigo=$oLista->getLista(); 
+      unset($oItem);
+
+      if(empty($aProductosSiigo)){
+        $aProductos[]=$result; 
+        $totalSincronizar++; 
+      }
+    }
+}
+////////////CONSUMIR CLIENTES
+
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/customers");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"], 
+));
+
+$response = curl_exec($ch);
+
+$responseClientes=json_decode($response);
+
+
+$paginasC=$responseClientes->pagination->page_size; 
+$totalC=$responseClientes->pagination->total_results; 
+
+$forC=ceil($totalC/$paginasC); 
+
+
+$totalSincronizar=0; 
+$aClientes=[]; 
+for($i=1; $i<=$forC; $i++){
+  curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/customers?page=".$i);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: ".$_SESSION["token"], 
+  ));
+
+  $responseCl = curl_exec($ch);
+  
+  $responseCl=json_decode($responseCl);
+
+  foreach($responseCl->results as $index => $result){
+      
+      $oLista=new Lista("tercero"); 
+      $oLista->setFiltro("nit","LIKE",$result->identification); 
+      $aClientesSiigo=$oLista->getLista(); 
+      unset($oItem);
+
+      if(empty($aClientesSiigo)){
+        $aClientes[]=$result; 
+        $totalSincronizar++; 
+      }
+    }
+}
+
+/////////////////FACTURAS DE VENTA
+
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/invoices");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"]
+));
+
+$response = curl_exec($ch);
+
+$responseFacturas=json_decode($response);
+
+
+$paginasFra=$responseFacturas->pagination->page_size; 
+$totalFra=$responseFacturas->pagination->total_results; 
+
+$forFra=ceil($totalFra/$paginasFra); 
+$totalSincronizar=0; 
+
+
+$aFacturas=[]; 
+for($i=1; $i<=$forFra; $i++){
+  curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/invoices?page=".$i);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: ".$_SESSION["token"], 
+  ));
+
+  $responseF = curl_exec($ch);
+  
+  $responseF=json_decode($responseF);
+  
+  foreach($responseF->results as $index => $result){
+      $oLista=new Lista("factura_venta"); 
+      $oLista->setFiltro("nroFactura","LIKE",$result->name); 
+      $aFacturasSiigo=$oLista->getLista(); 
+      unset($oItem);
+
+      if(empty($aFacturasSiigo)){
+        $aFacturas[]=$result; 
+        $totalSincronizar++; 
+      }
+    }
+}
+
+//////////////// LISTA USUARIOS
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/users");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"]
+));
+
+$responseU = curl_exec($ch);
+
+$responseU=json_decode($responseU);
+$aUsuarios=[]; 
+foreach($responseU->results as $index => $result){
+    $aUsuarios[$result->id][nombre]=$result->first_name; 
+    $aUsuarios[$result->id][apellido]=$result->last_name; 
+    $aUsuarios[$result->id][identificacion]=$result->identification; 
+    $oItem=new Data("usuario","numeroDocumento",$result->identification);
+    $oUser=$oItem->getDatos();
+    unset($oItem);
+
+    $aUsuarios[$result->id][existe]=empty($oUser)?0:1; 
+}
+
+
+//////////////// TIPO COMPROBANTES
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/document-types");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"]
+));
+
+$responsetc = curl_exec($ch);
+
+$responsetc=json_decode($responsetc);
+$aTipoComprobante=[]; 
+foreach($responsetc->results as $index => $result){
+    $aTipoComprobante[]=$result; 
+} 
+/////////////////////////// Listar comprobantes
+
+
+$oLista = new Lista('configuracion_tipo_documentos_sincronizacion');
+$oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]); 
+$oLista->setFiltro("tipo","=",1); 
+$aSincronizacionDocumentos=$oLista->getLista();
+unset($oLista);
+
+curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/journals");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json",
+  "Authorization: ".$_SESSION["token"]
+));
+
+$responseComprobantes = curl_exec($ch);
+$responseComprobantes=json_decode($responseComprobantes);
+
+
+$paginasCom=$responseComprobantes->pagination->page_size; 
+$totalCom=$responseComprobantes->pagination->total_results; 
+
+$forCom=ceil($totalCom/$paginasCom); 
+$aComprobantes=[]; 
+for($i=1; $i<=$forCom; $i++){
+  curl_setopt($ch, CURLOPT_URL, "https://api.siigo.com/v1/journals?page=".$i);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: ".$_SESSION["token"], 
+  ));
+
+  $responseCo = curl_exec($ch);
+  
+  $responseCo=json_decode($responseCo);
+  
+  foreach($responseCo->results as $index => $result){
+
+      $codigoComprobante=explode("-",$result->name);
+      $letra=$codigoComprobante[0]; 
+      $idTipo=""; 
+      foreach($aSincronizacionDocumentos as $sincro){
+        if($sincro["letra"]==$codigoComprobante[0]){
+          $letra=$sincro["letra"]; 
+          $idTipo=$sincro["idTiposDocumento"]; 
+          break; 
+        }
+      }
+
+      $oLista=new Lista("comprobante"); 
+      if($idTipo!=""){
+        $oLista->setFiltro("idTipo","=",$idTipo); 
+      }
+      $oLista->setFiltro("comprobante","=",$codigoComprobante[1]); 
+      $oLista->setFiltro("fecha","LIKE",$result->date); 
+      $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
+      $oLista->setFiltro("numero","=",$result->number);
+      $aComprobantesSiigo=$oLista->getLista(); 
+      unset($oItem);
+ 
+
+      if(empty($aComprobantesSiigo)){
+        $aComprobantes[]=$result; 
+      }
+    }
+}
+
+$oLista = new Lista('tipos_documento_contable');
+$tiposDocumento=$oLista->getLista();
+unset($oLista);
+?>
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Sincronización</h4>
+        </div>
+        <div class="card-body">
+        	<div class="row sortable-card ui-sortable">
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-primary <?php if(count($aProductos)>0){  ?>  sincronizarProductos <?php } ?>" data-toggle="tooltip" data-placement="top" title="Click para sincronizar">
+                  <div class="card-header ui-sortable-handle">
+                    <h4><?php echo count($aProductos); ?> Productos</h4>
+                  </div>
+                  <div class="card-body text-center">
+                    <p>Sin sincronizar</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-secondary <?php if(count($aClientes)>0){  ?>  sincronizarClientes <?php } ?>" data-toggle="tooltip" data-placement="top" title="Click para sincronizar">
+                  <div class="card-header ui-sortable-handle">
+                    <h4><?php echo count($aClientes); ?> Clientes</h4>
+                  </div>
+                  <div class="card-body">
+                    <p>Sin sincronizar</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-danger <?php if(count($aClientes)>0){  ?>  sincronizarFacturas <?php } ?>" data-toggle="tooltip" data-placement="top" title="Click para sincronizar" >
+                  <div class="card-header ui-sortable-handle">
+                    <h4><?php echo count($aFacturas); ?> Facturas</h4>
+                  </div>
+                  <div class="card-body">
+                    <p>Sin sincronizar</p>
+                  </div>
+                </div>
+              </div>
+              <div> 
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-warning <?php if(count($aComprobantes)>0){  ?>  sincronizarComprobantes <?php } ?>" data-toggle="tooltip" data-placement="top" title="Click para sincronizar">
+                  <div class="card-header ui-sortable-handle">
+                    <h4><?php echo count($aComprobantes); ?> Comprobantes</h4>
+                  </div>
+                  <div class="card-body">
+                    <p>Sin sincronizar</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="card-body">
+        	<h4>Información a sincronizar</h4>
+        </div>
+        <div class="card-body">
+        <form enctype="multipart/form-data" id="frmGuardarProductosSincronizados" class="ocultar infoGuardar">
+          <div class="row">
+            <div class="col-md-12 col-lg-12 table-responsive">
+              <table class="table  table-striped  mayusculas" style="font-size: 11px;width: 100%" id="tableProductos">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <?php foreach($aProductos as $index => $iProducto){  ?> 
+                  <input type="hidden" name="itemProducto[<?php echo $index; ?>][codigo]" value="<?php echo $iProducto->code; ?>">
+                  <input type="hidden" name="itemProducto[<?php echo $index; ?>][nombre]" value="<?php echo $iProducto->name; ?>">
+                  <input type="hidden" name="itemProducto[<?php echo $index; ?>][tipo]" value="<?php echo $iProducto->account_group->name; ?>">
+                  <tr>
+                    <td class="centrar"> <?php echo $index+1; ?> </td>
+                    <td> <?php echo $iProducto->code; ?> </td>
+                    <td> <?php echo $iProducto->name; ?> </td>
+                    <td> <?php echo $iProducto->account_group->name; ?> </td>
+                    
+                  </tr> 
+                  <?php } ?> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="javascript:void(0)" id="btnSincronizarProductos">Guardar</a>
+        </form>
+
+        <form enctype="multipart/form-data" id="frmGuardarClientesSincronizados" class="ocultar infoGuardar" >
+          <div class="row">
+            <div class="col-md-12 col-lg-12 table-responsive">
+              <table class="table  table-striped  mayusculas" style="font-size: 11px;width: 100%" id="tableClientes">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Tipo</th>
+                    <th>Tipo Documento</th>
+                    <th>Razon Social</th>
+                    <th>NIT</th>
+                    <th>Email</th>
+                    <th>Plazo Pago</th>
+                    <th>Responsable Iva?</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <?php foreach($aClientes as $index => $iCliente){  ?> 
+                  <tr>
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][tipoPersona]" class="tipoPersona" value="<?php echo $iCliente->person_type; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][tipoIdentificacion]" class="tipoIdentificacion" value="<?php echo $iCliente->id_type->code; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][nombre]" class="nombre" value="<?php echo $iCliente->name[0].' '.$iCliente->name[1]; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][identification]" class="identification" value="<?php echo $iCliente->identification; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][digito]" class="digito" value="<?php echo $iCliente->check_digit; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][telefono]" class="telefono" value="<?php echo $iCliente->phones[0]->number; ?>">
+                    <input type="hidden" name="itemCliente[<?php echo $index; ?>][direccion]" class="direccion" value="<?php echo $iCliente->address->address; ?>">
+                    <td class="centrar"> <?php echo $index+1; ?> </td>
+                    <td> <?php echo $iCliente->person_type=="Person"?"Persona Natural":"Persona Juridica"; ?> </td>
+                    <td> <?php echo $iCliente->id_type->name; ?> </td>
+                    <td> <?php echo $iCliente->name[0]." ".$iCliente->name[1]; ?> </td>
+                    <td> <?php echo $iCliente->identification."-".$iCliente->check_digit; ?> </td>
+                    <td> <input type="email" name="itemCliente[<?php echo $index; ?>][email]" class="form-control email"> </td>
+                    <td> <input type="number" name="itemCliente[<?php echo $index; ?>][diasPago]" class="form-control diasPago"> </td>
+                    <td class="text-center"> <input type="hidden" name="itemCliente[<?php echo $index; ?>][iva]" class="ivah" value="0">
+                    <input type="checkbox" name="itemCliente[<?php echo $index; ?>][iva]" class="iva" value="1" checked> </td>
+                    <td> <?php echo $iCliente->address->address; ?> </td>
+                    <td> <?php echo $iCliente->phones[0]->number; ?> </td>
+                    
+                  </tr> 
+                  <?php } ?> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="javascript:void(0)" id="btnSincronizarClientes">Guardar</a>
+        </form>
+        <form enctype="multipart/form-data" id="frmGuardarFacturasSincronizados" class="ocultar infoGuardar" >
+          <div class="row">
+            <div class="col-md-12 col-lg-12 table-responsive">
+              <table class="table  table-striped  mayusculas" style="font-size: 11px;width: 100%" id="tableFacturas">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Nro Factura</th>
+                    <th>Fecha Registro</th>
+                    <th>Fecha Factura</th>
+                    <th>Tercero</th>
+                    <th>Total Items</th>
+                    <th>Subtotal</th>
+                    <th>Total</th>
+                    <th>Metodo Pago</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Usuario Registra</th>
+                    <th>Estado</th>
+                    <th>Ver</th> 
+                  </tr>
+                </thead>
+                <tbody> 
+                  <?php foreach($aFacturas as $index => $iFactura){  
+                  	$vendedor=$aUsuarios[$iFactura->seller]; 
+                  	$fechaRegistro=explode("T",$iFactura->metadata->created); 
+                  	
+					
+                  	$oItem=new Data("tercero","nit",$iFactura->customer->identification);
+          					$oProveedor=$oItem->getDatos();
+          					unset($oItem);
+                    $sHtml=""; 
+                    $subtotal=0; 
+                   foreach($iFactura->items as $item){ 
+                      $valorImpuesto=0; 
+                      $subtotal+=$item->price; 
+                      $sImpuestos=""; 
+                      foreach($item->taxes as $imp){
+                        $valorImpuesto+=$imp->value; 
+                        $sImpuestos.="<input type='hidden' class='codigoImpuesto' value='".$imp->name."'>"; 
+                        $sImpuestos.="<input type='hidden' class='porcentajeImpuesto' value='".$imp->percentage."'>"; 
+                        $sImpuestos.="<input type='hidden' class='valorImpuesto' value='".$imp->value."'>"; 
+                        $sImpuestos.="<input type='hidden' class='tipoImpuesto' value='".$imp->type."'>"; 
+                      }
+                      $sHtml.="<li class='lista'>".$item->code." ".$item->description." | ".$item->quantity." | "."$".number_format($item->price,0,",",".")." | "."$".number_format($valorImpuesto,0,",",".");
+                      $sHtml.="<input type='hidden' class='codigo' value='".$item->code."'>";
+                      $sHtml.="<input type='hidden' class='descripcion' value='".$item->description."'>";
+                      $sHtml.="<input type='hidden' class='cantidad' value='".$item->quantity."'>";
+                      $sHtml.="<input type='hidden' class='valorItem' value='".$item->price."'>";
+                      $sHtml.="<input type='hidden' class='totalItem' value='".$item->total."'>";
+                      $sHtml.=$sImpuestos."</li>";
+                      
+                   } 
+                  ?> 
+                  <tr class="info">
+                    <input type="hidden" class="nroFactura" value="<?php echo $iFactura->name; ?>">
+                    <input type="hidden" class="fechaRegistro" value="<?php echo $fechaRegistro[0].' '.$fechaRegistro[1]; ?>">
+                    <input type="hidden" class="fechaFactura" value="<?php echo $iFactura->date; ?>">
+                    <input type="hidden" class="tercero" value="<?php echo $oProveedor['idTercero']; ?>">
+                    <input type="hidden" class="subtotal" value="<?php echo $subtotal; ?>">
+                    <input type="hidden" class="total" value="<?php echo $iFactura->total; ?>">
+                    <input type="hidden" class="metodopago" value="<?php echo $iFactura->payments[0]->name; ?>">
+                    <input type="hidden" class="fechaVencimiento" value="<?php echo $iFactura->payments[0]->due_date; ?>">
+                    <input type="hidden" class="observaciones" value="<?php echo $iFactura->observations; ?>">
+                    <?php if($vendedor["existe"]==0){  ?>
+                    <input type="hidden" class="usuario" value="">
+                    <?php }else{  ?>
+                    <input type="hidden" class="usuario" value="<?php echo $vendedor['identificacion']; ?>">
+                    <?php } ?>
+                    <input type="hidden" class="estadoFinanciero" value="<?php echo $iFactura->stamp->status; ?>">
+                    <td class="centrar"> <?php echo $index+1; ?> </td>
+                    <td> <?php echo $iFactura->name; ?> </td>
+                    <td> <?php echo $fechaRegistro[0]." ".$fechaRegistro[1]; ?> </td>
+                    <td> <?php echo $iFactura->date; ?> </td>
+                    <td> <?php echo empty($oProveedor)?'<i class="fas fa-info-circle" name="alerta-usuario" style="color:#ef0707" data-toggle="tooltip" data-placement="top" title="Tercero no encontrado en Smartbuss" ></i>':$oProveedor["razonSocial"]; ?> </td>
+                    <td class="centrar"> <?php echo count($iFactura->items); ?> </td>
+                    <td> <?php echo "$".number_format($subtotal,0,",","."); ?> </td>
+                    <td> <?php echo "$".number_format($iFactura->total,0,",","."); ?> </td>
+                    <td> <?php echo $iFactura->payments[0]->name; ?> </td>
+                    <td> <?php echo $iFactura->payments[0]->due_date; ?> </td>
+                    <td> 
+                      <i class="fas fa-info-circle" name="alerta-usuario" style="color:#ef0707" data-toggle="tooltip" data-placement="top" title="Usuario no existe en Smartbuss" ></i>
+                      <?php echo $vendedor["nombre"]." ".$vendedor["apellido"]; ?>
+                      </td>
+                    <td> <?php echo $iFactura->stamp->status=="Accepted"?"Activo":"Rechazado"; ?> </td>
+                    
+                    <td class="centrar"> <a href="javascript:void(0)" class="verDetalle" id="<?php echo $iFactura->id; ?>" data-toggle="tooltip" data-placement="top" title="Ver detalles"><i class="fas fa-eye" style="color: #3BCCFF;font-size: 20px;"></i></a> </td> 
+                    
+                  </tr> 
+                  <tr class="ocultar fra detalle<?php echo $iFactura->id; ?>" >
+                  	<td colspan="12">
+                  		<textarea readonly class="form-control"><?php echo $iFactura->observations; ?></textarea>
+                  	</td>
+                  </tr>
+                  <tr class="ocultar fra productos detalle<?php echo $iFactura->id; ?>" >
+                  	
+                  	<td colspan="12">
+                  		<ul>
+                  			<?php echo $sHtml; ?>
+                  		</ul>
+                  	</td>
+                  </tr>
+                  <?php } ?> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="javascript:void(0)" id="btnSincronizarFra">Guardar</a>
+        </form>
+        <form enctype="multipart/form-data" id="frmGuardarComprobantesSincronizados" class="ocultar infoGuardar" >
+          <?php foreach($aComprobantes as $index => $iComprobante){ 
+            $codigoComprobante=explode("-",$iComprobante->name); 
+            $idTipo=""; 
+            foreach($aSincronizacionDocumentos as $sincro){
+              if($sincro["letra"]==$codigoComprobante[0]){
+                $letra=$sincro["letra"]; 
+                $idTipo=$sincro["idTiposDocumento"]; 
+                break; 
+              }
+            }
+          ?> 
+          <div class="cuadro-comprobante">
+          <div class="row">
+            <div class=" col-md-4 ">
+              <div class="form-group">
+                <label class="negrita d-block">Codigo Comprobante<span class="requerido">*</span>:</label>
+                <input type="text" class="form-control codigo" name="datos[cuentaContable]" value="<?php echo $iComprobante->name; ?>" >
+                <input type="hidden" class="form-control codigoOculto" name="datos[cuentaContable]" value="<?php echo $codigoComprobante[0]; ?>" >
+              
+              </div>
+            </div>
+            <div class=" col-md-4 ">
+              <div class="form-group">
+                <label class="negrita d-block">Fecha<span class="requerido">*</span>:</label>
+                <input type="text" class="form-control fechaComprobante" name="datos[cuentaContable]" value="<?php echo $iComprobante->date; ?>" >              
+              </div>
+            </div>
+            <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="negrita">Tipo Documento Smartbuss<span class="requerido">*</span>:</label>
+                    <select class="custom-select completar" tipo="<?php echo $codigoComprobante[0]; ?>" name="datos[tipoDocumento]" id="tipoDocumento"   required>
+                    <option value="">Seleccione una opción</option>
+                      <?php foreach($tiposDocumento as $itemComprobante){ ?>
+                          <option value='<?php echo $itemComprobante["idTiposDocumento"]; ?>' <?php if($idTipo==$itemComprobante["idTiposDocumento"]){ echo 'selected'; } ?> ><?php echo $itemComprobante["letra"].' - '.$itemComprobante["descripcion"]; ?></option>
+                    <?php } ?>
+                  </select>
+                  </div>
+                </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-lg-12 table-responsive">
+              <table class="table  table-striped  mayusculas" style="font-size: 11px;width: 100%" id="tableComprobantes">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th>Cuenta Contable</th>
+                    <th>Tercero</th>
+                    <th>Descripción Movimiento</th>
+                    <th>Debito</th>
+                    <th>Credito</th>
+                  </tr>
+                </thead>
+                <tbody> 
+                  <?php foreach($iComprobante->items as $i => $item){  
+                      $oItem=new Data("tercero","nit",$item->customer->identification);
+                      $oProveedor=$oItem->getDatos();
+                      unset($oItem);
+
+                      $oItem=new Data("cuenta_contable","codigoCuenta",$item->account->code);
+                      $oCuenta=$oItem->getDatos();
+                      unset($oItem);
+                  ?> 
+                  <tr class="itemComprobante">
+                    <input type="hidden" class="cuentaContable" value="<?php echo $item->account->code; ?>">
+                    <input type="hidden" class="idCuentaContable" value="<?php echo $oCuenta['idCuentaContable']; ?>">
+                    <input type="hidden" class="idTercero" value="<?php echo $oProveedor['idTercero']; ?>">
+                    <input type="hidden" class="tipoTercero" value="<?php echo $oProveedor['tipoTercero']; ?>">
+                    <input type="hidden" class="descripcion" value="<?php echo $item->description; ?>">
+                    <input type="hidden" class="movimiento" value="<?php echo $item->account->movement; ?>">
+                    <input type="hidden" class="valor" value="<?php echo $item->value; ?>">
+                    
+                    <td class="centrar"> <?php echo $i+1; ?> </td>
+                    <td> <?php echo empty($oCuenta)?'<i class="fas fa-info-circle" name="alerta-usuario" style="color:#ef0707" data-toggle="tooltip" data-placement="top" title="Cuenta contable no encontrado en Smartbuss" ></i>'.$item->account->code:$item->account->code." ".$oCuenta['nombre']; ?> </td>
+                    <td> <?php echo empty($oCuenta)?'<i class="fas fa-info-circle" name="alerta-usuario" style="color:#ef0707" data-toggle="tooltip" data-placement="top" title="Tercero no encontrado en Smartbuss" ></i>'.$item->customer->identification:$item->customer->identification." - ".$oProveedor["razonSocial"]; ?> </td>
+                    <td> <?php echo $item->description; ?> </td>
+                    <td class="centrar"> <?php if($item->account->movement=="Debit"){ echo "$".number_format($item->value,2,",",".");}else{ echo '0'; } ?> </td>
+                    <td class="centrar"> <?php if($item->account->movement=="Credit"){ echo "$".number_format($item->value,2,",",".");}else{ echo '0'; } ?> </td>
+                  </tr> 
+                  
+                  <?php } ?> 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+          <?php } ?> 
+          <a class="btn btn-primary" href="javascript:void(0)" id="btnSincronizarCompro">Guardar</a>
+        </form>
+        </div>
+      </div>
+    </div>
+</div>

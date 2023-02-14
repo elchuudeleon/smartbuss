@@ -15,7 +15,7 @@ $oLista->setFiltro("anio","=",$datos["anio"]);
 $aListas=$oLista->getLista();
 unset($oLista);
 
-
+$msg=true; 
 $datos["cajaCompensacion"]=$oControl->eliminarMoneda($datos["cajaCompensacion"]);
 $datos["riesgo1"]=$oControl->eliminarMoneda($datos["riesgo1"]);
 $datos["riesgo2"]=$oControl->eliminarMoneda($datos["riesgo2"]);
@@ -31,10 +31,10 @@ $oItem=new Data("aportes_parafiscales","idAportesParafiscales");
 foreach($datos  as $key => $value){
     $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem);
 
-$msg=true; 
+
 
 echo json_encode(array("msg"=>$msg));
 ?>

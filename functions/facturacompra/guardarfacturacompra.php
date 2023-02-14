@@ -1,17 +1,11 @@
 <?php
-
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
 
 
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 include_once($CLASS . "control.php");
-
 
 
 $oControl=new Control();
@@ -68,77 +62,49 @@ if( isset($_FILES['file2']) && $_FILES['file2'] != 'undefined')
 // print_r($sFoto2);
 
 $oItem=new Data("tercero","idTercero",$datos["idTercero"]); 
-
 $aProveedor=$oItem->getDatos(); 
-
 unset($oItem);
-
 
 
 $idT=$aProveedor["idTercero"];
 
-
-
 if($aProveedor["periodoPago"]==0){
-
     $nuevafecha=$datos["fechaRecibido"];
-
 }else{
-
     $nuevafecha = strtotime ( '+'.$aProveedor["periodoPago"].' day' , strtotime ( $datos["fechaRecibido"] ) ) ;
-
     $nuevafecha = date ( 'Y-m-d' , $nuevafecha );    
-
 }
-
-
 
 
 
 if(!isset($_SESSION)){ session_start(); }
-
 $aDatos["fechaRegistro"]=date("Y-m-d H:i:s");
-
 $aDatos["idUsuarioRegistra"]=$_SESSION["idUsuario"]; 
-
 $aDatos["idEmpresa"]=$datos["idEmpresa"]; 
-
 if ($datos["tipoCompraB"]!="" && $datos["tipoCompraS"]!="") {
     $aDatos["tipoFactura"]=3;
 }
 if ($datos["tipoCompraB"]=="" && $datos["tipoCompraS"]!="") {
-    
+
     $aDatos["tipoFactura"]=2; 
 }
 if ($datos["tipoCompraB"]!="" && $datos["tipoCompraS"]=="") {
-    
     $aDatos["tipoFactura"]=1; 
 }
 if ($datos["tipoCompraB"]=="" && $datos["tipoCompraS"]=="") {
-    
     $aDatos["tipoFactura"]=1; 
 }
 
 $aDatos["fechaRecibido"]=$datos["fechaRecibido"]; 
-
 $aDatos["fechaPago"]=$nuevafecha; 
-
 $aDatos["idProveedor"]=$datos["idTercero"]; 
-
 $aDatos["nroFactura"]=$datos["nroFactura"]; 
-
 $aDatos["archivo"]=$sFoto; 
-
 $aDatos["archivo2"]=$sFoto2; 
-
 $aDatos["subtotal"]=str_replace("$", "", str_replace(".", "", $datos["subtotal"])); 
-
 $aDatos["descuento"]=str_replace("$", "", str_replace(".", "", $datos["descuento"])); 
-
 $aDatos["iva"]=str_replace("$", "", str_replace(".", "", $datos["iva"])); 
-
 $aDatos["total"]=str_replace("$", "", str_replace(".", "", $datos["total"])); 
-
 // $aDatos["estado"]=1; 
 
 $aDatos["saldo"]=str_replace("$", "", str_replace(".", "", $datos["totalPago"])); 
@@ -239,8 +205,8 @@ if ($aFormaPago[0]["idCuentaBancaria"]==0) {
     $aDatos["saldo"]=str_replace("$", "", str_replace(".", "", $datos["totalPago"]));
 }
 
+$aDatos["formaPago"]=$datos["formaPagoFactura"]; 
 $oItem=new Data("factura_compra","idFacturaCompra"); 
-
 foreach($aDatos  as $key => $value){
 
     $oItem->$key=$value; 

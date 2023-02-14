@@ -9,7 +9,7 @@ date_default_timezone_set("America/Bogota");
 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 $id  = (isset($_REQUEST['id'] ) ? $_REQUEST['id'] : "" ); 
-
+$msg=true; 
 $datos["estado"]=1; 
 if($id!=""){
     $oItem=new Data("retencion","idRetencion",$id); 
@@ -24,7 +24,7 @@ $datos["idCiudad"]=0;
 foreach($datos  as $key => $value){
     $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem);
 
 
@@ -43,7 +43,7 @@ foreach($aListas as $index=>$iItem){
 
     $aListas[$index]["ciudad"]=$aCiudad["nombre"]." - ".$aDepartamento["nombre"]; 
 }
-$msg=true; 
+
 
 echo json_encode(array("msg"=>$msg,"lista"=>$aListas));
 ?>

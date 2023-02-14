@@ -13,8 +13,8 @@ $accion  = (isset($_REQUEST['accion'] ) ? $_REQUEST['accion'] : "" );
 $estado=$accion==1?0:1;
 $oItem=new Data("usuario","idUsuario",$id); 
 $oItem->estado=$estado; 
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem); 
 
-echo json_encode(array("msg"=>true));
+echo json_encode(array("msg"=>$msg));
 ?>

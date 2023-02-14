@@ -1,8 +1,13 @@
 $(document).ready(function(e){
 
 	// dataTable("#tableEnterprise"); 
+    agregarTable()
+	
+});
 
-	var table = $('#tableEnterprise').DataTable({
+
+function agregarTable(){
+    var table = $('#tableEnterprise').DataTable({
       // orderCellsTop: true,
       //  fixedHeader: true,
       paging: true,
@@ -62,25 +67,26 @@ $(document).ready(function(e){
     });
 
     //Creamos una fila en el head de la tabla y lo clonamos para cada columna
-    $('#tableEnterprise thead tr').clone(true).appendTo( '#tableEnterprise thead' );
+    //$('#tableEnterprise thead tr').clone(true).appendTo( '#tableEnterprise thead' );
 
     $('#tableEnterprise thead tr:eq(1) th').each( function (i) {
         var title = $(this).text(); //es el nombre de la columna
-        $(this).html( '<input type="text"  class="form-control" style="heigth:25%;" />' );
+        var cantidad=$('#tableEnterprise thead tr:eq(1) th').length; 
+        if(i>0&&i<(cantidad-1)){
+            $(this).html( '<input type="text"  class="form-control" style="heigth:25%;" />' );
  
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        }
+        
     } ); 
-});
-
-
-
+}
 
 $("body").on("click touchstart","#btnEliminar",function(e){
 
@@ -158,7 +164,7 @@ $("body").on("click touchstart","#btnEliminar",function(e){
 
                   'Algo ha salido mal!',
 
-                  'Verifique su conexión a internet',
+                  msg.texto!=""?msg.texto:'Verifique su conexión a internet',
 
                   'error'
 
@@ -284,6 +290,64 @@ $("body").on("click touchstart",".comprobante",function(e){
           }
         })
     })
+
+
+$("body").on("change","#fechaInicio, #fechaFinal",function(e){
+    if($("#fechaInicio").val()!=""&&$("#fechaFinal").val()!=""){
+        Swal.fire({
+      title: 'Cargando!',
+      html: 'Espere',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+         Swal.showLoading()
+         $.ajax({
+        url:URL+"functions/comprobantes/listarcomprobantes.php", 
+        type:"POST", 
+        data: {"fechaInicio":$("#fechaInicio").val(),"fechaFin":$("#fechaFinal").val()}, 
+        dataType: "json",
+        }).done(function(msg){  
+            Swal.close()
+          if(msg.aComprobante.length>0){
+              var sHtml="";
+              $("#tableEnterprise").dataTable().fnDestroy();
+              msg.aComprobante.forEach(function(element,index){
+                sHtml+="<tr>"; 
+                sHtml+="<td>"+(index+1)+"</td>"; 
+                sHtml+="<td>"+element.letra+"-"+element.comprobante+""+element.numero+"</td>"; 
+                sHtml+="<td>"+element.fecha+"</td>"; 
+                sHtml+="<td>"+element.fechaRegistro+"</td>"; 
+                sHtml+="<td>"+element.usuario+"</td>"; 
+                sHtml+="<td>"+element.observaciones+"</td>"; 
+                sHtml+="<td>"+element.saldoDebito+"</td>"; 
+                sHtml+="<td>"+element.saldoCredito+"</td>"; 
+                sHtml+="<td class='centrar'>"; 
+                sHtml+='<a href="'+URL+'vercomprobante/'+element.idEncript+'" name="'+element.idEmpresa+'"  data-toggle="tooltip" data-placement="top" title="Ver Items comprobante"><i class="fas fa-eye" style="color: #8A96FF;font-size: 20px;"></i></a>'; 
+                sHtml+='<a href="'+URL+''+element.archivo+'" target="_blank"data-toggle="tooltip" data-placement="top" title="ver archivo"><i class="fas fa-paperclip" style="color: #A59D9D;font-size: 20px;"></i></a>'; 
+                if (element.estadoFra!=3) {
+                    sHtml+='<a href="'+URL+'editarcomprobante/'+element.idEncript+'" name="'+element.idEmpresa+'"  data-toggle="tooltip" data-placement="top" title="Editar comprobante"><i class="fas fa-pencil-alt" style="color: #FFCC4D;font-size: 20px;"></i></a>'; 
+                    sHtml+='<a href="javascript:void(0)" id="btnAnular" name="btnAnular['+index+']"  value="'+element.idComprobante+'" ><i class="fas fa-ban" style="color: #DF81FF;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Anular factura"  ></i></a>'; 
+                    sHtml+='<a href="javascript:void(0)" id="btnEliminar" name="btnEliminar['+index+']" value="'+element.idComprobante+'"   idEmpresa="'+element.idEmpresa+'"><i class="fas fa-trash" style="color: #FF5D5D;font-size: 19px;" data-toggle="tooltip" data-placement="top" title="Eliminar"  ></i></a>'; 
+                }
+                sHtml+="</td>";
+                sHtml+="</tr>"; 
+
+              })
+              
+              $("#tableEnterprise tbody").html(sHtml);
+              agregarTable()
+          }
+          
+      });
+         },
+      willClose: () => {
+        //clearInterval(timerInterval)
+          }
+        }).then((result) => {
+        })
+        
+    }
+})
 
 $("body").on("click touchstart","#btnGuardar",function(e){
     e.preventDefault();

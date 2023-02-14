@@ -31,66 +31,39 @@ $(document).ready(function(e){
     
 
     $.ajax({
-
         url:URL+"functions/cuentascontables/cargarcuentascontables.php", 
-
         type:"POST", 
-
         data: {"idEmpresa":idEmpresa}, 
-
         dataType: "json",
-
         }).done(function(msg){  
-
           msg.forEach(function(element,index){
-
             aDatos.push({
-
                 value: element.idCuentaContable,
-
                 label: element.codigoCuentaContable+" - "+element.nombre,
-
                 naturaleza: element.naturaleza,
-
                 tercero:element.tercero,
-
                 centroCosto:element.centroCosto,
-
                 detalle:element.detalle,
-
                 porcentajeRetencion:element.porcentajeRetencion,
 
               })
 
           })
-
           autocomplete(); 
 
 
       }); 
-
       $.ajax({
-
         url:URL+"functions/centrocosto/cargarcentrocosto.php", 
-
         type:"POST", 
-
         data: {"idEmpresa":idEmpresa}, 
-
         dataType: "json",
-
         }).done(function(msg){  
-
           msg.forEach(function(element,index){
-
             aDatosC.push({
-
                 value: element.idCentroCosto,
-
                 label: element.codigoCentroCosto+'-'+element.centroCosto,
-
               })
-
           })
 
           autocompleteC(); 
@@ -123,19 +96,13 @@ var tipoDetalle=3;
 aDatosT=[];
 
   $.ajax({
-
       url:URL+"functions/terceros/cargarterceros.php", 
-
       type:"POST", 
-
       data: {"idEmpresa":idEmpresa,"tipoDetalle":tipoDetalle}, 
-
       dataType: "json",
-
       }).done(function(msg){
       // console.log(msg);
-       
-
+      
         msg.forEach(function(element,index){
           if (element.idCliente !=null) {
                var tipo='c'; 
@@ -205,43 +172,43 @@ $("body").on("change","#idComprobanteRecurrente",function(e){
           sHtml+='<tr>';
           var num=index+1;
           sHtml+='<td>'+num+'</td>';
-sHtml+='<td><input type="text" name="item['+index+'][cuentaContable]" id="item['+index+'][cuentaContable]" class="form-control cuentaContable mayusculas" required placeholder="Cuenta" value="'+element.codigoCuenta+' - '+element.cuentaContable+'">';
-sHtml+='<span name="item['+index+'][letreroCuentaContable]" id="item['+index+'][letreroCuentaContable]" class="ocultar letreroCuentaContable" style="color: red;">Cuenta no seleccionada correctamente</span><input type="hidden" name="item['+index+'][idCuentaContable]" id="item['+index+'][idCuentaContable]" class="form-control idCuentaContable"  required value="'+element.idCuentaContable+'"></td>';
-if (element.codigoCentroCosto != null) {
-sHtml+='<td><input type="text" class="form-control centroCosto mayusculas" name="item['+index+'][centroCosto]" id="item['+index+'][centroCosto]" placeholder="centro costo" value="'+element.codigoCentroCosto+'-'+element.centroCosto+'" ><input type="hidden" name="item['+index+'][idCentroCosto]" id="item['+index+'][idCentroCosto]" class="form-control idCentroCosto" value="'+element.idCentroCosto+'" ><span name="item['+index+'][letreroCentroCosto]" id="item['+index+'][letreroCentroCosto]" class="ocultar letreroCentroCosto" style="color: red;">Centro costo no seleccionado correctamente</span></td>';
-}
-if (element.codigoCentroCosto == null) {
-  sHtml+='<td><input type="text" class="form-control centroCosto mayusculas" name="item['+index+'][centroCosto]" id="item['+index+'][centroCosto]" placeholder="centro costo" " ><input type="hidden" name="item['+index+'][idCentroCosto]" id="item['+index+'][idCentroCosto]" class="form-control idCentroCosto" ><span name="item['+index+'][letreroCentroCosto]" id="item['+index+'][letreroCentroCosto]" class="ocultar letreroCentroCosto" style="color: red;">Centro costo no seleccionado correctamente</span></td>';
-}
-if (element.codigoSubcentroCosto!=null) {
-  sHtml+='<td><input type="text" class="form-control subcentroCosto mayusculas" name="item['+index+'][subcentroCosto]" id="item['+index+'][subcentroCosto]" placeholder="subcentro costo" value="'+element.codigoSubcentroCosto+'-'+element.subcentroCosto+'" ><input type="hidden" name="item['+index+'][idSubcentroCosto]" id="item['+index+'][idSubcentroCosto]" class="form-control idSubcentroCosto" value="'+element.idSubcentroCosto+'" ><span name="item['+index+'][letreroSubcentroCosto]" id="item['+index+'][letreroSubcentroCosto]" class="ocultar letreroSubcentroCosto" style="color: red;">Subcentro costo no seleccionado correctamente</span></td>';
-}
-if (element.codigoSubcentroCosto==null) {
-  sHtml+='<td><input type="text" class="form-control subcentroCosto mayusculas" name="item['+index+'][subcentroCosto]" id="item['+index+'][subcentroCosto]" placeholder="subcentro costo" ><input type="hidden" name="item['+index+'][idSubcentroCosto]" id="item['+index+'][idSubcentroCosto]" class="form-control idSubcentroCosto"><span name="item['+index+'][letreroSubcentroCosto]" id="item['+index+'][letreroSubcentroCosto]" class="ocultar letreroSubcentroCosto" style="color: red;">Subcentro costo no seleccionado correctamente</span> </td>';
-}
-sHtml+='<td><input type="text" class="form-control  nit" name="item['+index+'][nit]" id="item['+index+'][nit]" placeholder="NIT" value="'+element.nit+' - '+element.razonSocial+'" ><input type="hidden" name="item['+index+'][idTercero]" id="item['+index+'][idTercero]" class="form-control idTercero" required value="'+element.idTercero+'" > <span name="item['+index+'][letreroTercero]" id="item['+index+'][letreroTercero]" class="ocultar letreroTercero" style="color: red;">Tercero no seleccionado correctamente</span><input type="hidden" name="item['+index+'][tipoTercero]" id="item['+index+'][tipoTercero]" class="form-control tipoTercero" ></td>';
-sHtml+='<td><input type="text" class="form-control  descripcion mayusculas" name="item['+index+'][descripcion]" id="item['+index+'][descripcion]" placeholder="Descripción" required  value="'+element.descripcion+'"></td>';
-if (element.base!="0") {
-sHtml+='<td><input type="text" class="form-control  base moneda mayusculas" name="item['+index+'][base]" id="item['+index+'][base]" placeholder="Base/cruce" readonly value="'+element.base+'"></td>';
-}
-if (element.base=="0") {
-sHtml+='<td><input type="text" class="form-control  base moneda mayusculas" name="item['+index+'][base]" id="item['+index+'][base]" placeholder="Base/cruce" readonly ></td>';
-}
-if (element.saldoDebito!="0") {
-  sHtml+='<td><input type="text" class="form-control decimales moneda debito mayusculas" name="item['+index+'][debito]" id="item['+index+'][debito]" placeholder="Débito" value="'+element.saldoDebito+'"  ></td>';
-}
-if (element.saldoDebito=="0") {
-  sHtml+='<td><input type="text" class="form-control decimales moneda debito mayusculas" name="item['+index+'][debito]" id="item['+index+'][debito]" placeholder="Débito" disabled  ></td>';
-}
-if (element.saldoCredito!="0") {
-  sHtml+='<td><input type="text" class="form-control decimales moneda  credito mayusculas" name="item['+index+'][credito]" id="item['+index+'][credito]" placeholder="Crédito" value="'+element.saldoCredito+'" ></td>';          
-}
-if (element.saldoCredito=="0") {
-  sHtml+='<td><input type="text" class="form-control decimales moneda  credito mayusculas" name="item['+index+'][credito]" id="item['+index+'][credito]" placeholder="Crédito" disabled ></td>';          
-}
- sHtml+='<td class="centrar"><a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn btn-icon btn-sm btn-danger eliminar"><i class="fas fa-trash"></i></a></td>';
-          sHtml+='</tr>';
-})
+            sHtml+='<td><input type="text" name="item['+index+'][cuentaContable]" id="item['+index+'][cuentaContable]" class="form-control cuentaContable mayusculas" required placeholder="Cuenta" value="'+element.codigoCuenta+' - '+element.cuentaContable+'">';
+            sHtml+='<span name="item['+index+'][letreroCuentaContable]" id="item['+index+'][letreroCuentaContable]" class="ocultar letreroCuentaContable" style="color: red;">Cuenta no seleccionada correctamente</span><input type="hidden" name="item['+index+'][idCuentaContable]" id="item['+index+'][idCuentaContable]" class="form-control idCuentaContable"  required value="'+element.idCuentaContable+'"></td>';
+            if (element.codigoCentroCosto != null) {
+            sHtml+='<td><input type="text" class="form-control centroCosto mayusculas" name="item['+index+'][centroCosto]" id="item['+index+'][centroCosto]" placeholder="centro costo" value="'+element.codigoCentroCosto+'-'+element.centroCosto+'" ><input type="hidden" name="item['+index+'][idCentroCosto]" id="item['+index+'][idCentroCosto]" class="form-control idCentroCosto" value="'+element.idCentroCosto+'" ><span name="item['+index+'][letreroCentroCosto]" id="item['+index+'][letreroCentroCosto]" class="ocultar letreroCentroCosto" style="color: red;">Centro costo no seleccionado correctamente</span></td>';
+            }
+            if (element.codigoCentroCosto == null) {
+              sHtml+='<td><input type="text" class="form-control centroCosto mayusculas" name="item['+index+'][centroCosto]" id="item['+index+'][centroCosto]" placeholder="centro costo" " ><input type="hidden" name="item['+index+'][idCentroCosto]" id="item['+index+'][idCentroCosto]" class="form-control idCentroCosto" ><span name="item['+index+'][letreroCentroCosto]" id="item['+index+'][letreroCentroCosto]" class="ocultar letreroCentroCosto" style="color: red;">Centro costo no seleccionado correctamente</span></td>';
+            }
+            if (element.codigoSubcentroCosto!=null) {
+              sHtml+='<td><input type="text" class="form-control subcentroCosto mayusculas" name="item['+index+'][subcentroCosto]" id="item['+index+'][subcentroCosto]" placeholder="subcentro costo" value="'+element.codigoSubcentroCosto+'-'+element.subcentroCosto+'" ><input type="hidden" name="item['+index+'][idSubcentroCosto]" id="item['+index+'][idSubcentroCosto]" class="form-control idSubcentroCosto" value="'+element.idSubcentroCosto+'" ><span name="item['+index+'][letreroSubcentroCosto]" id="item['+index+'][letreroSubcentroCosto]" class="ocultar letreroSubcentroCosto" style="color: red;">Subcentro costo no seleccionado correctamente</span></td>';
+            }
+            if (element.codigoSubcentroCosto==null) {
+              sHtml+='<td><input type="text" class="form-control subcentroCosto mayusculas" name="item['+index+'][subcentroCosto]" id="item['+index+'][subcentroCosto]" placeholder="subcentro costo" ><input type="hidden" name="item['+index+'][idSubcentroCosto]" id="item['+index+'][idSubcentroCosto]" class="form-control idSubcentroCosto"><span name="item['+index+'][letreroSubcentroCosto]" id="item['+index+'][letreroSubcentroCosto]" class="ocultar letreroSubcentroCosto" style="color: red;">Subcentro costo no seleccionado correctamente</span> </td>';
+            }
+            sHtml+='<td><input type="text" class="form-control  nit" name="item['+index+'][nit]" id="item['+index+'][nit]" placeholder="NIT" value="'+element.nit+' - '+element.razonSocial+'" ><input type="hidden" name="item['+index+'][idTercero]" id="item['+index+'][idTercero]" class="form-control idTercero" required value="'+element.idTercero+'" > <span name="item['+index+'][letreroTercero]" id="item['+index+'][letreroTercero]" class="ocultar letreroTercero" style="color: red;">Tercero no seleccionado correctamente</span><input type="hidden" name="item['+index+'][tipoTercero]" id="item['+index+'][tipoTercero]" class="form-control tipoTercero" ></td>';
+            sHtml+='<td><input type="text" class="form-control  descripcion mayusculas" name="item['+index+'][descripcion]" id="item['+index+'][descripcion]" placeholder="Descripción" required  value="'+element.descripcion+'"></td>';
+            if (element.base!="0") {
+            sHtml+='<td><input type="text" class="form-control  base moneda mayusculas" name="item['+index+'][base]" id="item['+index+'][base]" placeholder="Base/cruce" readonly value="'+element.base+'"></td>';
+            }
+            if (element.base=="0") {
+            sHtml+='<td><input type="text" class="form-control  base moneda mayusculas" name="item['+index+'][base]" id="item['+index+'][base]" placeholder="Base/cruce" readonly ></td>';
+            }
+            if (element.saldoDebito!="0") {
+              sHtml+='<td><input type="text" class="form-control decimales moneda debito mayusculas" name="item['+index+'][debito]" id="item['+index+'][debito]" placeholder="Débito" value="'+element.saldoDebito+'"  ></td>';
+            }
+            if (element.saldoDebito=="0") {
+              sHtml+='<td><input type="text" class="form-control decimales moneda debito mayusculas" name="item['+index+'][debito]" id="item['+index+'][debito]" placeholder="Débito" disabled  ></td>';
+            }
+            if (element.saldoCredito!="0") {
+              sHtml+='<td><input type="text" class="form-control decimales moneda  credito mayusculas" name="item['+index+'][credito]" id="item['+index+'][credito]" placeholder="Crédito" value="'+element.saldoCredito+'" ></td>';          
+            }
+            if (element.saldoCredito=="0") {
+              sHtml+='<td><input type="text" class="form-control decimales moneda  credito mayusculas" name="item['+index+'][credito]" id="item['+index+'][credito]" placeholder="Crédito" disabled ></td>';          
+            }
+             sHtml+='<td class="centrar"><a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn btn-icon btn-sm btn-danger eliminar"><i class="fas fa-trash"></i></a></td>';
+                      sHtml+='</tr>';
+            })
     $("#tableProductos tbody").append(sHtml); 
     sumar_columnas();
   }); 
@@ -481,7 +448,7 @@ autocomplete=function(){
         $( ".cuentaContable" ).eq(index).val( ui.item.label );
 
         $( ".idCuentaContable" ).eq(index).val( ui.item.value );
-
+        buscarFacturasPorPagar(index); 
         $( ".naturaleza" ).eq(index).val( ui.item.naturaleza );
         $( ".letreroCuentaContable" ).eq(index).addClass('ocultar');
         if (ui.item.tercero=='2') {
@@ -536,37 +503,37 @@ autocomplete=function(){
     
         if (idTipoDocumento==7 || idTipoDocumento==15) {
 
-          $("#index").val(index);
-          $.ajax({
-            url:URL+"functions/comprobantes/consultarfacturacruceTercero.php", 
-            type:"POST", 
-            data: {"idTercero":idTercero,"idEmpresa":idEmpresa,"idTipoDocumento":idTipoDocumento}, 
-            dataType: "json",
-            }).done(function(msg){
-              // console.log(msg);
-              // console.log('**');
-              // console.log(msg.facturas);
-              if (idTipoDocumento==7) {
-                var idFacturaCompra=0;
-                var  sHtmlC='<optgroup label="Pendiente por pagar"><option value="">Seleccione</option>'; 
-                msg.facturas.forEach(function(element,index){
-                  idFacturaCompra=parseInt(element.idFacturaCompra);
-                  sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
-                });
-              }
-              if (idTipoDocumento==15) {
-                var  sHtmlC='<optgroup label="Pendiente por cobrar"><option value="">Seleccione</option>'; 
-                    msg.facturas.forEach(function(element,index){
-                      idFacturaVenta=parseInt(element.idFacturaVenta);
-                    sHtmlC+='<option value="'+idFacturaVenta+'" saldo="'+element.saldo+'"  nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'" >Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
-                  })
-              }
-                  sHtmlC+="</optgroup>"; 
-                $("[name='factura[0][cruceFactura]']").html(sHtmlC);
-                // $("[name='factura[0][cruceFactura]']").attr("required",true);
+          // $("#index").val(index);
+          // $.ajax({
+          //   url:URL+"functions/comprobantes/consultarfacturacruceTercero.php", 
+          //   type:"POST", 
+          //   data: {"idEmpresa":idEmpresa,"idTipoDocumento":idTipoDocumento}, 
+          //   dataType: "json",
+          //   }).done(function(msg){
+          //     // console.log(msg);
+          //     // console.log('**');
+          //     // console.log(msg.facturas);
+          //     if (idTipoDocumento==7) {
+          //       var idFacturaCompra=0;
+          //       var  sHtmlC='<optgroup label="Pendiente por pagar"><option value="">Seleccione</option>'; 
+          //       msg.facturas.forEach(function(element,index){
+          //         idFacturaCompra=parseInt(element.idFacturaCompra);
+          //         sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+          //       });
+          //     }
+          //     if (idTipoDocumento==15) {
+          //       var  sHtmlC='<optgroup label="Pendiente por cobrar"><option value="">Seleccione</option>'; 
+          //           msg.facturas.forEach(function(element,index){
+          //             idFacturaVenta=parseInt(element.idFacturaVenta);
+          //           sHtmlC+='<option value="'+idFacturaVenta+'" saldo="'+element.saldo+'"  nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'" >Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+          //         })
+          //     }
+          //         sHtmlC+="</optgroup>"; 
+          //       $("[name='factura[0][cruceFactura]']").html(sHtmlC);
+          //       // $("[name='factura[0][cruceFactura]']").attr("required",true);
 
-                // $('#facturaCruce').modal('show');
-          });
+          //       // $('#facturaCruce').modal('show');
+          // });
         }
     }
   }
@@ -833,38 +800,39 @@ autocompleteT=function(){
     if(idTipoDocumento!=""){
     
         if (idTipoDocumento==7 || idTipoDocumento==15) {
+          //$( ".nit" ).eq(index).val( ui.item.label );
+          buscarFacturasPorPagar(index); 
+          // $("#index").val(index);
+          // $.ajax({
+          //   url:URL+"functions/comprobantes/consultarfacturacruceTercero.php", 
+          //   type:"POST", 
+          //   data: {"idTercero":idTercero,"idEmpresa":idEmpresa,"idTipoDocumento":idTipoDocumento}, 
+          //   dataType: "json",
+          //   }).done(function(msg){
+          //     // console.log(msg);
+          //     // console.log('**');
+          //     // console.log(msg.facturas);
+          //     if (idTipoDocumento==7) {
+          //       var idFacturaCompra=0;
+          //       var  sHtmlC='<optgroup label="Pendiente por pagar"><option value="">Seleccione</option>'; 
+          //       msg.facturas.forEach(function(element,index){
+          //         idFacturaCompra=parseInt(element.idFacturaCompra);
+          //         sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+          //       });
+          //     }
+          //     if (idTipoDocumento==15) {
+          //       var  sHtmlC='<optgroup label="Pendiente por cobrar"><option value="">Seleccione</option>'; 
+          //           msg.facturas.forEach(function(element,index){
+          //             idFacturaVenta=parseInt(element.idFacturaVenta);
+          //           sHtmlC+='<option value="'+idFacturaVenta+'" saldo="'+element.saldo+'"  nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'" >Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+          //         })
+          //     }
+          //         sHtmlC+="</optgroup>"; 
+          //       $("[name='factura[0][cruceFactura]']").html(sHtmlC);
+          //       // $("[name='factura[0][cruceFactura]']").attr("required",true);
 
-          $("#index").val(index);
-          $.ajax({
-            url:URL+"functions/comprobantes/consultarfacturacruceTercero.php", 
-            type:"POST", 
-            data: {"idTercero":idTercero,"idEmpresa":idEmpresa,"idTipoDocumento":idTipoDocumento}, 
-            dataType: "json",
-            }).done(function(msg){
-              // console.log(msg);
-              // console.log('**');
-              // console.log(msg.facturas);
-              if (idTipoDocumento==7) {
-                var idFacturaCompra=0;
-                var  sHtmlC='<optgroup label="Pendiente por pagar"><option value="">Seleccione</option>'; 
-                msg.facturas.forEach(function(element,index){
-                  idFacturaCompra=parseInt(element.idFacturaCompra);
-                  sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
-                });
-              }
-              if (idTipoDocumento==15) {
-                var  sHtmlC='<optgroup label="Pendiente por cobrar"><option value="">Seleccione</option>'; 
-                    msg.facturas.forEach(function(element,index){
-                      idFacturaVenta=parseInt(element.idFacturaVenta);
-                    sHtmlC+='<option value="'+idFacturaVenta+'" saldo="'+element.saldo+'"  nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'" >Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
-                  })
-              }
-                  sHtmlC+="</optgroup>"; 
-                $("[name='factura[0][cruceFactura]']").html(sHtmlC);
-                // $("[name='factura[0][cruceFactura]']").attr("required",true);
-
-                // $('#facturaCruce').modal('show');
-          });
+          //       // $('#facturaCruce').modal('show');
+          // });
         }
     }else{
       $("[name='datos[comprobante]']").html("<option value=''>Seleccione una opción</option>");
@@ -904,44 +872,59 @@ $("[name='datos[cruce]']").on('change',function(){
 
 $("body").on("click","#btnGuardarCruce",function(e){
 
-var cant=$("#tableCruzar tbody tr").length; 
-var sHtml=' <td><input type="hidden" name="cruce['+cant+'][idFactura]" id="cruce['+cant+'][idFactura]" value="'+$("#cruceFactura option:selected").val()+'"><input type="hidden" name="cruce['+cant+'][index]" id="cruce['+cant+'][index]" value="'+$("#index").val()+'"><input type="text" class="form-control mayusculas" name="cruce['+cant+'][nroFactura]" id="cruce['+cant+'][nroFactura]" value="'+$("#cruceFactura option:selected").attr("nroFactura")+'" readonly></td>';
+e.preventDefault();
 
-sHtml+='<td><input type="text" class="form-control mayusculas" name="cruce['+cant+'][tercero]" id="cruce['+cant+'][tercero]" value="'+$("#cruceFactura option:selected").attr("tercero")+'" readonly></td>';
-sHtml+='<td><input type="text" class="form-control mayusculas moneda saldo" name="cruce['+cant+'][saldo]" id="cruce['+cant+'][saldo]" value="'+$("#cruceFactura option:selected").attr("saldo")+'" readonly></td>';
-
-
-
-
-
-
-
-if ($("#tipoDocumento").val()==7) {
-  //debito
-// [name='factura[0][cruceFactura]']
-
-  $("[name='item["+$("#index").val()+"][debito]']").val($("#cruceFactura option:selected").attr("saldo")).trigger('change');
-  $("[name='item["+$("#index").val()+"][credito]']").attr("disabled","disabled");
-
-  // saldoF.value=;
-
+if(true === $("#frmCruceFactura").parsley().validate()){
+  var subtotal=0;
+  $("#divTablaCruzar").html(); 
+    $("#tableCruzar .seleccionarFactura:checked").each(function(index,element){
+      var valor=eliminarMoneda(eliminarMoneda(eliminarMoneda($(".valorCruce").eq(index).val(),"$",""),".",""),",","."); 
+      subtotal+=valor;
+      $("#divTablaCruzar").append("<input type='hidden' value='"+$(".seleccionarFactura").eq(index).val()+"' id='fraCruce["+index+"][idFactura]' name='fraCruce["+index+"][idFactura]' />"+
+        "<input type='hidden' value='"+valor+"' id='fraCruce["+index+"][valor]' name='fraCruce["+index+"][valor]' />"); 
+      console.log(element,index)
+    })
+    if($("#movimiento").val()==1){
+      $(".debito").val(subtotal).trigger('change')
+    }else{
+      $(".credito").val(subtotal).trigger('change')
+    }
+    $("#facturaCruce").modal("toggle"); 
+    sumar_columnas()
 }
+// var cant=$("#tableCruzar tbody tr").length; 
+// var sHtml=' <td><input type="hidden" name="cruce['+cant+'][idFactura]" id="cruce['+cant+'][idFactura]" value="'+$("#cruceFactura option:selected").val()+'"><input type="hidden" name="cruce['+cant+'][index]" id="cruce['+cant+'][index]" value="'+$("#index").val()+'"><input type="text" class="form-control mayusculas" name="cruce['+cant+'][nroFactura]" id="cruce['+cant+'][nroFactura]" value="'+$("#cruceFactura option:selected").attr("nroFactura")+'" readonly></td>';
 
-if ($("#tipoDocumento").val()==15) {
-//credito
-  $("[name='item["+$("#index").val()+"][credito]']").val($("#cruceFactura option:selected").attr("saldo")).trigger('change');
-  $("[name='item["+$("#index").val()+"][debito]']").attr("disabled","disabled");
-  // var saldoF=document.getElementById("item["+$("#index").val()+"][credito]");
-  // saldoF.value=$("#cruceFactura option:selected").attr("saldo");
-
-}
+// sHtml+='<td><input type="text" class="form-control mayusculas" name="cruce['+cant+'][tercero]" id="cruce['+cant+'][tercero]" value="'+$("#cruceFactura option:selected").attr("tercero")+'" readonly></td>';
+// sHtml+='<td><input type="text" class="form-control mayusculas moneda saldo" name="cruce['+cant+'][saldo]" id="cruce['+cant+'][saldo]" value="'+$("#cruceFactura option:selected").attr("saldo")+'" readonly></td>';
 
 
+// if ($("#tipoDocumento").val()==7) {
+//   //debito
+// // [name='factura[0][cruceFactura]']
 
-  $("#tableCruzar tbody").append("<tr>"+sHtml+"</tr>"); 
-  $(".saldo").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
-  $('#facturaCruce').modal('hide');
-  $("#divTablaCruzar").css("display","block");
+//   $("[name='item["+$("#index").val()+"][debito]']").val($("#cruceFactura option:selected").attr("saldo")).trigger('change');
+//   $("[name='item["+$("#index").val()+"][credito]']").attr("disabled","disabled");
+
+//   // saldoF.value=;
+
+// }
+
+// if ($("#tipoDocumento").val()==15) {
+// //credito
+//   $("[name='item["+$("#index").val()+"][credito]']").val($("#cruceFactura option:selected").attr("saldo")).trigger('change');
+//   $("[name='item["+$("#index").val()+"][debito]']").attr("disabled","disabled");
+//   // var saldoF=document.getElementById("item["+$("#index").val()+"][credito]");
+//   // saldoF.value=$("#cruceFactura option:selected").attr("saldo");
+
+// }
+
+
+
+//   $("#tableCruzar tbody").append("<tr>"+sHtml+"</tr>"); 
+//   $(".saldo").formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
+//   $('#facturaCruce').modal('hide');
+//   $("#divTablaCruzar").css("display","block");
 })
 
 // autocompleteTer=function(){
@@ -1589,59 +1572,59 @@ $("body").on("click","#btnGuardar",function(e){
                   
 
                   
-                  var cant=$("#tableCruzar tbody tr").length; 
-                  if (cant!=0) {
-                    var saldos =[];
+                  // var cant=$("#tableCruzar tbody tr").length; 
+                  // if (cant!=0) {
+                  //   var saldos =[];
 
-                    for (let i = 0; i < cant; i++) {
-                      // 0[i]
-                      let nroF=$("[name='cruce["+i+"][nroFactura]']").val();
-                      let saldo=$("[name='cruce["+i+"][saldo]']").val();
-                      // let saldoFactura = parseFloat(saldo.replace(",","."));
-                      let saldoFactura =parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(saldo,"$",""),".",""),",","."));
+                  //   for (let i = 0; i < cant; i++) {
+                  //     // 0[i]
+                  //     let nroF=$("[name='cruce["+i+"][nroFactura]']").val();
+                  //     let saldo=$("[name='cruce["+i+"][saldo]']").val();
+                  //     // let saldoFactura = parseFloat(saldo.replace(",","."));
+                  //     let saldoFactura =parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(saldo,"$",""),".",""),",","."));
 
-                      // console.log('saldo:');
-                      // console.log(saldo);
+                  //     // console.log('saldo:');
+                  //     // console.log(saldo);
                       
-                      let index=$("[name='cruce["+i+"][index]']").val();
-                      // console.log('index:');
-                      // console.log(index);
-                      var debito=$("[name='item["+index+"][debito]']").val();
+                  //     let index=$("[name='cruce["+i+"][index]']").val();
+                  //     // console.log('index:');
+                  //     // console.log(index);
+                  //     var debito=$("[name='item["+index+"][debito]']").val();
                       
-                      // console.log('length');
-                        // console.log(debito.length); 
-                        // console.log('paso');
-                      // if ($("[name='item["+index+"][debito]']").val().length!=0) {
-                      if (debito.length >0) {
+                  //     // console.log('length');
+                  //       // console.log(debito.length); 
+                  //       // console.log('paso');
+                  //     // if ($("[name='item["+index+"][debito]']").val().length!=0) {
+                  //     if (debito.length >0) {
 
 
-                        var total=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(debito,"$",""),".",""),",","."));
-                        // console.log('debito:');
-                      }
-                      if (debito.length==0) {
-                        var total='';
-                      }
-                      // console.log($("[name='item["+index+"][debito]']").val());
-                      // console.log(total);
-                      if (total==0 || total=='' ) {
-                        var credito=$("[name='item["+index+"][credito]']").val();
+                  //       var total=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(debito,"$",""),".",""),",","."));
+                  //       // console.log('debito:');
+                  //     }
+                  //     if (debito.length==0) {
+                  //       var total='';
+                  //     }
+                  //     // console.log($("[name='item["+index+"][debito]']").val());
+                  //     // console.log(total);
+                  //     if (total==0 || total=='' ) {
+                  //       var credito=$("[name='item["+index+"][credito]']").val();
 
-                        total=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(credito,"$",""),".",""),",","."));
-                        // console.log('credito:');
-                      }
+                  //       total=parseFloat(eliminarMoneda(eliminarMoneda(eliminarMoneda(credito,"$",""),".",""),",","."));
+                  //       // console.log('credito:');
+                  //     }
 
-                        // console.log(total);
-                      let pagoFactura = saldoFactura-total;
+                  //       // console.log(total);
+                  //     let pagoFactura = saldoFactura-total;
                       
-                        // console.log('saldo:');
-                        // console.log(saldoFactura);
-                        // console.log('total:');
-                        // console.log(pagoFactura);
+                  //       // console.log('saldo:');
+                  //       // console.log(saldoFactura);
+                  //       // console.log('total:');
+                  //       // console.log(pagoFactura);
 
-                      saldos.push(nroF,pagoFactura);
-                    }
+                  //     saldos.push(nroF,pagoFactura);
+                  //   }
 
-                  }
+                  //}
                   // $("#tableCruzar tbody").append("<tr>"+sHtml+"</tr>");
 
 
@@ -1779,6 +1762,7 @@ $("body").on("click","#btnGuardar",function(e){
         )
       }
     }
+
   });
 
 
@@ -2154,3 +2138,123 @@ $("body").on("change","[name='datos[numeroComprobante]']",function(e){
       });    
 
 });
+
+$("body").on("change", "#tipoDocumento", function(e){
+
+})
+
+function buscarFacturasPorPagar(index2){
+  
+  if(($("#tipoDocumento").val()==7||$("#tipoDocumento").val()==15)&&$(".idTercero").eq(index2).val()!=""&&$(".idCuentaContable").eq(index2).val()!=""){
+    var idEmpresa=$("#idEmpresa").val();
+    var idTipoDocumento=$("#tipoDocumento").val(); 
+    $.ajax({
+        url:URL+"functions/comprobantes/consultarfacturacruce.php", 
+        type:"POST", 
+        data: {"idEmpresa":idEmpresa,"idTipoDocumento":idTipoDocumento, "idCuenta":$(".idCuentaContable").eq(index2).val(), "idTercero":$(".idTercero").eq(index2).val()}, 
+        dataType: "json",
+        }).done(function(msg){
+
+          var sHtml=""; 
+          if(msg.facturas.length>0){
+            if (idTipoDocumento==7) {
+                msg.facturas.forEach(function(element,index){
+                  sHtml+="<tr>"
+                  sHtml+="<td><div class='form-group'>"
+                  sHtml+="<input  type='hidden' name='item["+index+"][idFactura]' value='0'>"
+                  sHtml+="<input  type='hidden' class='terceroCruce' name='item["+index+"][idTercero]' value='"+element.idTercero+"'>"
+                  sHtml+="<input  type='checkbox' class='seleccionarFactura' name='item["+index+"][idFactura]' value='"+element.idFacturaCompra+"'>"
+                  sHtml+="</div>"
+                  sHtml+="</td>"
+                  sHtml+="<td>"+element.nroFactura
+                  sHtml+="</td>"
+                  sHtml+="<td>"+element.razonSocial
+                  sHtml+="</td>"
+                  sHtml+="<td><input type='text' class='form-control saldoCruce moneda mayusculas' name='item["+index+"][saldoCruce]' id='item["+index+"][saldoCruce]' placeholder='Valor cruce' readonly value='"+element.saldo+"'>"
+                  sHtml+="</td>"
+                  sHtml+="<td><input type='text' class='form-control valorCruce moneda mayusculas' name='item["+index+"][valorCruce]' id='item["+index+"][valorCruce]' placeholder='Valor cruce' readonly value='"+element.saldo+"'>"
+                  sHtml+="</td>"
+                  sHtml+="<tr>"
+                  //sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+                });
+              }
+              if (idTipoDocumento==15) {
+                msg.facturas.forEach(function(element,index){
+                  sHtml+="<tr>"
+                  sHtml+="<td><div class='form-group'>"
+                  sHtml+="<input  type='hidden' name='item["+index+"][idFactura]' value='0'>"
+                  sHtml+="<input  type='hidden' class='terceroCruce' name='item["+index+"][idTercero]' value='"+element.idTercero+"'>"
+                  sHtml+="<input  type='checkbox' class='seleccionarFactura' name='item["+index+"][idFactura]' value='"+element.idFacturaVenta+"'>"
+                  sHtml+="</div>"
+                  sHtml+="</td>"
+                  sHtml+="<td>"+element.nroFactura
+                  sHtml+="</td>"
+                  sHtml+="<td>"+element.razonSocial
+                  sHtml+="</td>"
+                  sHtml+="<td><input type='text' class='form-control saldoCruce moneda mayusculas' name='item["+index+"][saldoCruce]' id='item["+index+"][saldoCruce]' placeholder='Valor cruce' readonly value='"+element.saldo+"'>"
+                  sHtml+="</td>"
+                  sHtml+="<td><input type='text' class='form-control valorCruce moneda mayusculas' name='item["+index+"][valorCruce]' id='item["+index+"][valorCruce]' placeholder='Valor cruce' readonly value='"+element.saldo+"'>"
+                  sHtml+="</td>"
+                  sHtml+="<tr>"
+                  //sHtmlC+='<option value="'+idFacturaCompra+'" saldo="'+element.saldo+'" nroFactura="'+element.nroFactura+'" tercero="'+element.razonSocial+'">Nro Factura: '+element.nroFactura+'   |        SALDO: '+element.saldo+'       |           Tercero: '+element.razonSocial+'</option>'; 
+                });
+              }
+                //   sHtmlC+="</optgroup>"; 
+                // $("[name='factura[0][cruceFactura]']").html(sHtmlC);
+                // $("[name='factura[0][cruceFactura]']").attr("required",true);
+
+            $("#tableCruzar tbody").html(sHtml);
+            $(".valorCruce, .saldoCruce").trigger("change")
+            $('#facturaCruce').modal('show');
+          }
+          
+      });
+  }
+}
+
+$("body").on("change",".seleccionarFactura",function(e){
+
+  var idTercero=$(this).parents("td").find(".terceroCruce").val(); 
+  var elemento=this;
+  var valida=true; 
+  $(".seleccionarFactura:checked").each(function(index, element2){
+    console.log($(".terceroCruce").eq(index).val(), idTercero)
+    if($(".terceroCruce").eq(index).val()!=idTercero){
+      Swal.fire(
+        'Algo ha salido mal!',
+        'No se pueden seleccionar facturas de diferentes terceros',
+        'error'
+      ).then((result) => {
+      })
+      $(elemento).prop('checked', false)
+      $(elemento).removeAttr('checked')
+      valida=false; 
+    }
+  })
+  if(valida){
+    if($(this).is(":checked")){
+      $(this).parents("tr").find(".valorCruce").removeAttr("readonly"); 
+    }else{
+      $(this).parents("tr").find(".valorCruce").attr("readonly","readonly"); 
+    }
+  }
+  
+})
+$("body").on("blur",".valorCruce",function(e){
+
+  var saldo=$(this).parents("tr").find(".saldoCruce").val(); 
+  var elemento=this;
+  
+  var valorCruce=parseFloat(eliminarMoneda($(elemento).val(),",","."))
+  var saldoCruce=parseFloat(eliminarMoneda(saldo,",","."))
+  console.log(eliminarMoneda(saldo,",","."))
+  if(saldoCruce<valorCruce){
+    Swal.fire(
+        'Algo ha salido mal!',
+        'El valor del cruce no puede ser mayor al valor de la factura',
+        'error'
+      ).then((result) => {
+        $(elemento).val("")
+      })
+  }
+})

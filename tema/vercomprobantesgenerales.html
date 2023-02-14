@@ -34,6 +34,7 @@ unset($oItem);
 
 
 if ($idTipo==0) {
+
     $oLista=new Lista("comprobante");
     $oLista->setFiltro("fecha",">=",$desde);
     $oLista->setFiltro("fecha","<=",$hasta);

@@ -10,25 +10,35 @@ class Dashboard extends Sql{
 
 	public function getSaldoProveedores($idEmpresa){
 
-
-
 		$condicion=""; 
-
 		if(!isset($_SESSION)){ session_start(); }
-
-				
-
+	
 		$sql="SELECT  sum(saldo) as total
 			FROM factura_compra 
-			WHERE idEmpresa=$idEmpresa and (estado=1 or estado=2 or estado=4)";
-
-		
-
+			WHERE idEmpresa=$idEmpresa and estado IN(1,2,4)";
+	
 	    $dProveedores=$this->ejecutarSql($sql); 
-
 	    return $dProveedores; 
 
 	}
+    
+  	
+	public function getDetalleSaldoProveedores($idEmpresa){
+
+		$condicion=""; 
+		if(!isset($_SESSION)){ session_start(); }
+	
+		$sql="SELECT t.idTercero, fc.nroFactura, t.razonSocial, SUM(fc.saldo) as saldo 
+			FROM factura_compra as fc 
+			INNER JOIN tercero as t ON(t.idTercero=fc.idProveedor)
+			WHERE fc.idEmpresa=$idEmpresa and estado IN(1,2,4) 
+			GROUP BY fc.idProveedor";
+		
+	    $dProveedores=$this->ejecutarSql($sql); 
+	    return $dProveedores; 
+
+	}
+
 	public function getSaldoProveedoresAbono($idEmpresa){
 
 

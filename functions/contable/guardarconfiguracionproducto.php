@@ -1,31 +1,19 @@
 <?php
-
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 date_default_timezone_set("America/Bogota"); 
-
 
 
 $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
 
-// $banco  = (isset($_REQUEST['banco'] ) ? $_REQUEST['banco'] : "" );
-
-// print_r($item);
 
 if(!isset($_SESSION)){ session_start(); }
 
-
-// print_r($item);
-// print_r('---');
-// print_r($datos);
+  $msg=true; 
 
 foreach ($item as $key => $value) {
     if ($value["cuentaContableProductoCompra"]!="" and $value["idCuentaContableProductoCompra"]!=""  ) {
@@ -60,16 +48,14 @@ foreach ($item as $key => $value) {
             $oItem->$keya=$valuea; 
 
         }
-        $oItem->guardar(); 
+        $msg=$oItem->guardar(); 
         // $idAuxiliar=$oItem->ultimoId();
         unset($oItem);
         }
 }
 
-   $msg=true; 
-
-
-    echo json_encode(array("msg"=>$msg));
+ 
+echo json_encode(array("msg"=>$msg));
 
 
 ?>

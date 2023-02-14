@@ -1,31 +1,20 @@
 <?php
-
 header('Content-type: application/json');
-
 require_once("../../php/restrict.php");
 
 
-
 include_once($CLASS . "data.php");
-
 include_once($CLASS . "lista.php");
-
 include_once($CLASS . "control.php");
-
 
 
 $oControl=new Control();
 
-
-
 date_default_timezone_set("America/Bogota"); 
 
 
-
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
-
 $item  = (isset($_REQUEST['item'] ) ? $_REQUEST['item'] : "" );
-
 $impuesto  = (isset($_REQUEST['impuesto'] ) ? $_REQUEST['impuesto'] : "" );
 
 
@@ -97,9 +86,7 @@ if(empty($aValidate)){
     $aDatos["fechaRegistro"]=date("Y-m-d H:i:s");
     $aDatos["idUsuarioRegistra"]=$_SESSION["idUsuario"]; 
     $aDatos["estado"]=1; 
-    
-        $aDatos["tipoTercero"]=1; 
-    
+    $aDatos["tipoTercero"]=1; 
     $aDatos["responsableIva"]=2;
     $aDatos["periodoPago"]=30; 
 
@@ -120,13 +107,9 @@ if(empty($aValidate)){
         }
     }
 }
-if(!empty($aValidate)){
-    if ($aValidate['tipoTercero']==1 || $aValidate['tipoTercero']==4) {
-        $idTercero=$aValidate['idTercero'];
-
-
-            // if($value["estado"]==1){
-
+    if(!empty($aValidate)){
+        if ($aValidate['tipoTercero']==1 || $aValidate['tipoTercero']==4) {
+            $idTercero=$aValidate['idTercero'];
             $oLista=new Lista("tercero_empresa");
             $oLista->setFiltro("idTercero","=",$idTercero);
             $oLista->setFiltro("idEmpresa","=",$_SESSION["idEmpresa"]);
@@ -140,19 +123,12 @@ if(!empty($aValidate)){
                 $oItem->guardar(); 
                 unset($oItem); 
             }
-
-            
-            // }
-        
-    }
+        }
         if ($aValidate['tipoTercero']==2) {
             $aDatos["tipoPersona"]=2; 
             $aDatos["nit"]=$datos["nit"]; 
-            
             $aDatos["razonSocial"]=$datos["razonSocial"]; 
-             
             $aDatos["estado"]=1; 
-            
             $aDatos["tipoTercero"]=4; 
 
             $oItem=new Data("tercero","idTercero",$aValidate['idTercero']); 
@@ -185,13 +161,9 @@ if(!empty($aValidate)){
 
 
 if(!isset($_SESSION)){ session_start(); }
-
 $aDatos["fechaRegistro"]=date("Y-m-d H:i:s");
-
 $aDatos["idUsuarioRegistra"]=$_SESSION["idUsuario"]; 
-
 $aDatos["idEmpresa"]=$datos["idEmpresa"]; 
-
 $aDatos["fechaFactura"]=$datos["fechaFactura"]; 
 if (!empty($datos["idCliente"])) {
     $idT=$datos["idCliente"];
@@ -199,20 +171,14 @@ if (!empty($datos["idCliente"])) {
 if (empty($datos["idCliente"])) {
     $idT=$idTercero;
 }
+
 $aDatos["idCliente"]=$idT;
-
 $aDatos["nroFactura"]=$datos["nroFactura"]; 
-
 $aDatos["archivo"]=$sFoto; 
-
 $aDatos["archivo2"]=$sFoto2; 
-
 $aDatos["subtotal"]=str_replace("$", "", str_replace(".", "", $datos["subtotal"])); 
-
 $aDatos["descuento"]=str_replace("$", "", str_replace(".", "", $datos["descuento"])); 
-
 $aDatos["iva"]=str_replace("$", "", str_replace(".", "", $datos["iva"])); 
-
 $aDatos["total"]=str_replace("$", "", str_replace(".", "", $datos["total"])); 
 
 
@@ -225,49 +191,44 @@ if ($aFormaPago[0]["idCuentaBancaria"]!=0) {
     $aDatos["estado"]=3; 
     $aDatos["saldo"]=0;
 
-
-
-
     $totalFactura=str_replace("$", "", str_replace(".", "", $datos["totalPago"]));
     $idCuenta=$aFormaPago[0]["idCuentaBancaria"];
 
     $oItem=new Data("cuenta_bancaria","idCuentaBancaria",$aFormaPago[0]["idCuentaBancaria"]);
     $cuentaDatos=$oItem->getDatos(); 
 
-        $saldoActual=$cuentaDatos["saldoActual"];
+    $saldoActual=$cuentaDatos["saldoActual"];
 
-        $nuevoSaldo=$saldoActual + $totalFactura;
-        $cuatropormil=$cuentaDatos['aplicaCuatroMil'];
-        unset($oItem);
+    $nuevoSaldo=$saldoActual + $totalFactura;
+    $cuatropormil=$cuentaDatos['aplicaCuatroMil'];
+    unset($oItem);
 
-        $oItem=new Data("tercero","idTercero",$idT); 
-        $clienteDatos=$oItem->getDatos(); 
-        unset($oItem);
-
-
-        $bDatos["idCuentaBancaria"]=$idCuenta;
-        $bDatos["idTipoMovimiento"]=3;
-        $bDatos["fechaRegistro"]=date("Y-m-d H:i:s");
-        $bDatos["valorIngreso"]=$totalFactura;
-        $bDatos["valorEgreso"]=0;  
-        $bDatos["saldoAnterior"]=$saldoActual;
-        $bDatos["saldoActual"]=$nuevoSaldo;
-        $bDatos["descripcionMovimiento"]='pago de factura '.$datos["nroFactura"].' del cliente '.$clienteDatos["razonSocial"]; 
-
-        $oItem=new Data("cuenta_bancaria_movimientos","idCuentaBancariaMovimientos"); 
-            foreach($bDatos  as $key => $value){
-                $oItem->$key=$value; 
-            }
-            $oItem->guardar(); 
-           
-            unset($oItem);
-
-        $oItem=new Data("cuenta_bancaria","idCuentaBancaria",$idCuenta); 
-        $oItem->saldoActual=$nuevoSaldo; 
-        $oItem->guardar(); 
-        unset($oItem);
+    $oItem=new Data("tercero","idTercero",$idT); 
+    $clienteDatos=$oItem->getDatos(); 
+    unset($oItem);
 
 
+    $bDatos["idCuentaBancaria"]=$idCuenta;
+    $bDatos["idTipoMovimiento"]=3;
+    $bDatos["fechaRegistro"]=date("Y-m-d H:i:s");
+    $bDatos["valorIngreso"]=$totalFactura;
+    $bDatos["valorEgreso"]=0;  
+    $bDatos["saldoAnterior"]=$saldoActual;
+    $bDatos["saldoActual"]=$nuevoSaldo;
+    $bDatos["descripcionMovimiento"]='pago de factura '.$datos["nroFactura"].' del cliente '.$clienteDatos["razonSocial"]; 
+
+    $oItem=new Data("cuenta_bancaria_movimientos","idCuentaBancariaMovimientos"); 
+    foreach($bDatos  as $key => $value){
+        $oItem->$key=$value; 
+    }
+    $oItem->guardar(); 
+   
+    unset($oItem);
+
+    $oItem=new Data("cuenta_bancaria","idCuentaBancaria",$idCuenta); 
+    $oItem->saldoActual=$nuevoSaldo; 
+    $oItem->guardar(); 
+    unset($oItem);
 
 }
 if ($aFormaPago[0]["idCuentaBancaria"]==0) {
@@ -277,17 +238,12 @@ if ($aFormaPago[0]["idCuentaBancaria"]==0) {
 
 
 $aDatos["fechaVencimiento"]=$datos["fechaVencimientoFactura"];
-
+$aDatos["formaPagoFactura"]=$datos["formaPagoFactura"];
 
 $oItem=new Data("factura_venta","idFacturaVenta"); 
-
 foreach($aDatos  as $key => $value){
-
     $oItem->$key=$value; 
-
 }
-
-
 $oItem->guardar(); 
 $idfactura=$oItem->ultimoId(); 
 
@@ -295,45 +251,27 @@ unset($oItem);
 
 
 foreach ($item as $key => $value) {
-
     $aItem["idFacturaVenta"]=$idfactura; 
-
     $aItem["detalleProducto"]=$value["producto"]; 
-
     $aItem["idProductoServicio"]=$value["idProducto"]==""?0:$value["idProducto"]; 
-
     $aItem["descripcion"]=$value["descripcion"]; 
-
     $aItem["idUnidad"]=$value["idUnidad"]; 
-
     $aItem["cantidad"]=$value["cantidad"]; 
-
     $aItem["idBodega"]=$value["idBodega"]; 
-
     $aItem["iva"]=$value["iva"]; 
-
     $aItem["valorUnitario"]=str_replace("$", "", str_replace(".", "", $value["valorUnitario"])); 
-
     $aItem["subtotal"]=str_replace("$", "", str_replace(".", "", $value["subtotal"])); 
-
     $aItem["total"]=str_replace("$", "", str_replace(".", "", $value["total"]));
 
 
-
     $oItem=new Data("factura_venta_item","idFacturaVentaItem"); 
-
     foreach($aItem  as $key => $valueFVI){
 
         $oItem->$key=$valueFVI; 
 
     }
-
     $oItem->guardar(); 
-
     unset($oItem);
-
-
-
 
 
     $oLista=new Lista("producto_servicio");
@@ -499,14 +437,6 @@ foreach ($solista as $key => $super) {
     unset($oItem);
 }
 
-
-    // $oLista=new Lista("compra_cuenta_contable");
-    // $oLista->setFiltro("concepto","=",'TotalPagar');
-    // $oLista->setFiltro("idEmpresa","=",$datos["idEmpresa"]);
-    // $oLista->setFiltro("tipoFactura","=",'compra');
-    // $aCC=$oLista->getLista();
-
-
 $comp=true;
 
     $oLista=new Lista("impuesto_cuenta_contable");
@@ -514,7 +444,7 @@ $comp=true;
     $oLista->setFiltro("tipoImpuesto","=",'3');
     $oLista->setFiltro("tipoFactura","=",'venta');
     $aCC=$oLista->getLista();
-$consecutivoComprobante=0;
+    $consecutivoComprobante=0;
 if (!empty($aCC)) {
 
 
@@ -524,10 +454,7 @@ if (!empty($aCC)) {
     $aNumero=$oLista->getLista();
     unset($oLista);
 
-
-    // $numeroComprobante=intval($aNumero[0]["numeracionActual"]);
     $numeroComprobante=intval($datos["numeroComprobante"]);
-
 
     $oItem=new Data("tipos_documento_contable","idTiposDocumento",$aNumero[0]["tipo"]);
     $letraTipo=$oItem->getDatos();

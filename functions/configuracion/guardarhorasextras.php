@@ -8,7 +8,7 @@ include_once($CLASS . "lista.php");
 date_default_timezone_set("America/Bogota"); 
 
 $datos  = (isset($_REQUEST['datos'] ) ? $_REQUEST['datos'] : "" );
-
+$msg=true; 
 $oLista = new Lista('horas_extras');
 $oLista->setFiltro("anio","=",$datos["anio"]);
 $aListas=$oLista->getLista();
@@ -22,7 +22,7 @@ $oItem=new Data("horas_extras","idHorasExtras");
 foreach($datos  as $key => $value){
     $oItem->$key=$value; 
 }
-$oItem->guardar(); 
+$msg=$oItem->guardar(); 
 unset($oItem);
 
 
@@ -30,7 +30,7 @@ $oLista = new Lista('horas_extras');
 $aLista=$oLista->getLista();
 unset($oLista);
 
-$msg=true; 
+
 
 echo json_encode(array("msg"=>$msg,"lista"=>$aLista));
 ?>

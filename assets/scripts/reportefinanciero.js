@@ -1,421 +1,398 @@
-$(function () {
-
-  graphFinanciero();
-
- 
-
+$(function() {
+    graphFinanciero();
+    console.log(window.innerWidth)
+    if(window.innerWidth<1550){
+      $(".info").removeClass("col-md-2").addClass("col-md-4")
+    }else{
+      $(".info").addClass("col-md-2").removeClass("col-md-4")
+    }
 });
 
 
 
-graphFinanciero=function(){
-  $.ajax({
+graphFinanciero = function() {
+    $.ajax({
+        url: URL + "functions/dashboard/facturaVentaAcumulada.php",
+        type: "POST",
+        dataType: "json",
+    }).done(function(msg) {
 
-      url:URL+"functions/dashboard/facturaVentaAcumulada.php", 
+        var aVenta = [];
 
-      type:"POST", 
-
-      dataType: "json",
-
-      }).done(function(msg){ 
-
-
-
-        var aVenta=[]; 
-        
-
-        var aLabels=[]; 
+        var aLabels = [];
         // console.log(msg.facturaCompraSumada);
-           
-
-
-
-          msg.facturaVentaSumada.forEach(function(element,index){
-            // console.log(element.valor);
-            // aCompra.push(parseInt(element.facturaCompraSumada.valor));
+        msg.facturaVentaSumada.forEach(function(element, index) {
 
             aVenta.push(parseInt(element.valor));
             // var mesLabel=element.mes;
-           
-            aLabels.push(element.periodoAnio+'-'+element.periodoMes);
 
-          });
-          var aCompras=[]; 
-          msg.facturaCompraSumada.forEach(function(element,index){
-            // console.log(element.valor);
-            // aCompra.push(parseInt(element.facturaCompraSumada.valor));
+            aLabels.push(element.periodoAnio + '-' + element.periodoMes);
+
+        });
+        var aCompras = [];
+        msg.facturaCompraSumada.forEach(function(element, index) {
 
             aCompras.push(parseInt(element.valor));
-            // var mesLabel=element.mes;
-           
-            // aLabels.push(element.periodoAnio+'-'+element.periodoMes);
 
-          });
-          var aGastos=[]; 
-          msg.gastosOperacionales.forEach(function(element,index){
-            // console.log(element.valor);
-            // aCompra.push(parseInt(element.facturaCompraSumada.valor));
+        });
+        var aGastos = [];
+        msg.gastosOperacionales.forEach(function(element, index) {
 
             aGastos.push(parseInt(element.valor));
-            // var mesLabel=element.mes;
-           
-            // aLabels.push(element.periodoAnio+'-'+element.periodoMes);
 
-          });
-          var aGastosVentas=[]; 
-          msg.gastosOperacionalesVentas.forEach(function(element,index){
-            // console.log(element.valor);
-            // aCompra.push(parseInt(element.facturaCompraSumada.valor));
+        });
+        var aGastosVentas = [];
+        msg.gastosOperacionalesVentas.forEach(function(element, index) {
 
             aGastosVentas.push(parseInt(element.valor));
-            // var mesLabel=element.mes;
-           
-            // aLabels.push(element.periodoAnio+'-'+element.periodoMes);
 
-          });
-          // console.log(aCompras);
+        });
+        // console.log(aCompras);
 
-var options2 = {
-    series: [
-      {
-        name: "Ventas",
-        data: aVenta,
-      },
-      {
-        name: "Compras ",
-        data: aCompras,
-      },
-      {
-        name: "Gastos operacionales de admon",
-        data: aGastos,
-      },
-      {
-        name: "Gastos operacionales de ventas",
-        data: aGastosVentas,
-      },
-    ],
-    chart: {
-      height: 300,
-      type: "line",
-      dropShadow: {
-        enabled: true,
-        opacity: 0.3,
-        blur: 5,
-        left: -7,
-        top: 22,
-      },
-      toolbar: {
-        show: true,
-      },
-    },
-    colors: ["#6777EF", "#FEB019","#8BFFC1","#EF8BFF"],
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      curve: "smooth",
-      width: 3,
-      lineCap: "square",
-    },
-    xaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      crosshairs: {
-        show: true,
-      },
-      categories: aLabels,
-      labels: {
-        offsetX: 0,
-        offsetY: 5,
-        style: {
-          fontSize: "12px",
-          fontFamily: "Segoe UI",
-          cssClass: "apexcharts-xaxis-title",
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        offsetX: 0,
-        offsetY: 0,
-        style: {
-          fontSize: "12px",
-          fontFamily: "Segoe UI",
-          cssClass: "apexcharts-yaxis-title",
-        },
-      },
-    },
-    legend: {
-      show: false,
-    },
-    tooltip: {
-      theme: "dark",
-      marker: {
-        show: true,
-      },
-      x: {
-        show: true,
-      },
-      y: {
-            formatter: function (val) {                                     
-                return "$ " + format((val*1));
-            }
+        var options2 = {
+            series: [{
+                    name: "Ventas",
+                    data: aVenta,
+                },
+                {
+                    name: "Compras ",
+                    data: aCompras,
+                },
+                {
+                    name: "Gastos operacionales de admon",
+                    data: aGastos,
+                },
+                {
+                    name: "Gastos operacionales de ventas",
+                    data: aGastosVentas,
+                },
+            ],
+            chart: {
+                height: 300,
+                type: "line",
+                dropShadow: {
+                    enabled: true,
+                    opacity: 0.3,
+                    blur: 5,
+                    left: -7,
+                    top: 22,
+                },
+                toolbar: {
+                    show: true,
+                },
+            },
+            colors: ["#6777EF", "#FEB019", "#8BFFC1", "#EF8BFF"],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                show: true,
+                curve: "smooth",
+                width: 3,
+                lineCap: "square",
+            },
+            xaxis: {
+                axisBorder: {
+                    show: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                crosshairs: {
+                    show: true,
+                },
+                categories: aLabels,
+                labels: {
+                    offsetX: 0,
+                    offsetY: 5,
+                    style: {
+                        fontSize: "12px",
+                        fontFamily: "Segoe UI",
+                        cssClass: "apexcharts-xaxis-title",
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    offsetX: 0,
+                    offsetY: 0,
+                    style: {
+                        fontSize: "12px",
+                        fontFamily: "Segoe UI",
+                        cssClass: "apexcharts-yaxis-title",
+                    },
+                },
+            },
+            legend: {
+                show: false,
+            },
+            tooltip: {
+                theme: "dark",
+                marker: {
+                    show: true,
+                },
+                x: {
+                    show: true,
+                },
+                y: {
+                    formatter: function(val) {
+                        return "$ " + format((val * 1));
+                    }
 
-        }
+                }
 
-    },
+            },
 
-  };
+        };
 
 
 
-  var chart3 = new ApexCharts(document.querySelector("#facturacion"), options2);
+        var chart3 = new ApexCharts(document.querySelector("#facturacion"), options2);
 
-  chart3.render();
+        chart3.render();
 
-})
-	$.ajax({
-	    url:URL+"functions/dashboard/dashboardempresa.php", 
-	    type:"POST", 
-	    dataType: "json",
-      
-	    }).done(function(msg){  
+    })
+    $.ajax({
+        url: URL + "functions/dashboard/dashboardempresa.php",
+        type: "POST",
+        dataType: "json",
 
-		    console.log('acá');
+    }).done(function(msg) {
+
+        console.log('acá');
         console.log(msg);
         console.log('hasta');
-	      $("#totalActivoCorriente").html(parseFloat(msg.indicador.totalActivoCorriente).toFixed(2)); 
-	      $("#totalPasivoCorriente").html(parseFloat(msg.indicador.totalPasivoCorriente).toFixed(2)); 
-	      $("#activo").html(parseFloat(msg.indicador.activo).toFixed(2)); 
-	      $("#pasivo").html(parseFloat(msg.indicador.pasivo).toFixed(2)); 
-	      $("#utilidadOperacional").html(parseFloat(msg.indicador.utilidadOperacional).toFixed(2)); 
-	      $("#totalPatrimonio").html(parseFloat(msg.indicador.totalPatrimonio).toFixed(2)); 
-	      $("#totalActivo").html(parseFloat(msg.indicador.totalActivo).toFixed(2)); 
-	      $("#totalPatrimonioA").html(parseFloat(msg.indicador.totalPatrimonio).toFixed(2));
-	      $("#totalActivoCorrienteC").html(parseFloat(msg.indicador.totalActivoCorriente).toFixed(2)); 
-	      $("#totalPasivoCorrienteC").html(parseFloat(msg.indicador.totalPasivoCorriente).toFixed(2)); 
-	      $("#indicadorLiquidez").html(parseFloat(msg.indicador.indiceLiquidez).toFixed(2)); 
-	      $("#indicadorSolidez").html(parseFloat(msg.indicador.solidez).toFixed(2)); 
-	      $("#capitalTrabajo").html(msg.indicador.capitalTrabajo); 
-	      $("#rentabilidadPatrimonio").html(parseFloat(msg.indicador.rentabilidadPatrimonio).toFixed(5)); 
-	      $("#rentabilidadActivo").html(parseFloat(msg.indicador.rentabilidadActivo).toFixed(2));
+        $("#totalActivoCorriente").html(parseFloat(msg.indicador.totalActivoCorriente).toFixed(2));
+        $("#totalPasivoCorriente").html(parseFloat(msg.indicador.totalPasivoCorriente).toFixed(2));
+        $("#activo").html(parseFloat(msg.indicador.activo).toFixed(2));
+        $("#pasivo").html(parseFloat(msg.indicador.pasivo).toFixed(2));
+        $("#utilidadOperacional").html(parseFloat(msg.indicador.utilidadOperacional).toFixed(2));
+        $("#totalPatrimonio").html(parseFloat(msg.indicador.totalPatrimonio).toFixed(2));
+        $("#totalActivo").html(parseFloat(msg.indicador.totalActivo).toFixed(2));
+        $("#totalPatrimonioA").html(parseFloat(msg.indicador.totalPatrimonio).toFixed(2));
+        $("#totalActivoCorrienteC").html(parseFloat(msg.indicador.totalActivoCorriente).toFixed(2));
+        $("#totalPasivoCorrienteC").html(parseFloat(msg.indicador.totalPasivoCorriente).toFixed(2));
+        $("#indicadorLiquidez").html(parseFloat(msg.indicador.indiceLiquidez).toFixed(2));
+        $("#indicadorSolidez").html(parseFloat(msg.indicador.solidez).toFixed(2));
+        $("#capitalTrabajo").html(msg.indicador.capitalTrabajo);
+        $("#rentabilidadPatrimonio").html(parseFloat(msg.indicador.rentabilidadPatrimonio).toFixed(5));
+        $("#rentabilidadActivo").html(parseFloat(msg.indicador.rentabilidadActivo).toFixed(2));
         // console.log(msg.gastos);
-			    	
-        var  label3=[]; 
-        var  datos3=[];
 
-        if(msg.gastos!=null){
+        var label3 = [];
+        var datos3 = [];
 
-          msg.gastos.forEach(function(element,index){
+        if (msg.gastos != null) {
 
-          label3.push(element.periodo),
+            msg.gastos.forEach(function(element, index) {
 
-            datos3.push(element.valor)
+                label3.push(element.periodo),
 
-            })
-
-        }
-
-
-
-   let miCanvas3 = document.getElementById("gastos").getContext("2d");
-   // var label3= ['Oct-2020','Nov-2020','Dic-2020'];
-   // var datos3= [5500600,3800000,1780350];
-
-   var stackedLine = new Chart(miCanvas3, {
-    type: 'line',
-    data:{
-      
-      datasets:[{label:"GASTOS",
-        data: datos3,
-        borderColor:"rgb(185,84,255)",
-        backgroundColor:"rgba(185,84,255,0.1)",
-        
-        lineTension: 0.5,
-        order:1,
-        pointBorderWidth:8
-      }],
-      labels:label3
-      
-    },
-    
-    options: {
-        scales: {
-            yAxes: [{
-                stacked: true
-            }]
-        },
-        tooltips: {
-              callbacks: {
-                  label: function(tooltipItem, data) {
-                      return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
-                          return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-                      });
-                  }
-              }
-    }
-  }
-  });
-   var  label=[]; 
-        var  datos=[];
-   if(msg.ingresos!=null){
-
-          msg.ingresos.forEach(function(element,index){
-
-          label.push(element.periodo),
-
-            datos.push(element.valor)
+                    datos3.push(element.valor)
 
             })
 
         }
 
 
-   let miCanvas1 = document.getElementById("ingresos").getContext("2d");
-   // var label= ['Oct-2020','Nov-2020','Dic-2020'];
-   // var datos= [1200600,3800000,18500400];
 
-   var stackedLine = new Chart(miCanvas1, {
-    type: 'line',
-    data:{
-      
-      datasets:[{label:"INGRESOS",
-        data: datos,
-        borderColor:"rgb(84,216,255)",
-        backgroundColor:"rgba(84,216,255,0.1)",
-        
-        lineTension: 0.5,
-        order:1,
-        pointBorderWidth:8
-      }],
-      labels:label
-      
-    },
-    
-    options: {
-        scales: {
-            yAxes: [{
-                stacked: true
-            }]
-        },
-        tooltips: {
-              callbacks: {
-                  label: function(tooltipItem, data) {
-                      return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
-                          return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-                      });
-                  }
-              }
-    }
-  }
-  });
+        let miCanvas3 = document.getElementById("gastos").getContext("2d");
+        // var label3= ['Oct-2020','Nov-2020','Dic-2020'];
+        // var datos3= [5500600,3800000,1780350];
 
-	     // am4core.useTheme(am4themes_animated);
-       // console.log(msg.rentabilidad);
-        var  label2=[]; 
-        var  datos2=[]; 
-        var ultimo=0;
+        var stackedLine = new Chart(miCanvas3, {
+            type: 'line',
+            data: {
 
-        if(msg.rentabilidad!=null){
+                datasets: [{
+                    label: "GASTOS",
+                    data: datos3,
+                    borderColor: "rgb(185,84,255)",
+                    backgroundColor: "rgba(185,84,255,0.1)",
 
-          msg.rentabilidad.forEach(function(element,index){
+                    lineTension: 0.5,
+                    order: 1,
+                    pointBorderWidth: 8
+                }],
+                labels: label3
 
-          label2.push(element.periodo),
+            },
 
-            datos2.push(element.valor),
+            options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
+                                return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        var label = [];
+        var datos = [];
+        if (msg.ingresos != null) {
 
-            ultimo=element.valor
+            msg.ingresos.forEach(function(element, index) {
+
+                label.push(element.periodo),
+
+                    datos.push(element.valor)
 
             })
 
         }
 
-let miCanvas2 = document.getElementById("utilidad").getContext("2d");
-   // var label2= ['Oct-2020','Nov-2020','Dic-2020'];
-   // var datos2= [1200600,3800000,18500400];
-   // var primer=parseFloat(datos2[0]);
-   ultimo=parseFloat(ultimo);
-   console.log(ultimo);
-   if (ultimo >=0) {
-      var color="rgb(84,255,198)";
-      var colorFondo="rgba(84,255,198,0.1)";
-    }
-    if (ultimo <0) {
-      var color="rgb(255,70,70)";
-      var colorFondo="rgba(255,70,70,0.1)";
-    }
 
-   var stackedLine = new Chart(miCanvas2, {
-    type: 'line',
-    data:{
-      
-      datasets:[{label:"UTILIDAD O PERDIDA",
-        data: datos2,
+        let miCanvas1 = document.getElementById("ingresos").getContext("2d");
+        // var label= ['Oct-2020','Nov-2020','Dic-2020'];
+        // var datos= [1200600,3800000,18500400];
 
-        borderColor:color,
-        backgroundColor:colorFondo,  
-        
-        lineTension: 0.5,
-        order:1,
-        pointBorderWidth:8
-      }],
-      labels:label2
-      
-    },
-    
-    options: {
-        scales: {
-            yAxes: [{
-                stacked: true
-            }]
-        },
-        tooltips: {
-              callbacks: {
-                  label: function(tooltipItem, data) {
-                      return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
-                          return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-                      });
-                  }
-              }
-    }
-  }
-  });
-       am4core.useTheme(am4themes_animated);
-        var  aData=[]; 
-        if(msg.rentabilidad!=null){
-          msg.rentabilidad.forEach(function(element,index){
-          aData.push({
-            "country": element.periodo,
-            "visits": element.valor
-          })
+        var stackedLine = new Chart(miCanvas1, {
+            type: 'line',
+            data: {
+
+                datasets: [{
+                    label: "INGRESOS",
+                    data: datos,
+                    borderColor: "rgb(84,216,255)",
+                    backgroundColor: "rgba(84,216,255,0.1)",
+
+                    lineTension: 0.5,
+                    order: 1,
+                    pointBorderWidth: 8
+                }],
+                labels: label
+
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
+                                return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                            });
+                        }
+                    }
+                }
+            }
+        });
+
+        // am4core.useTheme(am4themes_animated);
+        // console.log(msg.rentabilidad);
+        var label2 = [];
+        var datos2 = [];
+        var ultimo = 0;
+
+        if (msg.rentabilidad != null) {
+
+            msg.rentabilidad.forEach(function(element, index) {
+
+                label2.push(element.periodo),
+
+                    datos2.push(element.valor),
+
+                    ultimo = element.valor
+
             })
 
         }
 
-      var aActivo=[]; 
-      var aPasivo=[]; 
-      var aPatrimonio=[];
-      var aLabel=[]; 
-      if(msg.situacion!=null){
-          msg.situacion.forEach(function(element,index){
-          // var activo= parseInt(eliminarMoneda(element.activo,".",""));
-          // var pasivo= parseInt(eliminarMoneda(element.pasivo,".",""));
-          // var patrimonio= parseInt(eliminarMoneda(element.patrimonio,".",""));
-          // aActivo.push(activo);
-          aActivo.push(parseInt(element.activo));
-          // aPasivo.push(pasivo);
-          aPasivo.push(parseInt(element.pasivo));
-          // aPatrimonio.push(patrimonio);
-          aPatrimonio.push(parseInt(element.patrimonio));
-          aLabel.push(element.periodo);
-          })};
-          var options = {
-          series: [{
+        let miCanvas2 = document.getElementById("utilidad").getContext("2d");
+        // var label2= ['Oct-2020','Nov-2020','Dic-2020'];
+        // var datos2= [1200600,3800000,18500400];
+        // var primer=parseFloat(datos2[0]);
+        ultimo = parseFloat(ultimo);
+        console.log(ultimo);
+        if (ultimo >= 0) {
+            var color = "rgb(84,255,198)";
+            var colorFondo = "rgba(84,255,198,0.1)";
+        }
+        if (ultimo < 0) {
+            var color = "rgb(255,70,70)";
+            var colorFondo = "rgba(255,70,70,0.1)";
+        }
+
+        var stackedLine = new Chart(miCanvas2, {
+            type: 'line',
+            data: {
+
+                datasets: [{
+                    label: "UTILIDAD O PERDIDA",
+                    data: datos2,
+
+                    borderColor: color,
+                    backgroundColor: colorFondo,
+
+                    lineTension: 0.5,
+                    order: 1,
+                    pointBorderWidth: 8
+                }],
+                labels: label2
+
+            },
+
+            options: {
+                scales: {
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
+                                return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        am4core.useTheme(am4themes_animated);
+        var aData = [];
+        if (msg.rentabilidad != null) {
+            msg.rentabilidad.forEach(function(element, index) {
+                aData.push({
+                    "country": element.periodo,
+                    "visits": element.valor
+                })
+            })
+
+        }
+
+        var aActivo = [];
+        var aPasivo = [];
+        var aPatrimonio = [];
+        var aLabel = [];
+        if (msg.situacion != null) {
+            msg.situacion.forEach(function(element, index) {
+                // var activo= parseInt(eliminarMoneda(element.activo,".",""));
+                // var pasivo= parseInt(eliminarMoneda(element.pasivo,".",""));
+                // var patrimonio= parseInt(eliminarMoneda(element.patrimonio,".",""));
+                // aActivo.push(activo);
+                aActivo.push(parseInt(element.activo));
+                // aPasivo.push(pasivo);
+                aPasivo.push(parseInt(element.pasivo));
+                // aPatrimonio.push(patrimonio);
+                aPatrimonio.push(parseInt(element.patrimonio));
+                aLabel.push(element.periodo);
+            })
+        };
+        var options = {
+            series: [{
                 name: 'TOTAL ACTIVO',
                 data: aActivo
             }, {
@@ -425,1211 +402,1211 @@ let miCanvas2 = document.getElementById("utilidad").getContext("2d");
                 name: 'TOTAL PATRIMONIO',
                 data: aPatrimonio
             }],
-          chart: {
-          height: 350,
-          type: 'line',
-          // dropShadow: {
-          //   enabled: true,
-          //   color: '#000',
-          //   top: 18,
-          //   left: 7,
-          //   blur: 10,
-          //   opacity: 0.2
-          // },
-          toolbar: {
-            show: false
-          }
-        },
-        colors: ['#77B6EA', '#545454','#FFEE8F'],
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-       
-        grid: {
-          borderColor: '#e7e7e7',
-          row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5
-          },
-          padding:{
-            right:40,
-            left:10
-          },
-          position:'back'
-        },
-        markers: {
-          size: 10
-        },
-        xaxis: {
-          categories: aLabel,
-          labels: {
+            chart: {
+                height: 350,
+                type: 'line',
+                // dropShadow: {
+                //   enabled: true,
+                //   color: '#000',
+                //   top: 18,
+                //   left: 7,
+                //   blur: 10,
+                //   opacity: 0.2
+                // },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#77B6EA', '#545454', '#FFEE8F'],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth'
+            },
 
-              style: {
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+                padding: {
+                    right: 40,
+                    left: 10
+                },
+                position: 'back'
+            },
+            markers: {
+                size: 10
+            },
+            xaxis: {
+                categories: aLabel,
+                labels: {
 
-                  colors: '#8e8da4',
+                    style: {
 
-              }
+                        colors: '#8e8da4',
 
-          },
-          title: {
-            text: 'Meses'
-          }
-        },
+                    }
 
-        yaxis: {
-                
+                },
+                title: {
+                    text: 'Meses'
+                }
+            },
+
+            yaxis: {
+
                 labels: {
                     style: {
                         color: '#8e8da4',
                     }
                 }
             },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'right',
-          floating: true,
-          offsetY: -25,
-          offsetX: -5
-        },
-        tooltip: {
-      theme: "dark",
-      marker: {
-        show: true,
-      },
-      x: {
-        show: true,
-      },
-      y: {
-            formatter: function (val) { 
-            // var valor=parseInt(val);                                    
-                return "$ " + format((val*1));
-                // return val;
-            }
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            },
+            tooltip: {
+                theme: "dark",
+                marker: {
+                    show: true,
+                },
+                x: {
+                    show: true,
+                },
+                y: {
+                    formatter: function(val) {
+                        // var valor=parseInt(val);                                    
+                        return "$ " + format((val * 1));
+                        // return val;
+                    }
 
-        }
+                }
 
-    },
-      //   tooltip: {
-      //         theme: "dark",
-      // marker: {
-      //   show: true,
-      // },
-      //           y: {
-      //             // label: function(tooltipItem, data) {
-      //             //     return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
-      //             //         return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-      //             //     });
-      //             // }
-      //               formatter: function (val) {
-      //                 // var valor =parseFloat(val);
-      //                 // var valor =val.toString().formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
-      //                 // var valor =new Intl.NumberFormat().format(val.toString());
-      //                   return "$ " + format(val*1);
-      //                   // return valor;
-      //                   // return val*1;
-      //                   // return "$" + Number(val).toFixed(0).replace(/./g, function(c, i, a)
-      //               }
-      //           },
+            },
+            //   tooltip: {
+            //         theme: "dark",
+            // marker: {
+            //   show: true,
+            // },
+            //           y: {
+            //             // label: function(tooltipItem, data) {
+            //             //     return "$" + Number(tooltipItem.yLabel).toFixed(0).replace(/./g, function(c, i, a) {
+            //             //         return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+            //             //     });
+            //             // }
+            //               formatter: function (val) {
+            //                 // var valor =parseFloat(val);
+            //                 // var valor =val.toString().formatCurrency({decimalSymbol:',',digitGroupSymbol:'.'});
+            //                 // var valor =new Intl.NumberFormat().format(val.toString());
+            //                   return "$ " + format(val*1);
+            //                   // return valor;
+            //                   // return val*1;
+            //                   // return "$" + Number(val).toFixed(0).replace(/./g, function(c, i, a)
+            //               }
+            //           },
 
-      //       }
+            //       }
         };
 
         // var chart2 = new ApexCharts(document.querySelector("#chart"), options);
-         var chart2 = new ApexCharts( document.querySelector("#situacion"),options);
+        var chart2 = new ApexCharts(document.querySelector("#situacion"), options);
         chart2.render();
 
-    // var aCompra=[]; 
+        // var aCompra=[]; 
 
-    //     var aVenta=[]; 
+        //     var aVenta=[]; 
 
-    //     var aLabels=[]; 
+        //     var aLabels=[]; 
 
-    //     if(msg.facturacion!=null){
+        //     if(msg.facturacion!=null){
 
-    //       msg.facturacion.forEach(function(element,index){
+        //       msg.facturacion.forEach(function(element,index){
 
-    //         aCompra.push(element.compra);
+        //         aCompra.push(element.compra);
 
-    //         aVenta.push(element.venta);
+        //         aVenta.push(element.venta);
 
-    //         aLabels.push(element.periodo)
+        //         aLabels.push(element.periodo)
 
-    //       })
+        //       })
 
-    //     }
+        //     }
 
-    // var options2 = {
+        // var options2 = {
 
-    //         chart: {
+        //         chart: {
 
-    //             height: 350,
+        //             height: 350,
 
-    //             type: 'line',
+        //             type: 'line',
 
-    //         },
+        //         },
 
-    //         series: [{
+        //         series: [{
 
-    //             name: 'Facturación Compra',
+        //             name: 'Facturación Compra',
 
-    //             type: 'column',
+        //             type: 'column',
 
-    //             data: aCompra
+        //             data: aCompra
 
-    //         }, {
+        //         }, {
 
-    //             name: 'Facturación Venta',
+        //             name: 'Facturación Venta',
 
-    //             type: 'line',
+        //             type: 'line',
 
-    //             data: aVenta
+        //             data: aVenta
 
-    //         }],
+        //         }],
 
-    //         stroke: {
+        //         stroke: {
 
-    //             width: [0, 4]
+        //             width: [0, 4]
 
-    //         },
+        //         },
 
-    //         // labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        //         // labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 
-    //         labels: aLabels,
+        //         labels: aLabels,
 
-    //         xaxis: {
+        //         xaxis: {
 
-    //             type: 'category',
+        //             type: 'category',
 
-    //             labels: {
+        //             labels: {
 
-    //               style: {
+        //               style: {
 
-    //                     colors: '#8e8da4',
+        //                     colors: '#8e8da4',
 
-    //                 }
+        //                 }
 
-    //             }
+        //             }
 
-    //         },
+        //         },
 
-    //         yaxis: [{
+        //         yaxis: [{
 
-    //             title: {
+        //             title: {
 
-    //                 text: 'Facturación Compra',
+        //                 text: 'Facturación Compra',
 
-    //             },
+        //             },
 
-    //             labels: {
+        //             labels: {
 
-    //                 style: {
+        //                 style: {
 
-    //                     color: '#8e8da4',
+        //                     color: '#8e8da4',
 
-    //                 }
+        //                 }
 
-    //             }
+        //             }
 
 
 
-    //         }, {
+        //         }, {
 
-    //             opposite: true,
+        //             opposite: true,
 
-    //             title: {
+        //             title: {
 
-    //                 text: 'Facturación Venta'
+        //                 text: 'Facturación Venta'
 
-    //             },
+        //             },
 
-    //             labels: {
+        //             labels: {
 
-    //                 style: {
+        //                 style: {
 
-    //                     color: '#8e8da4',
+        //                     color: '#8e8da4',
 
-    //                 }
+        //                 }
 
-    //             }
+        //             }
 
-    //         }]
+        //         }]
 
-    //     }
+        //     }
 
-    // var chart3 = new ApexCharts(
+        // var chart3 = new ApexCharts(
 
-    //         document.querySelector("#facturacion"),
+        //         document.querySelector("#facturacion"),
 
-    //         options2
+        //         options2
 
-    //     );
+        //     );
 
 
-    // chart3.render();
+        // chart3.render();
 
 
 
-      //   am4core.useTheme(am4themes_animated);
+        //   am4core.useTheme(am4themes_animated);
 
-      // var chart4 = am4core.create("gaugeChart", am4charts.RadarChart);
+        // var chart4 = am4core.create("gaugeChart", am4charts.RadarChart);
 
-      // console.log(msg.indicador); 
+        // console.log(msg.indicador); 
 
-      var nivel=0; 
+        var nivel = 0;
 
-if(msg.indicador!=null){
+        if (msg.indicador != null) {
 
-        nivel=msg.indicador.nivelEndeudamiento; 
+            nivel = msg.indicador.nivelEndeudamiento;
 
-      }
+        }
 
 
-      $("#nivelEndeudamiento").html(nivel+"%");
-      // Add data
+        $("#nivelEndeudamiento").html(nivel + "%");
+        // Add data
 
-//       chart4.data = [{
+        //       chart4.data = [{
 
-//         "category": "Nivel Endeudamiento",
+        //         "category": "Nivel Endeudamiento",
 
-//         "value": nivel,
+        //         "value": nivel,
 
-//         "full": 100
+        //         "full": 100
 
-//        },    
+        //        },    
 
-//       ];
+        //       ];
 
 
 
 
-//       chart4.startAngle = -90;
+        //       chart4.startAngle = -90;
 
-//       chart4.endAngle = 180;
+        //       chart4.endAngle = 180;
 
-//       chart4.innerRadius = am4core.percent(20);
+        //       chart4.innerRadius = am4core.percent(20);
 
-//       chart4.numberFormatter.numberFormat = "#.#'%'";
+        //       chart4.numberFormatter.numberFormat = "#.#'%'";
 
-//       var categoryAxis = chart4.yAxes.push(new am4charts.CategoryAxis());
+        //       var categoryAxis = chart4.yAxes.push(new am4charts.CategoryAxis());
 
-//       categoryAxis.dataFields.category = "category";
+        //       categoryAxis.dataFields.category = "category";
 
-//       categoryAxis.renderer.grid.template.location = 0;
+        //       categoryAxis.renderer.grid.template.location = 0;
 
-//       categoryAxis.renderer.grid.template.strokeOpacity = 0;
+        //       categoryAxis.renderer.grid.template.strokeOpacity = 0;
 
-//       categoryAxis.renderer.labels.template.horizontalCenter = "right";
+        //       categoryAxis.renderer.labels.template.horizontalCenter = "right";
 
-//       categoryAxis.renderer.labels.template.fontWeight = 500;
+        //       categoryAxis.renderer.labels.template.fontWeight = 500;
 
-//       categoryAxis.renderer.labels.template.adapter.add("fill", function (fill, target) {
+        //       categoryAxis.renderer.labels.template.adapter.add("fill", function (fill, target) {
 
-//         return (target.dataItem.index >= 0) ? chart.colors.getIndex(target.dataItem.index) : fill;
+        //         return (target.dataItem.index >= 0) ? chart.colors.getIndex(target.dataItem.index) : fill;
 
-//       });
+        //       });
 
-// categoryAxis.renderer.minGridDistance = 10;
+        // categoryAxis.renderer.minGridDistance = 10;
 
 
 
-//       var valueAxis = chart4.xAxes.push(new am4charts.ValueAxis());
+        //       var valueAxis = chart4.xAxes.push(new am4charts.ValueAxis());
 
-//       valueAxis.renderer.grid.template.strokeOpacity = 0;
+        //       valueAxis.renderer.grid.template.strokeOpacity = 0;
 
-//       valueAxis.min = 0;
+        //       valueAxis.min = 0;
 
-//       valueAxis.max = 100;
+        //       valueAxis.max = 100;
 
-//       valueAxis.strictMinMax = true;
+        //       valueAxis.strictMinMax = true;
 
-//       valueAxis.renderer.labels.template.fill = am4core.color("#8e8da4");
+        //       valueAxis.renderer.labels.template.fill = am4core.color("#8e8da4");
 
 
-//       var series1 = chart4.series.push(new am4charts.RadarColumnSeries());
+        //       var series1 = chart4.series.push(new am4charts.RadarColumnSeries());
 
-//       series1.dataFields.valueX = "full";
+        //       series1.dataFields.valueX = "full";
 
-//       series1.dataFields.categoryY = "category";
+        //       series1.dataFields.categoryY = "category";
 
-//       series1.clustered = false;
+        //       series1.clustered = false;
 
-//       series1.columns.template.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");
+        //       series1.columns.template.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");
 
-//       series1.columns.template.fillOpacity = 0.08;
+        //       series1.columns.template.fillOpacity = 0.08;
 
-//       series1.columns.template.cornerRadiusTopLeft = 20;
+        //       series1.columns.template.cornerRadiusTopLeft = 20;
 
-//       series1.columns.template.strokeWidth = 0;
+        //       series1.columns.template.strokeWidth = 0;
 
-//       series1.columns.template.radarColumn.cornerRadius = 20;
+        //       series1.columns.template.radarColumn.cornerRadius = 20;
 
 
 
-//       var series2 = chart4.series.push(new am4charts.RadarColumnSeries());
+        //       var series2 = chart4.series.push(new am4charts.RadarColumnSeries());
 
-//       series2.dataFields.valueX = "value";
+        //       series2.dataFields.valueX = "value";
 
-//       series2.dataFields.categoryY = "category";
+        //       series2.dataFields.categoryY = "category";
 
-//       series2.clustered = false;
+        //       series2.clustered = false;
 
-//       series2.columns.template.strokeWidth = 0;
+        //       series2.columns.template.strokeWidth = 0;
 
-//       series2.columns.template.tooltipText = "{category}: [bold]{value}[/]";
+        //       series2.columns.template.tooltipText = "{category}: [bold]{value}[/]";
 
-//       series2.columns.template.radarColumn.cornerRadius = 20;
+        //       series2.columns.template.radarColumn.cornerRadius = 20;
 
 
 
-//       series2.columns.template.adapter.add("fill", function (fill, target) {
+        //       series2.columns.template.adapter.add("fill", function (fill, target) {
 
-//         return chart.colors.getIndex(target.dataItem.index);
+        //         return chart.colors.getIndex(target.dataItem.index);
 
-//       });
+        //       });
 
 
-//       chart4.cursor = new am4charts.RadarCursor();
+        //       chart4.cursor = new am4charts.RadarCursor();
 
 
-//       am4core.useTheme(am4themes_animated);
+        //       am4core.useTheme(am4themes_animated);
 
 
 
-// var draw = Chart.controllers.line.prototype.draw;
+        // var draw = Chart.controllers.line.prototype.draw;
 
-// Chart.controllers.lineShadow = Chart.controllers.line.extend({
+        // Chart.controllers.lineShadow = Chart.controllers.line.extend({
 
-//   draw: function () {
+        //   draw: function () {
 
-//     draw.apply(this, arguments);
+        //     draw.apply(this, arguments);
 
-//     var ctx = this.chart.chart.ctx;
+        //     var ctx = this.chart.chart.ctx;
 
-//     var _stroke = ctx.stroke;
+        //     var _stroke = ctx.stroke;
 
-//     ctx.stroke = function () {
+        //     ctx.stroke = function () {
 
-//       ctx.save();
+        //       ctx.save();
 
-//       ctx.shadowColor = "#00000075";
+        //       ctx.shadowColor = "#00000075";
 
-//       ctx.shadowBlur = 10;
+        //       ctx.shadowBlur = 10;
 
-//       ctx.shadowOffsetX = 8;
+        //       ctx.shadowOffsetX = 8;
 
-//       ctx.shadowOffsetY = 8;
+        //       ctx.shadowOffsetY = 8;
 
-//       _stroke.apply(this, arguments);
+        //       _stroke.apply(this, arguments);
 
-//       ctx.restore();
+        //       ctx.restore();
 
-//     };
+        //     };
 
-//   },
+        //   },
 
-// }); 
+        // }); 
 
 
- var  aIndiceLiquidezAcumulado=[]; 
+        var aIndiceLiquidezAcumulado = [];
         for (var key in msg.liquidezAcumulado) {
-          aIndiceLiquidezAcumulado.push(key);
-      }
-          // console.log(aIndiceLiquidezAcumulado);
+            aIndiceLiquidezAcumulado.push(key);
+        }
+        // console.log(aIndiceLiquidezAcumulado);
 
 
         // console.log('probando los value');
-        var  aIndiceLiquidezAcumuladoValues=[]; 
+        var aIndiceLiquidezAcumuladoValues = [];
         for (var key in msg.liquidezAcumulado) {
-          aIndiceLiquidezAcumuladoValues.push(msg.liquidezAcumulado[key]);
-      }
-          // console.log(aIndiceLiquidezAcumuladoValues);
+            aIndiceLiquidezAcumuladoValues.push(msg.liquidezAcumulado[key]);
+        }
+        // console.log(aIndiceLiquidezAcumuladoValues);
 
 
 
-// var aLabelsIndiceLiquidez=aIndiceLiquidezAcumulado;
-// var aDataIndiceLiquidez=aIndiceLiquidezAcumuladoValues;
+        // var aLabelsIndiceLiquidez=aIndiceLiquidezAcumulado;
+        // var aDataIndiceLiquidez=aIndiceLiquidezAcumuladoValues;
 
-var aLabelsIndiceLiquidez=['5','6','7','8','9','10'];
-var aDataIndiceLiquidez=[1.24,1.26,1.25,1.25,1.26,1.26];
+        var aLabelsIndiceLiquidez = ['5', '6', '7', '8', '9', '10'];
+        var aDataIndiceLiquidez = [1.24, 1.26, 1.25, 1.25, 1.26, 1.26];
 
 
 
-var ctx = document.getElementById("cardChart1").getContext("2d");
+        var ctx = document.getElementById("cardChart1").getContext("2d");
 
-var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
 
-gradientStroke2.addColorStop(0, "rgba(255, 204, 128, 1)");
+        gradientStroke2.addColorStop(0, "rgba(255, 204, 128, 1)");
 
-gradientStroke2.addColorStop(0.5, "rgba(255, 152, 0, 1)");
+        gradientStroke2.addColorStop(0.5, "rgba(255, 152, 0, 1)");
 
-gradientStroke2.addColorStop(1, "rgba(239, 108, 0, 1)");
+        gradientStroke2.addColorStop(1, "rgba(239, 108, 0, 1)");
 
 
-var myChart = new Chart(ctx, {
+        var myChart = new Chart(ctx, {
 
-  type: "line",
+            type: "line",
 
-  data: {
+            data: {
 
-    labels: aLabelsIndiceLiquidez,
+                labels: aLabelsIndiceLiquidez,
 
-    type: "line",
+                type: "line",
 
-    datasets: [
+                datasets: [
 
-      {
+                    {
 
-        label: "Income",
+                        label: "Income",
 
-        data: aDataIndiceLiquidez,
+                        data: aDataIndiceLiquidez,
 
-        borderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBorderColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverRadius: 5,
+                        pointHoverRadius: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverBorderWidth: 1,
 
-        pointRadius: 0.5,
+                        pointRadius: 0.5,
 
-        fill: false,
+                        fill: false,
 
-        borderWidth: 4,
+                        borderWidth: 4,
 
-      },
+                    },
 
-    ],
+                ],
 
-  },
+            },
 
-  options: {
+            options: {
 
-    legend: {
+                legend: {
 
-      display: false,
+                    display: false,
 
-    },
+                },
 
-    tooltips: {},
+                tooltips: {},
 
-    scales: {
+                scales: {
 
-      yAxes: [
+                    yAxes: [
 
-        {
+                        {
 
-          ticks: {
+                            ticks: {
 
-            display: false, //this will remove only the label
+                                display: false, //this will remove only the label
 
-          },
+                            },
 
-          gridLines: {
+                            gridLines: {
 
-            display: false,
+                                display: false,
 
-            drawBorder: false,
+                                drawBorder: false,
 
-          },
+                            },
 
-        },
+                        },
 
-      ],
+                    ],
 
-      xAxes: [
+                    xAxes: [
 
-        {
+                        {
 
-          gridLines: {
+                            gridLines: {
 
-            display: false,
+                                display: false,
 
-            drawBorder: false,
+                                drawBorder: false,
 
-          },
+                            },
 
-          ticks: {
+                            ticks: {
 
-            display: false, //this will remove only the label
+                                display: false, //this will remove only the label
 
-          },
+                            },
 
-        },
+                        },
 
-      ],
+                    ],
 
-    },
+                },
 
-  },
+            },
 
-});
+        });
 
 
-// console.log(msg.solidezAcumulado);
+        // console.log(msg.solidezAcumulado);
 
 
-// var  aSolidezAcumulado=[]; 
-//         for (var key in msg.solidezAcumulado) {
-//           aSolidezAcumulado.push(key);
-//       }
-          // console.log(aSolidezAcumulado);
+        // var  aSolidezAcumulado=[]; 
+        //         for (var key in msg.solidezAcumulado) {
+        //           aSolidezAcumulado.push(key);
+        //       }
+        // console.log(aSolidezAcumulado);
 
 
-        
-//         var  aSolidezAcumuladoValues=[]; 
-//         for (var key in msg.solidezAcumulado) {
-//           aSolidezAcumuladoValues.push(msg.solidezAcumulado[key]);
-//       }
-          // console.log(aSolidezAcumuladoValues);
 
+        //         var  aSolidezAcumuladoValues=[]; 
+        //         for (var key in msg.solidezAcumulado) {
+        //           aSolidezAcumuladoValues.push(msg.solidezAcumulado[key]);
+        //       }
+        // console.log(aSolidezAcumuladoValues);
 
 
-// var aLabelsSolidez=aSolidezAcumulado;
-// var aDataSolidez=aSolidezAcumuladoValues;
 
-var ctx = document.getElementById("cardChart2").getContext("2d");
+        // var aLabelsSolidez=aSolidezAcumulado;
+        // var aDataSolidez=aSolidezAcumuladoValues;
 
-var gradientStroke2 = ctx.createLinearGradient(500, 0, 0, 0);
+        var ctx = document.getElementById("cardChart2").getContext("2d");
 
-gradientStroke2.addColorStop(0, "rgba(55, 154, 80, 1)");
+        var gradientStroke2 = ctx.createLinearGradient(500, 0, 0, 0);
 
-gradientStroke2.addColorStop(1, "rgba(131, 210, 151, 1)");
+        gradientStroke2.addColorStop(0, "rgba(55, 154, 80, 1)");
 
+        gradientStroke2.addColorStop(1, "rgba(131, 210, 151, 1)");
 
 
-var myChart = new Chart(ctx, {
 
-  type: "line",
+        var myChart = new Chart(ctx, {
 
-  data: {
+            type: "line",
 
-    labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            data: {
 
-    type: "line",
+                labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
 
-    datasets: [
+                type: "line",
 
-      {
+                datasets: [
 
-        label: "Income",
+                    {
 
-        data: [60, 100, 50, 15, 110, 33, 20],
+                        label: "Income",
 
-        borderColor: gradientStroke2,
+                        data: [60, 100, 50, 15, 110, 33, 20],
 
-        pointBorderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointHoverRadius: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverRadius: 5,
 
-        pointRadius: 0.5,
+                        pointHoverBorderWidth: 1,
 
-        fill: false,
+                        pointRadius: 0.5,
 
-        borderWidth: 4,
+                        fill: false,
 
-      },
+                        borderWidth: 4,
 
-    ],
+                    },
 
-  },
+                ],
 
-  options: {
+            },
 
-    legend: {
+            options: {
 
-      display: false,
+                legend: {
 
-    },
+                    display: false,
 
-    tooltips: {},
+                },
 
-    scales: {
+                tooltips: {},
 
-      yAxes: [
+                scales: {
 
-        {
+                    yAxes: [
 
-          ticks: {
+                        {
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-          gridLines: {
+                            },
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-        },
+                            },
 
-      ],
+                        },
 
-      xAxes: [
+                    ],
 
-        {
+                    xAxes: [
 
-          gridLines: {
+                        {
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-          ticks: {
+                            },
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-        },
+                            },
 
-      ],
+                        },
 
-    },
+                    ],
 
-  },
+                },
 
-});
-// ----
+            },
 
-var ctx = document.getElementById("cardChart3").getContext("2d");
+        });
+        // ----
 
-var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
+        var ctx = document.getElementById("cardChart3").getContext("2d");
 
-gradientStroke2.addColorStop(0, "rgba(103, 119, 239, 1)");
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
 
-gradientStroke2.addColorStop(0.5, "rgba(106, 120, 220, 1)");
+        gradientStroke2.addColorStop(0, "rgba(103, 119, 239, 1)");
 
-gradientStroke2.addColorStop(1, "rgba(92, 103, 187, 1)");
+        gradientStroke2.addColorStop(0.5, "rgba(106, 120, 220, 1)");
 
+        gradientStroke2.addColorStop(1, "rgba(92, 103, 187, 1)");
 
 
-var myChart = new Chart(ctx, {
 
-  type: "line",
+        var myChart = new Chart(ctx, {
 
-  data: {
+            type: "line",
 
-    labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            data: {
 
-    type: "line",
+                labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
 
-    datasets: [
+                type: "line",
 
-      {
+                datasets: [
 
-        label: "Income",
+                    {
 
-        data: [0, 30, 10, 120, 50, 63, 10],
+                        label: "Income",
 
-        borderColor: gradientStroke2,
+                        data: [0, 30, 10, 120, 50, 63, 10],
 
-        pointBorderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointHoverRadius: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverRadius: 5,
 
-        pointRadius: 0.5,
+                        pointHoverBorderWidth: 1,
 
-        fill: false,
+                        pointRadius: 0.5,
 
-        borderWidth: 4,
+                        fill: false,
 
-      },
+                        borderWidth: 4,
 
-    ],
+                    },
 
-  },
+                ],
 
-  options: {
+            },
 
-    legend: {
+            options: {
 
-      display: false,
+                legend: {
 
-    },
+                    display: false,
 
-    tooltips: {},
+                },
 
-    scales: {
+                tooltips: {},
 
-      yAxes: [
+                scales: {
 
-        {
+                    yAxes: [
 
-          ticks: {
+                        {
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-          gridLines: {
+                            },
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-        },
+                            },
 
-      ],
+                        },
 
-      xAxes: [
+                    ],
 
-        {
+                    xAxes: [
 
-          gridLines: {
+                        {
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-          ticks: {
+                            },
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-        },
+                            },
 
-      ],
+                        },
 
-    },
+                    ],
 
-  },
+                },
 
-});
+            },
 
+        });
 
 
 
-var ctx = document.getElementById("cardChart4").getContext("2d");
 
-var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
+        var ctx = document.getElementById("cardChart4").getContext("2d");
 
-gradientStroke2.addColorStop(0, "rgba(61, 199, 190, 1)");
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
 
-gradientStroke2.addColorStop(0.5, "rgba(57, 171, 163, 1)");
+        gradientStroke2.addColorStop(0, "rgba(61, 199, 190, 1)");
 
-gradientStroke2.addColorStop(1, "rgba(40, 142, 135, 1)");
+        gradientStroke2.addColorStop(0.5, "rgba(57, 171, 163, 1)");
 
+        gradientStroke2.addColorStop(1, "rgba(40, 142, 135, 1)");
 
 
-var myChart = new Chart(ctx, {
 
-  type: "line",
+        var myChart = new Chart(ctx, {
 
-  data: {
+            type: "line",
 
-    labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            data: {
 
-    type: "line",
+                labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
 
-    datasets: [
+                type: "line",
 
-      {
+                datasets: [
 
-        label: "Income",
+                    {
 
-        data: [110, 90, 10, 38, 10, 90,],
+                        label: "Income",
 
-        borderColor: gradientStroke2,
+                        data: [110, 90, 10, 38, 10, 90, ],
 
-        pointBorderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointHoverRadius: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverRadius: 5,
 
-        pointRadius: 0.5,
+                        pointHoverBorderWidth: 1,
 
-        fill: false,
+                        pointRadius: 0.5,
 
-        borderWidth: 4,
+                        fill: false,
 
-      },
+                        borderWidth: 4,
 
-    ],
+                    },
 
-  },
+                ],
 
-  options: {
+            },
 
-    legend: {
+            options: {
 
-      display: false,
+                legend: {
 
-    },
+                    display: false,
 
-    tooltips: {},
+                },
 
-    scales: {
+                tooltips: {},
 
-      yAxes: [
+                scales: {
 
-        {
+                    yAxes: [
 
-          ticks: {
+                        {
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-          gridLines: {
+                            },
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-        },
+                            },
 
-      ],
+                        },
 
-      xAxes: [
+                    ],
 
-        {
+                    xAxes: [
 
-          gridLines: {
+                        {
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-          ticks: {
+                            },
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-        },
+                            },
 
-      ],
+                        },
 
-    },
+                    ],
 
-  },
+                },
 
-});
-var ctx = document.getElementById("cardChart5").getContext("2d");
+            },
 
-var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
+        });
+        var ctx = document.getElementById("cardChart5").getContext("2d");
 
-gradientStroke2.addColorStop(0, "rgba(135, 167, 236, 1)");
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
 
-gradientStroke2.addColorStop(0.5, "rgba(81, 132, 241, 1)");
+        gradientStroke2.addColorStop(0, "rgba(135, 167, 236, 1)");
 
-gradientStroke2.addColorStop(1, "rgba(25, 94, 242, 1)");
+        gradientStroke2.addColorStop(0.5, "rgba(81, 132, 241, 1)");
 
+        gradientStroke2.addColorStop(1, "rgba(25, 94, 242, 1)");
 
 
-var myChart = new Chart(ctx, {
 
-  type: "line",
+        var myChart = new Chart(ctx, {
 
-  data: {
+            type: "line",
 
-    labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            data: {
 
-    type: "line",
+                labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
 
-    datasets: [
+                type: "line",
 
-      {
+                datasets: [
 
-        label: "Income",
+                    {
 
-        data: [90, 10, 60, 75, 100, 32,],
+                        label: "Income",
 
-        borderColor: gradientStroke2,
+                        data: [90, 10, 60, 75, 100, 32, ],
 
-        pointBorderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointHoverRadius: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverRadius: 5,
 
-        pointRadius: 0.5,
+                        pointHoverBorderWidth: 1,
 
-        fill: false,
+                        pointRadius: 0.5,
 
-        borderWidth: 4,
+                        fill: false,
 
-      },
+                        borderWidth: 4,
 
-    ],
+                    },
 
-  },
+                ],
 
-  options: {
+            },
 
-    legend: {
+            options: {
 
-      display: false,
+                legend: {
 
-    },
+                    display: false,
 
-    tooltips: {},
+                },
 
-    scales: {
+                tooltips: {},
 
-      yAxes: [
+                scales: {
 
-        {
+                    yAxes: [
 
-          ticks: {
+                        {
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-          gridLines: {
+                            },
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-        },
+                            },
 
-      ],
+                        },
 
-      xAxes: [
+                    ],
 
-        {
+                    xAxes: [
 
-          gridLines: {
+                        {
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-          ticks: {
+                            },
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-        },
+                            },
 
-      ],
+                        },
 
-    },
+                    ],
 
-  },
+                },
 
-});
-var ctx = document.getElementById("cardChart6").getContext("2d");
+            },
 
-var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
+        });
+        var ctx = document.getElementById("cardChart6").getContext("2d");
 
-gradientStroke2.addColorStop(0, "rgba(247, 146, 146, 1)");
+        var gradientStroke2 = ctx.createLinearGradient(0, 0, 700, 0);
 
-gradientStroke2.addColorStop(0.5, "rgba(253, 94, 94, 1)");
+        gradientStroke2.addColorStop(0, "rgba(247, 146, 146, 1)");
 
-gradientStroke2.addColorStop(1, "rgba(216, 29, 29, 1)");
-var myChart = new Chart(ctx, {
+        gradientStroke2.addColorStop(0.5, "rgba(253, 94, 94, 1)");
 
-  type: "line",
+        gradientStroke2.addColorStop(1, "rgba(216, 29, 29, 1)");
+        var myChart = new Chart(ctx, {
 
-  data: {
+            type: "line",
 
-    labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
+            data: {
 
-    type: "line",
+                labels: ["2010", "2011", "2012", "2013", "2014", "2015", "2016"],
 
-    datasets: [
+                type: "line",
 
-      {
+                datasets: [
 
-        label: "Income",
+                    {
 
-        data: [93, 95, 94, 94, 93, 94,94],
+                        label: "Income",
 
-        borderColor: gradientStroke2,
+                        data: [93, 95, 94, 94, 93, 94, 94],
 
-        pointBorderColor: gradientStroke2,
+                        borderColor: gradientStroke2,
 
-        pointBackgroundColor: gradientStroke2,
+                        pointBorderColor: gradientStroke2,
 
-        pointHoverBackgroundColor: gradientStroke2,
+                        pointBackgroundColor: gradientStroke2,
 
-        pointHoverBorderColor: gradientStroke2,
+                        pointHoverBackgroundColor: gradientStroke2,
 
-        pointBorderWidth: 5,
+                        pointHoverBorderColor: gradientStroke2,
 
-        pointHoverRadius: 5,
+                        pointBorderWidth: 5,
 
-        pointHoverBorderWidth: 1,
+                        pointHoverRadius: 5,
 
-        pointRadius: 0.5,
+                        pointHoverBorderWidth: 1,
 
-        fill: false,
+                        pointRadius: 0.5,
 
-        borderWidth: 4,
+                        fill: false,
 
-      },
+                        borderWidth: 4,
 
-    ],
+                    },
 
-  },
+                ],
 
-  options: {
+            },
 
-    legend: {
+            options: {
 
-      display: false,
+                legend: {
 
-    },
+                    display: false,
 
-    tooltips: {},
+                },
 
-    scales: {
+                tooltips: {},
 
-      yAxes: [
+                scales: {
 
-        {
+                    yAxes: [
 
-          ticks: {
+                        {
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-          gridLines: {
+                            },
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-        },
+                            },
 
-      ],
+                        },
 
-      xAxes: [
+                    ],
 
-        {
+                    xAxes: [
 
-          gridLines: {
+                        {
 
-            display: false,
+                            gridLines: {
 
-            drawBorder: false,
+                                display: false,
 
-          },
+                                drawBorder: false,
 
-          ticks: {
+                            },
 
-            display: false, //this will remove only the label
+                            ticks: {
 
-          },
+                                display: false, //this will remove only the label
 
-        },
+                            },
 
-      ],
+                        },
 
-    },
+                    ],
 
-  },
+                },
 
-});
+            },
 
- }).fail( function( jqXHR, textStatus, errorThrown) {
+        });
 
-    console.log(errorThrown, textStatus, jqXHR);
-  // console.log(textStatus);
-  // console.log(errorThrown);
-});
+    }).fail(function(jqXHR, textStatus, errorThrown) {
 
-    
+        console.log(errorThrown, textStatus, jqXHR);
+        // console.log(textStatus);
+        // console.log(errorThrown);
+    });
 
-	function format(n) {
 
-	    n = n.toString()
 
-	    while (true) {
+    function format(n) {
 
-	      var n2 = n.replace(/(\d)(\d{3})($|,|\.)/g, '$1,$2$3')
+        n = n.toString()
 
-	      if (n == n2) break
+        while (true) {
 
-	      n = n2
+            var n2 = n.replace(/(\d)(\d{3})($|,|\.)/g, '$1,$2$3')
 
-	    }
+            if (n == n2) break
 
-	    return n
+            n = n2
 
-	}  	 
+        }
+
+        return n
+
+    }
 }
-	      
-	  	  
 
-$("body").on("click touchstart","#btnDetalleLiquidez",function(e){
 
-	location.replace('reportefinancierofiltrado/1&desde=1&hasta=12');
-	
+
+$("body").on("click touchstart", "#btnDetalleLiquidez", function(e) {
+
+    location.replace('reportefinancierofiltrado/1&desde=1&hasta=12');
+
     // var overlay = document.getElementById("overlayIndiceLiquidez");
     // var popup   = document.getElementById("popupIndiceLiquidez");
 
@@ -1637,21 +1614,21 @@ $("body").on("click touchstart","#btnDetalleLiquidez",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarIndiceLiquidez",function(e){
+$("body").on("click touchstart", "#btnCerrarIndiceLiquidez", function(e) {
     var overlay = document.getElementById("overlayIndiceLiquidez");
-    var popup   = document.getElementById("popupIndiceLiquidez");
-    
-    
+    var popup = document.getElementById("popupIndiceLiquidez");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });
 
 
 
-$("body").on("click touchstart","#btnDetalleSolidez",function(e){
+$("body").on("click touchstart", "#btnDetalleSolidez", function(e) {
 
-	location.replace('reportefinancierofiltrado/2');
-	
+    location.replace('reportefinancierofiltrado/2');
+
     // var overlay = document.getElementById("overlaySolidez");
     // var popup   = document.getElementById("popupSolidez");
 
@@ -1659,11 +1636,11 @@ $("body").on("click touchstart","#btnDetalleSolidez",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarSolidez",function(e){
+$("body").on("click touchstart", "#btnCerrarSolidez", function(e) {
     var overlay = document.getElementById("overlaySolidez");
-    var popup   = document.getElementById("popupSolidez");
-    
-    
+    var popup = document.getElementById("popupSolidez");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });
@@ -1671,10 +1648,10 @@ $("body").on("click touchstart","#btnCerrarSolidez",function(e){
 
 
 
-$("body").on("click touchstart","#btnDetalleCoberturaInteres",function(e){
+$("body").on("click touchstart", "#btnDetalleCoberturaInteres", function(e) {
 
 
-	location.replace('reportefinancierofiltrado/3');
+    location.replace('reportefinancierofiltrado/3');
     // var overlay = document.getElementById("overlayCoberturaInteres");
     // var popup   = document.getElementById("popupCoberturaInteres");
 
@@ -1682,20 +1659,20 @@ $("body").on("click touchstart","#btnDetalleCoberturaInteres",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarCoberturaInteres",function(e){
+$("body").on("click touchstart", "#btnCerrarCoberturaInteres", function(e) {
     var overlay = document.getElementById("overlayCoberturaInteres");
-    var popup   = document.getElementById("popupCoberturaInteres");
-    
-    
+    var popup = document.getElementById("popupCoberturaInteres");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });
 
 
-$("body").on("click touchstart","#btnDetalleRentabilidadPatrimonio",function(e){
+$("body").on("click touchstart", "#btnDetalleRentabilidadPatrimonio", function(e) {
 
 
-	location.replace('reportefinancierofiltrado/4');
+    location.replace('reportefinancierofiltrado/4');
     // var overlay = document.getElementById("overlayRentabilidadPatrimonio");
     // var popup   = document.getElementById("popupRentabilidadPatrimonio");
 
@@ -1703,19 +1680,19 @@ $("body").on("click touchstart","#btnDetalleRentabilidadPatrimonio",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarRentabilidadPatrimonio",function(e){
+$("body").on("click touchstart", "#btnCerrarRentabilidadPatrimonio", function(e) {
     var overlay = document.getElementById("overlayRentabilidadPatrimonio");
-    var popup   = document.getElementById("popupRentabilidadPatrimonio");
-    
-    
+    var popup = document.getElementById("popupRentabilidadPatrimonio");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });
 
-$("body").on("click touchstart","#btnDetalleRentabilidadActivo",function(e){
+$("body").on("click touchstart", "#btnDetalleRentabilidadActivo", function(e) {
 
 
-	location.replace('reportefinancierofiltrado/5');
+    location.replace('reportefinancierofiltrado/5');
     // var overlay = document.getElementById("overlayRentabilidadActivo");
     // var popup   = document.getElementById("popupRentabilidadActivo");
 
@@ -1723,20 +1700,20 @@ $("body").on("click touchstart","#btnDetalleRentabilidadActivo",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarRentabilidadActivo",function(e){
+$("body").on("click touchstart", "#btnCerrarRentabilidadActivo", function(e) {
     var overlay = document.getElementById("overlayRentabilidadActivo");
-    var popup   = document.getElementById("popupRentabilidadActivo");
-    
-    
+    var popup = document.getElementById("popupRentabilidadActivo");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });
 
 
-$("body").on("click touchstart","#btnDetalleCapitalTrabajo",function(e){
+$("body").on("click touchstart", "#btnDetalleCapitalTrabajo", function(e) {
 
 
-	location.replace('reportefinancierofiltrado/6');
+    location.replace('reportefinancierofiltrado/6');
     // var overlay = document.getElementById("overlayCapitalTrabajo");
     // var popup   = document.getElementById("popupCapitalTrabajo");
 
@@ -1744,11 +1721,11 @@ $("body").on("click touchstart","#btnDetalleCapitalTrabajo",function(e){
     // popup.classList.add('active');
 });
 
-$("body").on("click touchstart","#btnCerrarCapitalTrabajo",function(e){
+$("body").on("click touchstart", "#btnCerrarCapitalTrabajo", function(e) {
     var overlay = document.getElementById("overlayCapitalTrabajo");
-    var popup   = document.getElementById("popupCapitalTrabajo");
-    
-    
+    var popup = document.getElementById("popupCapitalTrabajo");
+
+
     overlay.classList.remove('active');
     popup.classList.remove('active');
 });

@@ -1469,21 +1469,19 @@ $("body").on("change","#baseImpuestos",function(e){
 
    if(base>subtotal){
 
-    swal({   
+    Swal.fire(
+      {
+        icon: 'error',
+        title: 'Algo ha salido mal!',
+        text: 'La base de impuestos no puede ser mayor al subtotal',
+        closeOnConfirm: true,
+      }
 
-      title: "Algo ha salido mal!",   
+      ).then((result) => {
 
-      text: "La base de impuestos no puede ser mayor al subtotal",
+       $("#baseImpuestos").val("")
 
-      type: "error",        
-
-      closeOnConfirm: true 
-
-      }).then((element)=>{
-
-        $("#baseImpuestos").val("")
-
-      });
+      })
 
       return false; 
 

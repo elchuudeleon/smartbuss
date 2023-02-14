@@ -10,59 +10,33 @@ $(document).ready(function(e){
   }
   idEmpresa=0;
 
-	$.ajax({
-
+	$.ajax({ 
 	    url:URL+"functions/cuentascontables/cargargrupos.php", 
-
 	    type:"POST", 
-
 	    data: {"idEmpresa":idEmpresa}, 
-
 	    dataType: "json",
-
 	    }).done(function(msg){  
-
 	      msg.forEach(function(element,index){
-
 	      	aDatos.push({
-
 			        value: element.idGrupo,
-
 			        label: element.codigo+" - "+element.denominacion,
-
 			      })
-
 	      })
-
 	      autocomplete(); 
-
 	  });  
 
 
-    
-
          $.ajax({
-
         url:URL+"functions/cuentascontables/cargarcuentas.php", 
-
         type:"POST", 
-
         data: {"id":$("#idGrupo").val()}, 
-
         dataType: "json",
-
         }).done(function(msg){  
-
         msg.forEach(function(element,index){
-
           aDatosc.push({
-
               value: element.idCuenta,
-
               label: element.codigo+" - "+element.denominacion,
-
             })
-
         })
 
         autocompletec(); 
@@ -70,27 +44,16 @@ $(document).ready(function(e){
     });
 
     $.ajax({
-
         url:URL+"functions/cuentascontables/cargarsubcuentas.php", 
-
         type:"POST", 
-
         data: {"id":$("#idCuenta").val()}, 
-
         dataType: "json",
-
         }).done(function(msg){  
-
         msg.forEach(function(element,index){
-
           aDatoss.push({
-
               value: element.idSubcuenta,
-
               label: element.codigo+" - "+element.denominacion,
-
             })
-
         })
 
         autocompletes(); 
@@ -106,80 +69,50 @@ $("body").on("click touchstart","#btnGuardar",function(e){
       if(true === $("#frmGuardar").parsley().validate()){
 
          Swal.fire({
-
         title: '¿Está seguro?',
-
         text: 'Está a punto de editar esta cuenta contable!',
-
         icon: 'warning', 
-
         showCancelButton: true,
-
         showLoaderOnConfirm: true,
-
         confirmButtonText: `Si, Editar!`,
-
         cancelButtonText:'Cancelar',
-
         preConfirm: function(result) {
-
           return new Promise(function(resolve) {
 
-            var formu = document.getElementById("frmGuardar");
-            
-            var data = new FormData(formu);
-
+          var formu = document.getElementById("frmGuardar");
+          var data = new FormData(formu);
             $.ajax({
-
             url:URL+"functions/cuentascontables/editarcuentacontable.php", 
-
             type:"POST", 
-
             data: data,
-
             contentType:false, 
-
             processData:false, 
-
             dataType: "json",
-
-            cache:false 
-
+          cache:false 
             }).done(function(msg){  
 
               if(msg.msg){
-
                 Swal.fire(
-
                   {
-
                   icon: 'success',
-
                   title: 'Cuenta contable editada!',
-
                   text: 'con exito',
-
                   closeOnConfirm: true,
-
                 }
-
                 ).then((result) => {
-
                  location.reload(); 
-
                 })
-
               }else{
 
-                 Swal.fire(
-
-                  'Algo ha salido mal!',
-
-                  'Verifique su conexión a internet',
-
-                  'error'
-
-                )
+               Swal.fire(
+                  {
+                  icon: 'error',
+                  title: 'Algo ha salido mal!',
+                  text: 'verifique con su proovedor de servicios',
+                  closeOnConfirm: true,
+                }
+                ).then((result) => {
+                })
 
               }
             });
@@ -201,81 +134,47 @@ $(".grupo").on( 'change', function() {
 
 
 autocomplete=function(){
-
   $( ".grupo" ).autocomplete({
-
       minLength: 0,
-
       source: aDatos,
-
       focus: function( event, ui ) {
-
         var index=$(this).index(".grupo");
-
         $( ".grupo" ).eq(index).val( ui.item.label );
-
         $( ".idGrupo" ).eq(index).val( ui.item.value );
-
-        
-
         return false;
-
       },
-
       select: function( event, ui ) {
-
         var index=$(this).index(".grupo");
-
         $( ".grupo" ).eq(index).val( ui.item.label );
-
-        $( ".idGrupo" ).eq(index).val( ui.item.value );
-        
+        $( ".idGrupo" ).eq(index).val( ui.item.value );    
         var id=ui.item.value;
         aDatosc=[];
         aDatoss=[];
 
          $.ajax({
-
         url:URL+"functions/cuentascontables/cargarcuentas.php", 
-
         type:"POST", 
-
         data: {"id":id}, 
-
         dataType: "json",
-
         }).done(function(msg){  
-
         msg.forEach(function(element,index){
-
           aDatosc.push({
-
               value: element.idCuenta,
-
               label: element.codigo+" - "+element.denominacion,
-
             })
-
         })
 
         autocompletec(); 
 
     }); 
-
-
-
         return false;
 
       },
 
       change: function(event, ui){
-
         var index=$(this).index(".grupo");
-
         if(ui.item==null){
-
           $( ".idGrupo" ).eq(index).val('');
-
         }
 
         return false;
@@ -292,55 +191,32 @@ autocomplete=function(){
 autocompletec=function(){
 
   $( ".cuenta" ).autocomplete({
-
       minLength: 0,
-
       source: aDatosc,
-
       focus: function( event, ui ) {
-
         var index=$(this).index(".cuenta");
-
         $( ".cuenta" ).eq(index).val( ui.item.label );
-
-        $( ".idCuenta" ).eq(index).val( ui.item.value );
-
-        
+        $( ".idCuenta" ).eq(index).val( ui.item.value );        
 
         return false;
 
       },
-
       select: function( event, ui ) {
-
         var index=$(this).index(".cuenta");
-
         $( ".cuenta" ).eq(index).val( ui.item.label );
-
         $( ".idCuenta" ).eq(index).val( ui.item.value );
-
         var ids=ui.item.value;
-
         $.ajax({
-
         url:URL+"functions/cuentascontables/cargarsubcuentas.php", 
-
         type:"POST", 
-
         data: {"id":ids}, 
-
         dataType: "json",
-
         }).done(function(msg){  
 
         msg.forEach(function(element,index){
-
           aDatoss.push({
-
               value: element.idSubcuenta,
-
               label: element.codigo+" - "+element.denominacion,
-
             })
 
         })
@@ -348,24 +224,17 @@ autocompletec=function(){
         autocompletes(); 
 
     }); 
-
-
         return false;
 
       },
 
       change: function(event, ui){
-
         var index=$(this).index(".cuenta");
-
         if(ui.item==null){
-
           $( ".idCuenta" ).eq(index).val('');
 
         }
-
         return false;
-
       }
 
     })
@@ -376,56 +245,32 @@ autocompletec=function(){
 autocompletes=function(){
 
   $( ".subcuenta" ).autocomplete({
-
       minLength: 0,
-
       source: aDatoss,
-
       focus: function( event, ui ) {
-
         var index=$(this).index(".subcuenta");
-
         $( ".subcuenta" ).eq(index).val( ui.item.label );
-
         $( ".idSubcuenta" ).eq(index).val( ui.item.value );
-
-        
-
         return false;
 
       },
-
       select: function( event, ui ) {
-
         var index=$(this).index(".subcuenta");
-
         $( ".subcuenta" ).eq(index).val( ui.item.label );
-
         $( ".idSubcuenta" ).eq(index).val( ui.item.value );
-
         return false;
 
       },
-
       change: function(event, ui){
-
         var index=$(this).index(".subcuenta");
-
         if(ui.item==null){
-
           $( ".idSubcuenta" ).eq(index).val('');
-
         }
-
         return false;
-
       }
 
     })
 }
-
-
-
 
 
 $("#checkauxiliar").on( 'change', function() {
@@ -490,11 +335,6 @@ $("#checksubcuenta").on( 'change', function() {
 });
 
 
-
-
-
-
-
 $("#tercero").on( 'change', function() {
     if ($(this).val()=='3') {
       $("#divPorcentajeRetencion").css("display","block");
@@ -512,8 +352,5 @@ $('.decimales').keyup(function () {
 
 
 });
-
-
-
 
 $('[data-toggle="tooltip"]').tooltip();

@@ -336,3 +336,66 @@ $("#categoria").keypress(function(e) {
 });
 
 $('[data-toggle="tooltip"]').tooltip();
+
+$("body").on("click touchstart",".eliminar",function(e){
+
+  var id=$(this).attr("id"); 
+
+  var texto=$(this).parents("tr").find("td").eq(1).html(); 
+
+  Swal.fire({
+          title: 'Está seguro?',
+          text: 'Está a punto de elminar el inventario de '+texto+'!',
+          icon: 'warning', 
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonText: `Si, Eliminar!`,
+          cancelButtonText:'Cancelar',
+          preConfirm: function(result) {
+          return new Promise(function(resolve) {
+            var data = new FormData();
+
+            data.append("id",id)
+
+            $.ajax({
+            url:URL+"functions/inventario/eliminarproductoinventario.php", 
+            type:"POST", 
+            data: data,
+            contentType:false, 
+            processData:false, 
+            dataType: "json",
+            cache:false 
+            }).done(function(msg){  
+
+              if(msg.msg){
+                Swal.fire(
+                  {
+                  icon: 'success',
+                  title: 'Producto Eliminado!',
+                  text: 'con exito',
+                  closeOnConfirm: true,
+                }
+                ).then((result) => {
+                 location.reload();  
+                })
+                 
+
+              }else{
+                 Swal.fire(
+                  'Algo ha salido mal!',
+                  'Verifique su conexión a internet',
+                  'error'
+                ).then((result) => {
+
+                
+                })
+              }
+          });
+          });
+        }
+        }).then((result) => {
+          if (result.isConfirmed) {
+          } 
+         })
+
+})

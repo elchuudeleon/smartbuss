@@ -1,0 +1,12 @@
+[17-Jan-2023 03:25:29 UTC] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 19
+[19-Jan-2023 01:51:39 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 16
+[19-Jan-2023 01:51:51 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 16
+[19-Jan-2023 01:54:01 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 42
+[19-Jan-2023 01:55:15 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 44
+[19-Jan-2023 01:55:50 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 45
+[19-Jan-2023 02:03:27 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 45
+[19-Jan-2023 02:03:54 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 46
+[19-Jan-2023 02:04:15 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 46
+[19-Jan-2023 02:05:59 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 45
+[19-Jan-2023 02:06:18 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 49
+[19-Jan-2023 02:09:03 UTC] PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /home/toa8o1mv7ibx/public_html/copia.smartbuss.co/functions/siigo/sincronizarclientes.php on line 45
